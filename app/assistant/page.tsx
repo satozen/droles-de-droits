@@ -88,16 +88,38 @@ export default function AssistantPage() {
               ← Retour
             </button>
           </Link>
-          <motion.h1
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent"
-          >
-            Assistant IA
-          </motion.h1>
-          <p className="text-gray-700">
-            Pose tes questions sur tes droits, je suis là pour t'aider!
-          </p>
+          <div className="flex items-center gap-6">
+            <div className="flex-1">
+              <motion.h1
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent"
+              >
+                Assistant IA
+              </motion.h1>
+              <p className="text-gray-700">
+                Pose tes questions sur tes droits, je suis là pour t'aider!
+              </p>
+            </div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2 }}
+              className="hidden md:block"
+            >
+              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-purple-300 shadow-lg">
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full h-full object-cover"
+                >
+                  <source src="/videos/ai assistant video loop.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </motion.div>
+          </div>
         </div>
 
         {/* Questions exemples (si aucun message utilisateur) */}
