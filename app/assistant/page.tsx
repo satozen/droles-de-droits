@@ -107,13 +107,20 @@ export default function AssistantPage() {
               transition={{ delay: 0.2 }}
               className="hidden md:block"
             >
-              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-purple-300 shadow-lg">
+              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-purple-300 shadow-lg bg-gradient-to-br from-purple-100 to-pink-100">
                 <video
                   autoPlay
                   loop
                   muted
                   playsInline
-                  className="w-full h-full object-cover"
+                  preload="auto"
+                  className="w-full h-full object-cover opacity-0 animate-[fadeIn_0.3s_ease-in_0.5s_forwards]"
+                  onLoadedData={(e) => {
+                    const video = e.currentTarget;
+                    video.play().catch(() => {
+                      // Fallback si autoplay échoue
+                    });
+                  }}
                 >
                   <source src="/videos/ai assistant video loop.mp4" type="video/mp4" />
                 </video>
