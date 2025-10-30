@@ -21,6 +21,7 @@ export default function AssistantPage() {
   ])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
+  const [videoLoaded, setVideoLoaded] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
@@ -107,14 +108,18 @@ export default function AssistantPage() {
               transition={{ delay: 0.2 }}
               className="hidden md:block"
             >
-              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-purple-300 shadow-lg bg-gradient-to-br from-purple-100 to-pink-100">
+              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-purple-300 shadow-lg bg-gradient-to-br from-purple-100 to-pink-100 relative">
+                {!videoLoaded && (
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-200 via-pink-200 to-blue-200 animate-pulse" />
+                )}
                 <video
                   autoPlay
                   loop
                   muted
                   playsInline
                   preload="auto"
-                  className="w-full h-full object-cover opacity-0 animate-[fadeIn_0.3s_ease-in_0.5s_forwards]"
+                  className={`w-full h-full object-cover transition-opacity duration-500 ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
+                  onPlaying={() => setVideoLoaded(true)}
                   onLoadedData={(e) => {
                     const video = e.currentTarget;
                     video.play().catch(() => {
