@@ -49,38 +49,49 @@ export async function POST(request: Request) {
     })
     */
 
-    /* 
-    // === POUR ANTHROPIC (Claude) ===
+    // === ANTHROPIC (Claude) - ACTIVÉ ===
+    // Si pas de clé API, retourne un message mock
+    if (!process.env.ANTHROPIC_API_KEY) {
+      return NextResponse.json({
+        reply: `Merci pour ta question : "${message}". L'API LLM n'est pas encore configurée. Pour l'instant, consulte les 12 droits dans le jeu pour apprendre!`,
+        isMock: true
+      })
+    }
+
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY!,
+        'x-api-key': process.env.ANTHROPIC_API_KEY,
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-3-sonnet-20240229',
-        max_tokens: 500,
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 1024,
         messages: [
           {
             role: 'user',
             content: message
           }
         ],
-        system: 'Tu es un assistant éducatif spécialisé dans les droits des usagers du système de santé québécois. Tu aides les jeunes à comprendre leurs droits de manière claire et accessible.'
+        system: 'Tu es un assistant éducatif spécialisé dans les droits des usagers du système de santé québécois. Tu aides les jeunes à comprendre leurs droits de manière claire et accessible. Réponds toujours en français, avec un ton amical adapté aux adolescents.'
       }),
     })
 
     const data = await response.json()
-    return NextResponse.json({ 
-      reply: data.content[0].text 
-    })
-    */
+    
+    // Gérer les erreurs de l'API
+    if (data.error) {
+      console.error('Anthropic API error:', data.error)
+      return NextResponse.json({
+        reply: "Désolé, j'ai rencontré un problème. Essaie de reformuler ta question ou consulte la page Ressources.",
+        isMock: false
+      })
+    }
 
-    // Réponse mock pour tester (retire quand tu actives le vrai LLM)
-    return NextResponse.json({
-      reply: `Merci pour ta question : "${message}". L'API LLM sera activée prochainement. Pour l'instant, consulte les 12 droits dans le jeu pour apprendre!`,
-      isMock: true
+    return NextResponse.json({ 
+      reply: data.content[0].text,
+      isMock: false
     })
 
   } catch (error) {
@@ -97,7 +108,8 @@ export async function GET() {
   return NextResponse.json({ 
     status: 'ok', 
     message: 'API Chat fonctionnelle',
-    llmActive: false // Change à true quand tu actives OpenAI/Anthropic
+    llmActive: !!process.env.ANTHROPIC_API_KEY,
+    provider: process.env.ANTHROPIC_API_KEY ? 'Claude Haiku 3.5' : 'Mock'
   })
 }
 
