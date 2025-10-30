@@ -30,6 +30,61 @@ export default function JeuPage() {
   const totalScenarios = droits.reduce((acc, droit) => acc + droit.scenarios.length, 0)
   const completedScenarios = progress.reduce((acc, p) => acc + (p.completed ? 1 : 0), 0)
 
+  // Calculer le nombre de droits complétés
+  const completedDroits = useMemo(() => {
+    return droits.filter(droit => {
+      const droitProgress = progress.filter(p => p.droitId === droit.id)
+      const completed = droitProgress.filter(p => p.completed).length
+      return completed === droit.scenarios.length && droit.scenarios.length > 0
+    }).length
+  }, [progress])
+
+  // Système de badges
+  const badges = useMemo(() => [
+    {
+      id: 'premier-pas',
+      nom: 'Premier pas',
+      description: 'Complète ton premier droit',
+      icone: '🌟',
+      couleur: 'from-yellow-400 to-orange-400',
+      debloque: completedDroits >= 1
+    },
+    {
+      id: 'curieux',
+      nom: 'Curieux',
+      description: 'Complète 3 droits',
+      icone: '🔍',
+      couleur: 'from-blue-400 to-cyan-400',
+      debloque: completedDroits >= 3
+    },
+    {
+      id: 'assidu',
+      nom: 'Assidu',
+      description: 'Complète 6 droits',
+      icone: '📚',
+      couleur: 'from-purple-400 to-pink-400',
+      debloque: completedDroits >= 6
+    },
+    {
+      id: 'champion',
+      nom: 'Champion',
+      description: 'Complète 9 droits',
+      icone: '🏆',
+      couleur: 'from-green-400 to-emerald-400',
+      debloque: completedDroits >= 9
+    },
+    {
+      id: 'maitre',
+      nom: 'Maître des droits',
+      description: 'Complète tous les 12 droits',
+      icone: '👑',
+      couleur: 'from-amber-400 to-yellow-500',
+      debloque: completedDroits === 12
+    }
+  ], [completedDroits])
+
+  const badgesDebloques = badges.filter(b => b.debloque).length
+
   // Calculer le prochain droit à débloquer
   const prochainDroit = useMemo(() => {
     for (const droit of droits) {
@@ -58,7 +113,9 @@ export default function JeuPage() {
             }
             window.dispatchEvent(new Event('progress-update'))
           }
-          setSelectedDroit(null)
+        }}
+        onNextDroit={(nextDroitId) => {
+          setSelectedDroit(nextDroitId)
         }}
       />
     )
@@ -119,13 +176,57 @@ export default function JeuPage() {
               className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 h-3 rounded-full"
             />
           </div>
-          <p className="text-sm text-gray-600 text-center">
+          <p className="text-sm text-gray-600 text-center mb-4">
             {completedScenarios === totalScenarios ? (
               <span className="text-green-600 font-semibold">🎉 Bravo! Tu as complété tous les droits!</span>
             ) : (
               `Continue, il te reste ${totalScenarios - completedScenarios} scénario${totalScenarios - completedScenarios > 1 ? 's' : ''} !`
             )}
           </p>
+
+          {/* Section des badges */}
+          <div className="border-t pt-4 mt-4">
+            <div className="flex justify-between items-center mb-3">
+              <h3 className="text-lg font-bold text-gray-800">Badges collectés</h3>
+              <span className="text-sm font-semibold text-gray-600">
+                {badgesDebloques}/{badges.length}
+              </span>
+            </div>
+            <div className="flex flex-wrap gap-3 justify-center">
+              {badges.map((badge, index) => (
+                <motion.div
+                  key={badge.id}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="relative group"
+                >
+                  <motion.div
+                    whileHover={{ scale: badge.debloque ? 1.1 : 1 }}
+                    className={`w-20 h-20 rounded-2xl flex items-center justify-center text-3xl shadow-md transition-all ${
+                      badge.debloque
+                        ? `bg-gradient-to-br ${badge.couleur} cursor-pointer`
+                        : 'bg-gray-200 opacity-40 grayscale'
+                    }`}
+                  >
+                    {badge.debloque ? badge.icone : '🔒'}
+                  </motion.div>
+                  
+                  {/* Tooltip au survol */}
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                    <div className="bg-gray-900 text-white text-xs rounded-lg py-2 px-3 whitespace-nowrap shadow-xl">
+                      <div className="font-bold">{badge.nom}</div>
+                      <div className="text-gray-300">{badge.description}</div>
+                      {badge.debloque && <div className="text-green-400 mt-1">✓ Débloqué</div>}
+                    </div>
+                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-1">
+                      <div className="border-4 border-transparent border-t-gray-900"></div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
         </motion.div>
 
         {/* Parcours des droits */}
@@ -247,21 +348,36 @@ export default function JeuPage() {
 function ScenarioComponent({ 
   droitId, 
   onBack, 
-  onComplete 
+  onComplete,
+  onNextDroit
 }: { 
   droitId: number
   onBack: () => void
   onComplete: (droitId: number, scenarioId: string) => void
+  onNextDroit: (nextDroitId: number) => void
 }) {
   const droit = droits.find(d => d.id === droitId)!
   const [currentScenarioIndex, setCurrentScenarioIndex] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null)
   const [showExplanation, setShowExplanation] = useState(false)
+  const [showCompletion, setShowCompletion] = useState(false)
   const { progress } = useProgress()
 
   const currentScenario = droit.scenarios[currentScenarioIndex]
   const scenarioKey = `${droitId}-${currentScenario.id}`
   const isCompleted = progress.some(p => p.key === scenarioKey && p.completed)
+
+  // Vérifier si ce droit est déjà entièrement complété
+  const isDroitCompleted = droit.scenarios.every(scenario => 
+    progress.some(p => p.key === `${droitId}-${scenario.id}` && p.completed)
+  )
+
+  // Afficher l'écran de complétion si le droit est déjà complété
+  useEffect(() => {
+    if (isDroitCompleted && currentScenarioIndex === 0 && !selectedAnswer) {
+      setShowCompletion(true)
+    }
+  }, [isDroitCompleted, currentScenarioIndex, selectedAnswer])
 
   const handleAnswer = (answerId: string) => {
     if (showExplanation) return
@@ -282,11 +398,75 @@ function ScenarioComponent({
       setSelectedAnswer(null)
       setShowExplanation(false)
     } else {
-      onBack()
+      // Afficher l'écran de complétion
+      setShowCompletion(true)
     }
   }
 
   const isCorrect = selectedAnswer === currentScenario.bonneReponse
+  
+  // Trouver le prochain droit NON complété
+  const findNextIncompleteDroit = () => {
+    for (let i = droitId + 1; i <= droits.length; i++) {
+      const nextDroit = droits.find(d => d.id === i)
+      if (nextDroit) {
+        const isNextDroitCompleted = nextDroit.scenarios.every(scenario => 
+          progress.some(p => p.key === `${i}-${scenario.id}` && p.completed)
+        )
+        if (!isNextDroitCompleted) {
+          return i
+        }
+      }
+    }
+    return null
+  }
+
+  const nextIncompleteDroitId = findNextIncompleteDroit()
+  const hasNextDroit = nextIncompleteDroitId !== null
+
+  // Écran de complétion du droit
+  if (showCompletion) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+        <div className="container mx-auto px-4 py-8 max-w-4xl">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-2xl p-8 shadow-xl text-center"
+          >
+            <div className="text-6xl mb-4">🎉</div>
+            <h2 className="text-3xl font-bold text-gray-800 mb-2">
+              Droit complété !
+            </h2>
+            <p className="text-lg text-gray-600 mb-6">
+              Tu as terminé tous les scénarios du <span className="font-semibold text-purple-600">{droit.titre}</span>
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              {hasNextDroit && (
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => onNextDroit(nextIncompleteDroitId!)}
+                  className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-shadow"
+                >
+                  Droit suivant →
+                </motion.button>
+              )}
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={onBack}
+                className="bg-white text-gray-700 border-2 border-gray-300 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-gray-50 transition-colors"
+              >
+                Retour aux droits
+              </motion.button>
+            </div>
+          </motion.div>
+        </div>
+      </main>
+    )
+  }
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
