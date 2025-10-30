@@ -4,6 +4,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
+import ReactMarkdown from 'react-markdown'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -139,9 +140,30 @@ export default function AssistantPage() {
                       : 'bg-gray-100 text-gray-800'
                   }`}
                 >
-                  <p className="text-sm md:text-base leading-relaxed whitespace-pre-wrap">
-                    {message.content}
-                  </p>
+                  {message.role === 'user' ? (
+                    <p className="text-sm md:text-base leading-relaxed whitespace-pre-wrap">
+                      {message.content}
+                    </p>
+                  ) : (
+                    <div className="text-sm md:text-base leading-relaxed prose prose-sm max-w-none">
+                      <ReactMarkdown
+                        components={{
+                          p: ({children}) => <p className="mb-2 last:mb-0">{children}</p>,
+                          ul: ({children}) => <ul className="list-disc list-inside mb-2 space-y-1">{children}</ul>,
+                          ol: ({children}) => <ol className="list-decimal list-inside mb-2 space-y-1">{children}</ol>,
+                          li: ({children}) => <li className="ml-2">{children}</li>,
+                          strong: ({children}) => <strong className="font-bold text-purple-700">{children}</strong>,
+                          em: ({children}) => <em className="italic">{children}</em>,
+                          code: ({children}) => <code className="bg-gray-200 px-1 py-0.5 rounded text-xs">{children}</code>,
+                          h1: ({children}) => <h1 className="text-lg font-bold mb-2">{children}</h1>,
+                          h2: ({children}) => <h2 className="text-base font-bold mb-2">{children}</h2>,
+                          h3: ({children}) => <h3 className="text-sm font-bold mb-1">{children}</h3>,
+                        }}
+                      >
+                        {message.content}
+                      </ReactMarkdown>
+                    </div>
+                  )}
                   {message.isMock && (
                     <p className="text-xs mt-2 opacity-70">
                       ⚠️ Mode démo - Active une clé API pour des réponses personnalisées
