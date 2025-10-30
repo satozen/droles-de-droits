@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
   try {
-    const { message, context } = await request.json()
+    const { message, context, conversationHistory } = await request.json()
 
     // Validation basique
     if (!message) {
@@ -73,12 +73,9 @@ export async function POST(request: Request) {
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 1024,
-        messages: [
-          {
-            role: 'user',
-            content: message
-          }
-        ],
+        messages: conversationHistory && conversationHistory.length > 0 
+          ? conversationHistory 
+          : [{ role: 'user', content: message }],
         system: `Tu es un assistant éducatif spécialisé dans les droits des usagers du système de santé québécois. Ta mission est d'aider les jeunes (12-18 ans) à comprendre et faire valoir leurs droits.
 
 ## LES 12 DROITS DES USAGERS (à connaître parfaitement) :
@@ -143,26 +140,34 @@ Réponds toujours en français québécois.
 
 ## FORMAT DE RÉPONSE :
 
-**IMPORTANT** : Tu dois TOUJOURS terminer ta réponse par exactement 3 questions de suivi au format suivant :
+**IMPORTANT** : Tu dois TOUJOURS terminer ta réponse par exactement 3 suggestions de suivi au format suivant :
 
 [QUESTIONS]
-1. [Question de suivi pertinente #1]
-2. [Question de suivi pertinente #2]
-3. [Question de suivi pertinente #3]
+1. [Affirmation/déclaration que l'utilisateur pourrait dire #1]
+2. [Affirmation/déclaration que l'utilisateur pourrait dire #2]
+3. [Affirmation/déclaration que l'utilisateur pourrait dire #3]
 
-Les questions de suivi doivent :
-- Être directement liées au sujet discuté
-- Approfondir un aspect mentionné dans ta réponse
-- Être courtes et claires (maximum 10-12 mots)
-- Encourager l'utilisateur à explorer d'autres aspects de ses droits
+Les suggestions de suivi doivent :
+- Être formulées comme si **l'utilisateur les disait** (affirmations, pas des questions directes)
+- Être directement liées au sujet discuté dans la conversation en cours
+- Approfondir un aspect mentionné dans ta dernière réponse
+- Être courtes et naturelles (maximum 10-12 mots)
+- Tenir compte du contexte de TOUTE la conversation, pas seulement du dernier échange
+
+Exemples de formulations (à adapter selon le contexte) :
+- "Explique-moi comment porter plainte"
+- "J'aimerais en savoir plus sur la confidentialité"
+- "Parle-moi de mes droits avec mes parents"
+- "Je veux voir mon dossier médical"
+- "Dis-m'en plus sur le consentement"
 
 Exemple de format complet :
 [Ta réponse normale ici...]
 
 [QUESTIONS]
-1. Que faire si mon droit n'est pas respecté?
-2. Comment puis-je accéder à mon dossier médical?
-3. Est-ce que mes parents doivent être présents?`
+1. Explique-moi comment porter plainte concrètement
+2. J'aimerais en savoir plus sur la confidentialité
+3. Parle-moi des droits avec mes parents`
       }),
     })
 

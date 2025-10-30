@@ -45,17 +45,27 @@ export default function AssistantPage() {
 
     // Ajouter le message de l'utilisateur
     const userMessage: Message = { role: 'user', content: messageToSend }
-    setMessages(prev => [...prev, userMessage])
+    const updatedMessages = [...messages, userMessage]
+    setMessages(updatedMessages)
     setInput('')
     setLoading(true)
 
     try {
+      // Construire l'historique de conversation pour l'API (sans les followUpQuestions)
+      const conversationHistory = updatedMessages
+        .filter(msg => msg.role === 'user' || msg.role === 'assistant')
+        .map(msg => ({
+          role: msg.role,
+          content: msg.content
+        }))
+
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: messageToSend,
-          context: 'droits-usagers'
+          context: 'droits-usagers',
+          conversationHistory
         }),
       })
 
@@ -205,14 +215,14 @@ export default function AssistantPage() {
                     className="mb-4 flex justify-start"
                   >
                     <div className="max-w-[80%] space-y-2">
-                      <p className="text-xs text-gray-500 mb-2 px-2">💡 Questions suggérées :</p>
+                      <p className="text-xs text-gray-500 mb-2 px-2">💡 Tu pourrais dire :</p>
                       {message.followUpQuestions.map((question, qIndex) => (
                         <button
                           key={qIndex}
                           onClick={() => handleSend(question)}
                           className="block w-full text-left bg-white border-2 border-purple-200 rounded-xl px-3 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:border-purple-400 transition-all duration-200 shadow-sm hover:shadow-md"
                         >
-                          <span className="text-purple-500 mr-2">→</span>
+                          <span className="text-purple-500 mr-2">💬</span>
                           {question}
                         </button>
                       ))}
