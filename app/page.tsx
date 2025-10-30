@@ -33,9 +33,11 @@ export default function Home() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
-              className="text-lg text-gray-600 mb-8"
+              className="text-lg text-gray-600 mb-8 max-w-2xl"
             >
-              À travers 12 scénarios interactifs, apprends tes droits et comment les faire respecter
+              Que tu sois en centre jeunesse, à l'hôpital ou dans un CLSC, tu as des droits. 
+              À travers des scénarios interactifs, apprends à les connaître et à les faire respecter. 
+              Connaître tes droits, c'est avoir du pouvoir pour te défendre.
             </motion.p>
             
             {/* Stats rapides */}
