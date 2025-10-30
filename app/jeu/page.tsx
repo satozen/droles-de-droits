@@ -1,16 +1,31 @@
 // Page de jeu - Parcours progressif à travers les 12 droits
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { droits } from '@/data/droits'
 import { useProgress } from '@/hooks/useProgress'
+import IntroUsager from '@/components/IntroUsager'
 
 export default function JeuPage() {
   const { progress } = useProgress()
   const [selectedDroit, setSelectedDroit] = useState<number | null>(null)
   const [modeLibre, setModeLibre] = useState(false)
+  const [showIntro, setShowIntro] = useState(false)
+
+  // Vérifier si c'est la première visite
+  useEffect(() => {
+    const hasSeenIntro = localStorage.getItem('hasSeenIntro')
+    if (!hasSeenIntro) {
+      setShowIntro(true)
+    }
+  }, [])
+
+  const handleIntroComplete = () => {
+    localStorage.setItem('hasSeenIntro', 'true')
+    setShowIntro(false)
+  }
 
   const totalScenarios = droits.reduce((acc, droit) => acc + droit.scenarios.length, 0)
   const completedScenarios = progress.reduce((acc, p) => acc + (p.completed ? 1 : 0), 0)
@@ -50,8 +65,12 @@ export default function JeuPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
+    <>
+      {/* Intro première visite */}
+      {showIntro && <IntroUsager onComplete={handleIntroComplete} />}
+
+      <main className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+        <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <Link href="/">
