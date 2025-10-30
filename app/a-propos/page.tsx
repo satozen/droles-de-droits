@@ -139,7 +139,7 @@ export default function AProposPage() {
                     Essayer le jeu
                   </button>
                 </Link>
-                <a href="mailto:contact@drolesde droits.com" className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-full font-semibold hover:bg-white/10 transition-colors">
+                <a href="mailto:dstl.st.laurent@gmail.com" className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-full font-semibold hover:bg-white/10 transition-colors">
                   Nous contacter
                 </a>
               </div>

@@ -1,0 +1,206 @@
+// Page Assistant IA - Pose tes questions sur tes droits
+'use client'
+
+import { useState, useRef, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import Link from 'next/link'
+
+interface Message {
+  role: 'user' | 'assistant'
+  content: string
+  isMock?: boolean
+}
+
+export default function AssistantPage() {
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      role: 'assistant',
+      content: "Salut! 👋 Je suis là pour répondre à tes questions sur tes droits en tant qu'usager du système de santé. Pose-moi n'importe quelle question!"
+    }
+  ])
+  const [input, setInput] = useState('')
+  const [loading, setLoading] = useState(false)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages])
+
+  const questionsExemples = [
+    "Puis-je refuser un traitement?",
+    "Mon médecin peut-il parler à mes parents sans mon consentement?",
+    "Comment porter plainte si mes droits ne sont pas respectés?",
+    "Ai-je le droit de voir mon dossier médical?"
+  ]
+
+  const handleSend = async (question?: string) => {
+    const messageToSend = question || input.trim()
+    if (!messageToSend) return
+
+    // Ajouter le message de l'utilisateur
+    const userMessage: Message = { role: 'user', content: messageToSend }
+    setMessages(prev => [...prev, userMessage])
+    setInput('')
+    setLoading(true)
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: messageToSend,
+          context: 'droits-usagers'
+        }),
+      })
+
+      const data = await res.json()
+      
+      // Ajouter la réponse de l'assistant
+      const assistantMessage: Message = {
+        role: 'assistant',
+        content: data.reply,
+        isMock: data.isMock
+      }
+      setMessages(prev => [...prev, assistantMessage])
+    } catch (error) {
+      console.error('Erreur:', error)
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: "Désolé, une erreur s'est produite. Essaie à nouveau ou consulte la page Ressources pour des contacts directs."
+      }])
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <main className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 flex flex-col">
+      <div className="container mx-auto px-4 py-6 flex-1 flex flex-col max-w-4xl">
+        {/* Header */}
+        <div className="mb-6">
+          <Link href="/">
+            <button className="text-gray-700 hover:text-gray-900 font-semibold mb-4">
+              ← Retour
+            </button>
+          </Link>
+          <motion.h1
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent"
+          >
+            Assistant IA
+          </motion.h1>
+          <p className="text-gray-700">
+            Pose tes questions sur tes droits, je suis là pour t'aider!
+          </p>
+        </div>
+
+        {/* Questions exemples (si aucun message utilisateur) */}
+        {messages.length === 1 && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6"
+          >
+            <p className="text-sm text-gray-600 mb-3">Questions populaires :</p>
+            <div className="grid md:grid-cols-2 gap-3">
+              {questionsExemples.map((q, i) => (
+                <button
+                  key={i}
+                  onClick={() => handleSend(q)}
+                  className="text-left bg-white rounded-lg p-3 text-sm text-gray-700 hover:bg-purple-50 hover:border-purple-300 border-2 border-transparent transition-all"
+                >
+                  💬 {q}
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {/* Zone de messages */}
+        <div className="flex-1 bg-white rounded-2xl shadow-lg p-4 mb-4 overflow-y-auto max-h-[60vh]">
+          <AnimatePresence>
+            {messages.map((message, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className={`mb-4 flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
+                <div
+                  className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+                    message.role === 'user'
+                      ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white'
+                      : 'bg-gray-100 text-gray-800'
+                  }`}
+                >
+                  <p className="text-sm md:text-base leading-relaxed whitespace-pre-wrap">
+                    {message.content}
+                  </p>
+                  {message.isMock && (
+                    <p className="text-xs mt-2 opacity-70">
+                      ⚠️ Mode démo - Active une clé API pour des réponses personnalisées
+                    </p>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+          
+          {loading && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex justify-start mb-4"
+            >
+              <div className="bg-gray-100 rounded-2xl px-4 py-3">
+                <div className="flex gap-2">
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                </div>
+              </div>
+            </motion.div>
+          )}
+          <div ref={messagesEndRef} />
+        </div>
+
+        {/* Zone de saisie */}
+        <div className="bg-white rounded-2xl shadow-lg p-4">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              handleSend()
+            }}
+            className="flex gap-3"
+          >
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Écris ta question ici..."
+              className="flex-1 px-4 py-3 rounded-full border-2 border-gray-200 focus:border-purple-400 focus:outline-none"
+              disabled={loading}
+            />
+            <button
+              type="submit"
+              disabled={!input.trim() || loading}
+              className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? '...' : 'Envoyer'}
+            </button>
+          </form>
+          <p className="text-xs text-gray-500 mt-2 text-center">
+            💡 Cette fonctionnalité utilise l'IA. Les réponses sont informatives mais ne remplacent pas un avis professionnel.
+          </p>
+        </div>
+      </div>
+    </main>
+  )
+}
+
