@@ -54,6 +54,11 @@ export async function POST(request: Request) {
     if (!process.env.ANTHROPIC_API_KEY) {
       return NextResponse.json({
         reply: `Merci pour ta question : "${message}". L'API LLM n'est pas encore configurée. Pour l'instant, consulte les 12 droits dans le jeu pour apprendre!`,
+        followUpQuestions: [
+          "Quels sont mes 12 droits?",
+          "Comment porter plainte?",
+          "Puis-je refuser un traitement?"
+        ],
         isMock: true
       })
     }
@@ -134,7 +139,30 @@ export async function POST(request: Request) {
 ❌ Donner des réponses trop longues ou compliquées
 ❌ Minimiser les préoccupations de la personne
 
-Réponds toujours en français québécois.`
+Réponds toujours en français québécois.
+
+## FORMAT DE RÉPONSE :
+
+**IMPORTANT** : Tu dois TOUJOURS terminer ta réponse par exactement 3 questions de suivi au format suivant :
+
+[QUESTIONS]
+1. [Question de suivi pertinente #1]
+2. [Question de suivi pertinente #2]
+3. [Question de suivi pertinente #3]
+
+Les questions de suivi doivent :
+- Être directement liées au sujet discuté
+- Approfondir un aspect mentionné dans ta réponse
+- Être courtes et claires (maximum 10-12 mots)
+- Encourager l'utilisateur à explorer d'autres aspects de ses droits
+
+Exemple de format complet :
+[Ta réponse normale ici...]
+
+[QUESTIONS]
+1. Que faire si mon droit n'est pas respecté?
+2. Comment puis-je accéder à mon dossier médical?
+3. Est-ce que mes parents doivent être présents?`
       }),
     })
 
@@ -145,12 +173,37 @@ Réponds toujours en français québécois.`
       console.error('Anthropic API error:', data.error)
       return NextResponse.json({
         reply: "Désolé, j'ai rencontré un problème. Essaie de reformuler ta question ou consulte la page Ressources.",
-        isMock: false
+        isMock: false,
+        followUpQuestions: []
       })
     }
 
+    const fullText = data.content[0].text
+    
+    // Parser les questions de suivi
+    let reply = fullText
+    let followUpQuestions: string[] = []
+    
+    const questionsMatch = fullText.match(/\[QUESTIONS\]([\s\S]*?)$/i)
+    if (questionsMatch) {
+      // Extraire le texte avant [QUESTIONS]
+      reply = fullText.substring(0, questionsMatch.index).trim()
+      
+      // Extraire les questions (format: 1. Question ici)
+      const questionsText = questionsMatch[1]
+      const questionMatches = questionsText.matchAll(/\d+\.\s*(.+?)(?=\n\d+\.|\n*$)/g)
+      
+      for (const match of questionMatches) {
+        const question = match[1].trim()
+        if (question) {
+          followUpQuestions.push(question)
+        }
+      }
+    }
+
     return NextResponse.json({ 
-      reply: data.content[0].text,
+      reply,
+      followUpQuestions: followUpQuestions.slice(0, 3), // Maximum 3 questions
       isMock: false
     })
 

@@ -10,6 +10,7 @@ interface Message {
   role: 'user' | 'assistant'
   content: string
   isMock?: boolean
+  followUpQuestions?: string[]
 }
 
 export default function AssistantPage() {
@@ -60,11 +61,12 @@ export default function AssistantPage() {
 
       const data = await res.json()
       
-      // Ajouter la réponse de l'assistant
+      // Ajouter la réponse de l'assistant avec les questions de suivi
       const assistantMessage: Message = {
         role: 'assistant',
         content: data.reply,
-        isMock: data.isMock
+        isMock: data.isMock,
+        followUpQuestions: data.followUpQuestions || []
       }
       setMessages(prev => [...prev, assistantMessage])
     } catch (error) {
@@ -148,51 +150,76 @@ export default function AssistantPage() {
         <div className="flex-1 bg-white rounded-2xl shadow-lg p-4 mb-4 overflow-y-auto max-h-[60vh]">
           <AnimatePresence>
             {messages.map((message, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                className={`mb-4 flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
-              >
-                <div
-                  className={`max-w-[80%] rounded-2xl px-4 py-3 ${
-                    message.role === 'user'
-                      ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white'
-                      : 'bg-gray-100 text-gray-800'
-                  }`}
+              <div key={index}>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  className={`mb-3 flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
-                  {message.role === 'user' ? (
-                    <p className="text-sm md:text-base leading-relaxed whitespace-pre-wrap">
-                      {message.content}
-                    </p>
-                  ) : (
-                    <div className="text-sm md:text-base leading-relaxed prose prose-sm max-w-none">
-                      <ReactMarkdown
-                        components={{
-                          p: ({children}) => <p className="mb-2 last:mb-0">{children}</p>,
-                          ul: ({children}) => <ul className="list-disc list-inside mb-2 space-y-1">{children}</ul>,
-                          ol: ({children}) => <ol className="list-decimal list-inside mb-2 space-y-1">{children}</ol>,
-                          li: ({children}) => <li className="ml-2">{children}</li>,
-                          strong: ({children}) => <strong className="font-bold text-purple-700">{children}</strong>,
-                          em: ({children}) => <em className="italic">{children}</em>,
-                          code: ({children}) => <code className="bg-gray-200 px-1 py-0.5 rounded text-xs">{children}</code>,
-                          h1: ({children}) => <h1 className="text-lg font-bold mb-2">{children}</h1>,
-                          h2: ({children}) => <h2 className="text-base font-bold mb-2">{children}</h2>,
-                          h3: ({children}) => <h3 className="text-sm font-bold mb-1">{children}</h3>,
-                        }}
-                      >
+                  <div
+                    className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+                      message.role === 'user'
+                        ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white'
+                        : 'bg-gray-100 text-gray-800'
+                    }`}
+                  >
+                    {message.role === 'user' ? (
+                      <p className="text-sm md:text-base leading-relaxed whitespace-pre-wrap">
                         {message.content}
-                      </ReactMarkdown>
+                      </p>
+                    ) : (
+                      <div className="text-sm md:text-base leading-relaxed prose prose-sm max-w-none">
+                        <ReactMarkdown
+                          components={{
+                            p: ({children}) => <p className="mb-2 last:mb-0">{children}</p>,
+                            ul: ({children}) => <ul className="list-disc list-inside mb-2 space-y-1">{children}</ul>,
+                            ol: ({children}) => <ol className="list-decimal list-inside mb-2 space-y-1">{children}</ol>,
+                            li: ({children}) => <li className="ml-2">{children}</li>,
+                            strong: ({children}) => <strong className="font-bold text-purple-700">{children}</strong>,
+                            em: ({children}) => <em className="italic">{children}</em>,
+                            code: ({children}) => <code className="bg-gray-200 px-1 py-0.5 rounded text-xs">{children}</code>,
+                            h1: ({children}) => <h1 className="text-lg font-bold mb-2">{children}</h1>,
+                            h2: ({children}) => <h2 className="text-base font-bold mb-2">{children}</h2>,
+                            h3: ({children}) => <h3 className="text-sm font-bold mb-1">{children}</h3>,
+                          }}
+                        >
+                          {message.content}
+                        </ReactMarkdown>
+                      </div>
+                    )}
+                    {message.isMock && (
+                      <p className="text-xs mt-2 opacity-70">
+                        ⚠️ Mode démo - Active une clé API pour des réponses personnalisées
+                      </p>
+                    )}
+                  </div>
+                </motion.div>
+                
+                {/* Questions de suivi - seulement pour les messages de l'assistant et si c'est le dernier message */}
+                {message.role === 'assistant' && message.followUpQuestions && message.followUpQuestions.length > 0 && index === messages.length - 1 && !loading && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="mb-4 flex justify-start"
+                  >
+                    <div className="max-w-[80%] space-y-2">
+                      <p className="text-xs text-gray-500 mb-2 px-2">💡 Questions suggérées :</p>
+                      {message.followUpQuestions.map((question, qIndex) => (
+                        <button
+                          key={qIndex}
+                          onClick={() => handleSend(question)}
+                          className="block w-full text-left bg-white border-2 border-purple-200 rounded-xl px-3 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:border-purple-400 transition-all duration-200 shadow-sm hover:shadow-md"
+                        >
+                          <span className="text-purple-500 mr-2">→</span>
+                          {question}
+                        </button>
+                      ))}
                     </div>
-                  )}
-                  {message.isMock && (
-                    <p className="text-xs mt-2 opacity-70">
-                      ⚠️ Mode démo - Active une clé API pour des réponses personnalisées
-                    </p>
-                  )}
-                </div>
-              </motion.div>
+                  </motion.div>
+                )}
+              </div>
             ))}
           </AnimatePresence>
           
