@@ -14,7 +14,9 @@ Ce jeu permet aux jeunes d'apprendre leurs droits et responsabilités en tant qu
 - **Quiz interactifs** : Scénarios à choix multiples avec explications détaillées
 - **Responsive** : Fonctionne sur mobile, tablette et ordinateur
 
-## 🚀 Installation
+## 🚀 Installation et Déploiement
+
+### Développement local
 
 ```bash
 # Installer les dépendances
@@ -25,6 +27,33 @@ npm run dev
 ```
 
 Ouvrez [http://localhost:3000](http://localhost:3000) dans votre navigateur.
+
+### Déploiement sur Vercel (GRATUIT)
+
+1. Va sur [vercel.com](https://vercel.com)
+2. Connecte-toi avec ton compte GitHub
+3. Clique sur "Add New Project"
+4. Sélectionne le repo `droles-de-droits`
+5. Clique "Deploy" - **C'est tout!** ✨
+
+Ton site sera live à: `https://droles-de-droits.vercel.app`
+
+### API LLM (Optionnel - pour assistant IA)
+
+Pour activer l'assistant IA avec OpenAI ou Anthropic:
+
+1. Obtiens une clé API:
+   - **OpenAI**: https://platform.openai.com/api-keys
+   - **Anthropic**: https://console.anthropic.com/
+
+2. Dans Vercel Dashboard:
+   - Va dans Project Settings > Environment Variables
+   - Ajoute `OPENAI_API_KEY` ou `ANTHROPIC_API_KEY`
+   - Redéploie
+
+3. Dans `app/api/chat/route.ts`, décommente la section du LLM choisi
+
+**Note**: Le MVP fonctionne parfaitement SANS API LLM (mode mock activé)
 
 ## 🏗️ Architecture
 
