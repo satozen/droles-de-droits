@@ -17,7 +17,7 @@ export default function AssistantPage() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: "Salut! 👋 Je suis là pour répondre à tes questions sur tes droits en tant qu'usager du système de santé. Pose-moi n'importe quelle question!"
+      content: "Salut! 👋 Je m'appelle Milo et je suis là pour répondre à tes questions sur tes droits en tant qu'usager du système de santé. Pose-moi n'importe quelle question!"
     }
   ])
   const [input, setInput] = useState('')
@@ -107,10 +107,10 @@ export default function AssistantPage() {
                 animate={{ opacity: 1, y: 0 }}
                 className="text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent"
               >
-                Assistant IA
+                Milo 🤖
               </motion.h1>
               <p className="text-gray-700">
-                Pose tes questions sur tes droits, je suis là pour t'aider!
+                Ton assistant virtuel pour comprendre tes droits
               </p>
             </div>
             <motion.div

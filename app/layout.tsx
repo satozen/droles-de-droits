@@ -28,7 +28,7 @@ export default function RootLayout({
             <div className="flex items-center gap-4 md:gap-6">
               <Link href="/" className="text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white text-sm md:text-base">Accueil</Link>
               <Link href="/jeu" className="text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white text-sm md:text-base">Jeu</Link>
-              <Link href="/assistant" className="text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white text-sm md:text-base">Assistant</Link>
+              <Link href="/assistant" className="text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white text-sm md:text-base">Milo</Link>
               <Link href="/ressources" className="text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white text-sm md:text-base">Ressources</Link>
               <Link href="/guide" className="text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white text-sm md:text-base">Guide</Link>
               <Link href="/a-propos" className="text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white text-sm md:text-base">À Propos</Link>
