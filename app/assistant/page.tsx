@@ -21,7 +21,6 @@ export default function AssistantPage() {
   ])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
-  const [videoLoaded, setVideoLoaded] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
@@ -108,33 +107,15 @@ export default function AssistantPage() {
               transition={{ delay: 0.2 }}
               className="hidden md:block"
             >
-              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-purple-300 shadow-lg bg-gradient-to-br from-purple-100 to-pink-100 relative">
+              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-purple-300 shadow-lg bg-gradient-to-br from-purple-100 to-pink-100">
                 <video
                   autoPlay
                   loop
                   muted
                   playsInline
-                  preload="auto"
                   className="w-full h-full object-cover"
-                  style={{ 
-                    opacity: videoLoaded ? 1 : 0,
-                    transition: 'opacity 0.5s ease-in'
-                  }}
-                  onLoadedData={(e) => {
-                    const video = e.currentTarget;
-                    // Attendre un petit moment pour laisser le vidéo se préparer
-                    setTimeout(() => {
-                      video.play().then(() => {
-                        // Attendre 100ms que le vidéo joue vraiment
-                        setTimeout(() => setVideoLoaded(true), 100);
-                      }).catch(() => {
-                        // Si autoplay échoue, afficher quand même après 500ms
-                        setTimeout(() => setVideoLoaded(true), 500);
-                      });
-                    }, 50);
-                  }}
                 >
-                  <source src="/videos/ai assistant video loop.mp4" type="video/mp4" />
+                  <source src="/videos/ai assistant video loop2.mp4" type="video/mp4" />
                 </video>
               </div>
             </motion.div>
