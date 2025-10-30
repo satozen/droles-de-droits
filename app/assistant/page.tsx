@@ -109,22 +109,29 @@ export default function AssistantPage() {
               className="hidden md:block"
             >
               <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-purple-300 shadow-lg bg-gradient-to-br from-purple-100 to-pink-100 relative">
-                {!videoLoaded && (
-                  <div className="absolute inset-0 bg-gradient-to-br from-purple-200 via-pink-200 to-blue-200 animate-pulse" />
-                )}
                 <video
                   autoPlay
                   loop
                   muted
                   playsInline
                   preload="auto"
-                  className={`w-full h-full object-cover transition-opacity duration-500 ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
-                  onPlaying={() => setVideoLoaded(true)}
+                  className="w-full h-full object-cover"
+                  style={{ 
+                    opacity: videoLoaded ? 1 : 0,
+                    transition: 'opacity 0.5s ease-in'
+                  }}
                   onLoadedData={(e) => {
                     const video = e.currentTarget;
-                    video.play().catch(() => {
-                      // Fallback si autoplay échoue
-                    });
+                    // Attendre un petit moment pour laisser le vidéo se préparer
+                    setTimeout(() => {
+                      video.play().then(() => {
+                        // Attendre 100ms que le vidéo joue vraiment
+                        setTimeout(() => setVideoLoaded(true), 100);
+                      }).catch(() => {
+                        // Si autoplay échoue, afficher quand même après 500ms
+                        setTimeout(() => setVideoLoaded(true), 500);
+                      });
+                    }, 50);
                   }}
                 >
                   <source src="/videos/ai assistant video loop.mp4" type="video/mp4" />
