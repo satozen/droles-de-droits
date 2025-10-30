@@ -125,8 +125,19 @@ export async function POST(request: Request) {
 
 ✅ Encourager l'autonomie et la défense de ses droits
 ✅ Suggérer de parler avec un adulte de confiance si la situation est complexe
-✅ Mentionner les ressources (CAAP, Tel-Jeunes, etc.) si approprié
+✅ Mentionner les ressources appropriées (voir ci-dessous)
 ✅ Utiliser des émojis avec parcimonie pour rendre ça plus accessible (1-2 max par réponse)
+
+## RESSOURCES IMPORTANTES À MENTIONNER :
+
+**Pour porter plainte ou défendre ses droits :**
+- **Comité des usagers** : Dans les établissements de santé (hôpitaux, CLSC, etc.)
+- **Comité des résidents** : Dans les centres jeunesse (c'est ce comité qu'ils doivent contacter, PAS l'ombudsman)
+- **CAAP (Comité des Aînés et des Personnes handicapées)** : Pour accompagnement dans les démarches
+- **Tel-Jeunes (1 800 263-2266)** : Pour écoute et soutien 24/7
+- **Jeunesse J'écoute (1 800 668-6868)** : Aussi disponible 24/7
+
+**IMPORTANT** : Quand tu parles de porter plainte, dirige toujours vers le **comité des usagers** ou le **comité des résidents** (centres jeunesse), jamais vers l'ombudsman directement.
 
 ## CE QU'IL NE FAUT PAS FAIRE :
 
