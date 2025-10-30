@@ -9,12 +9,13 @@ interface IntroUsagerProps {
 
 export default function IntroUsager({ onComplete }: IntroUsagerProps) {
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 z-50 flex items-center justify-center p-4 overflow-y-auto">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="max-w-3xl w-full bg-white rounded-3xl shadow-2xl p-6 md:p-10 relative my-8"
-      >
+    <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 z-50 overflow-y-auto">
+      <div className="min-h-screen flex items-start justify-center p-4 py-8 md:py-12">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="max-w-3xl w-full bg-white rounded-3xl shadow-2xl p-6 md:p-10 relative my-4"
+        >
         {/* Éléments décoratifs */}
         <div className="absolute -top-10 -right-10 w-40 h-40 bg-purple-200 rounded-full opacity-20 blur-3xl" />
         <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-200 rounded-full opacity-20 blur-3xl" />
@@ -137,7 +138,8 @@ export default function IntroUsager({ onComplete }: IntroUsagerProps) {
             </p>
           </motion.div>
         </div>
-      </motion.div>
+        </motion.div>
+      </div>
     </div>
   )
 }
