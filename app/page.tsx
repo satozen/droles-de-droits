@@ -52,11 +52,11 @@ export default function Home() {
                 <div className="text-sm text-gray-600">Droits</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600">12</div>
+                <div className="text-3xl font-bold text-blue-600">18</div>
                 <div className="text-sm text-gray-600">Scénarios</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-pink-600">~10</div>
+                <div className="text-3xl font-bold text-pink-600">~15</div>
                 <div className="text-sm text-gray-600">Minutes</div>
               </div>
             </motion.div>

@@ -39,23 +39,23 @@ export default function AProposPage() {
             </p>
 
             <p className="text-gray-700 leading-relaxed mb-8">
-              Mais une question revenait toujours, implicitement ou non : <strong>« Et après? »</strong>
+              Le spectacle fait son travail : il sensibilise, il décloisonne, il inspire.
             </p>
 
             <p className="text-gray-700 leading-relaxed mb-10">
-              Une fois le spectacle terminé et les affiches rangées, que reste-t-il?
+              Mais une opportunité s'est révélée : <strong>« Et si on pouvait prolonger cet élan? »</strong>
             </p>
 
-            {/* Section Problème */}
+            {/* Section Opportunité */}
             <div className="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-lg mb-10">
               <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                Le Problème : Le savoir s'envole, le besoin reste
+                L'Opportunité : Transformer l'inspiration en action
               </h2>
               <p className="text-gray-700 leading-relaxed mb-4">
-                Un spectacle donne une "charge" d'énergie et de motivation. Mais ce n'est pas un outil.
+                Le spectacle crée une prise de conscience puissante et durable. Il brise la glace, démystifie, et donne confiance.
               </p>
               <p className="text-gray-700 leading-relaxed mb-4">
-                Le droit des usagers, c'est complexe. C'est intimidant. Un jeune qui se retrouve seul dans un bureau de médecin, confus et stressé, ne se souviendra pas d'une blague entendue trois mois plus tôt. Il a besoin de réflexes.
+                Mais le droit des usagers, c'est aussi complexe. C'est parfois intimidant. Un jeune qui se retrouve seul dans un bureau de médecin, confus et stressé, a besoin de plus qu'une compréhension théorique. Il a besoin de réflexes pratiques.
               </p>
               <p className="text-gray-700 leading-relaxed mb-2">Comment un jeune (ou n'importe quel usager) peut-il :</p>
               <ul className="list-disc list-inside text-gray-700 space-y-2 ml-4">
@@ -74,7 +74,7 @@ export default function AProposPage() {
                 La Solution : Un simulateur de vol pour tes droits
               </h2>
               <p className="text-gray-700 leading-relaxed mb-4">
-                L'idée de <strong>« Drôles de Droits »</strong> (le jeu interactif) est simple : transformer l'écoute passive en <strong>simulation active</strong>.
+                L'idée de <strong>« Drôles de Droits »</strong> (le jeu interactif) est simple : prolonger l'éveil créé par le spectacle en offrant une <strong>simulation active et pratique</strong>.
               </p>
               <p className="text-gray-700 leading-relaxed mb-4">
                 Au lieu de <em>parler</em> des droits, on les <em>vit</em>.
