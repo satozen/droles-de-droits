@@ -61,15 +61,26 @@ export default function Home() {
               </div>
             </motion.div>
 
-            <Link href="/jeu">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-10 py-5 rounded-full text-xl font-semibold shadow-lg hover:shadow-xl transition-shadow"
-              >
-                Commencer l'aventure 🎮
-              </motion.button>
-            </Link>
+            <div className="flex gap-4 justify-center md:justify-start flex-wrap">
+              <Link href="/jeu">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-10 py-5 rounded-full text-xl font-semibold shadow-lg hover:shadow-xl transition-shadow"
+                >
+                  Commencer l'aventure 🎮
+                </motion.button>
+              </Link>
+              <Link href="/rpg">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-10 py-5 rounded-full text-xl font-semibold shadow-lg hover:shadow-xl transition-shadow"
+                >
+                  Mode Aventure RPG 🎭
+                </motion.button>
+              </Link>
+            </div>
           </motion.div>
 
           {/* Vidéo hero */}
