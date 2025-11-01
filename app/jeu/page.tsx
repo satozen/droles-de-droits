@@ -140,9 +140,19 @@ export default function JeuPage() {
             </motion.button>
           </Link>
           <div className="flex items-center gap-4">
+            <Link href="/rpg">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-4 py-2 rounded-full text-sm font-semibold transition-all bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-lg"
+                title="Mode Aventure RPG"
+              >
+                🎮 Mode Aventure
+              </motion.button>
+            </Link>
             <button
               onClick={() => {
-                if (confirm('Es-tu sûr·e de vouloir réinitialiser toute ta progression? Cette action ne peut pas être annulée.')) {
+                if (confirm('Es-tu sûr de vouloir réinitialiser toute ta progression? Cette action ne peut pas être annulée.')) {
                   if (typeof window !== 'undefined') {
                     localStorage.removeItem('progress')
                     localStorage.removeItem('hasSeenIntro')
