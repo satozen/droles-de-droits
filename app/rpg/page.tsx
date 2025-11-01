@@ -306,7 +306,7 @@ export default function RPGPage() {
   }
 
   // Utiliser une carte
-  const useCarte = (carteId: string) => {
+  const handleUseCarte = (carteId: string) => {
     playSound('success')
     const carte = cartes.find(c => c.id === carteId)
     if (!carte || !carte.debloque) return
@@ -488,7 +488,7 @@ export default function RPGPage() {
                   key={carte.id}
                   whileHover={{ scale: carte.debloque ? 1.05 : 1, rotateY: carte.debloque ? 5 : 0 }}
                   whileTap={{ scale: carte.debloque ? 0.95 : 1 }}
-                  onClick={() => carte.debloque && useCarte(carte.id)}
+                  onClick={() => carte.debloque && handleUseCarte(carte.id)}
                   className={`relative rounded-xl p-3 cursor-pointer transition-all ${
                     carte.debloque 
                       ? selectedCarte === carte.id
