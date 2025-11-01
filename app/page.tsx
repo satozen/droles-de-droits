@@ -61,6 +61,7 @@ export default function Home() {
               </div>
             </motion.div>
 
+            {/* Boutons d'action principaux */}
             <div className="flex gap-4 justify-center md:justify-start flex-wrap">
               <Link href="/jeu">
                 <motion.button
