@@ -141,6 +141,22 @@ export default function JeuPage() {
           </Link>
           <div className="flex items-center gap-4">
             <button
+              onClick={() => {
+                if (confirm('Es-tu sûr·e de vouloir réinitialiser toute ta progression? Cette action ne peut pas être annulée.')) {
+                  if (typeof window !== 'undefined') {
+                    localStorage.removeItem('progress')
+                    localStorage.removeItem('hasSeenIntro')
+                    window.dispatchEvent(new Event('progress-update'))
+                    window.location.reload()
+                  }
+                }
+              }}
+              className="px-4 py-2 rounded-full text-sm font-semibold transition-all bg-gray-100 text-gray-600 hover:bg-gray-200 border-2 border-gray-300"
+              title="Réinitialiser la progression"
+            >
+              🔄 Réinitialiser
+            </button>
+            <button
               onClick={() => setModeLibre(!modeLibre)}
               className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
                 modeLibre
