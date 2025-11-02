@@ -136,8 +136,10 @@ export default function DialoguePage() {
   const [currentScene, setCurrentScene] = useState<string>('intro')
   const [currentLineIndex, setCurrentLineIndex] = useState<number>(0)
   const [displayedText, setDisplayedText] = useState<string>('')
+  const [typingText, setTypingText] = useState<string>('')
   const [isTyping, setIsTyping] = useState<boolean>(false)
   const [showChoices, setShowChoices] = useState<boolean>(false)
+  const [textComplete, setTextComplete] = useState<boolean>(false)
 
   const currentDialogue = dialogue[currentScene]
   const currentLine = currentDialogue[currentLineIndex]
@@ -167,6 +169,103 @@ export default function DialoguePage() {
   const [textPages, setTextPages] = useState<string[]>([])
   const [currentPageIndex, setCurrentPageIndex] = useState<number>(0)
 
+  // Sons doux de début et fin (au lieu de bips constants)
+  const playTypingStartSound = () => {
+    try {
+      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
+      const oscillator = audioContext.createOscillator()
+      const gainNode = audioContext.createGain()
+      
+      oscillator.connect(gainNode)
+      gainNode.connect(audioContext.destination)
+      
+      oscillator.frequency.value = 400
+      oscillator.type = 'sine'
+      
+      gainNode.gain.setValueAtTime(0.05, audioContext.currentTime)
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2)
+      
+      oscillator.start(audioContext.currentTime)
+      oscillator.stop(audioContext.currentTime + 0.2)
+    } catch (e) {
+      // Silencieux si pas de support audio
+    }
+  }
+
+  const playTypingEndSound = () => {
+    try {
+      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
+      const oscillator = audioContext.createOscillator()
+      const gainNode = audioContext.createGain()
+      
+      oscillator.connect(gainNode)
+      gainNode.connect(audioContext.destination)
+      
+      oscillator.frequency.value = 500
+      oscillator.type = 'sine'
+      
+      gainNode.gain.setValueAtTime(0.06, audioContext.currentTime)
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15)
+      
+      oscillator.start(audioContext.currentTime)
+      oscillator.stop(audioContext.currentTime + 0.15)
+    } catch (e) {
+      // Silencieux si pas de support audio
+    }
+  }
+
+  const playClickSound = () => {
+    try {
+      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
+      const oscillator = audioContext.createOscillator()
+      const gainNode = audioContext.createGain()
+      
+      oscillator.connect(gainNode)
+      gainNode.connect(audioContext.destination)
+      
+      oscillator.frequency.value = 600
+      oscillator.type = 'sine'
+      
+      gainNode.gain.setValueAtTime(0.15, audioContext.currentTime)
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1)
+      
+      oscillator.start(audioContext.currentTime)
+      oscillator.stop(audioContext.currentTime + 0.1)
+    } catch (e) {
+      // Silencieux si pas de support audio
+    }
+  }
+
+  // Animation de typing (texte lettre par lettre)
+  useEffect(() => {
+    if (displayedText && displayedText.length > 0) {
+      setIsTyping(true)
+      setTextComplete(false)
+      setTypingText('')
+      
+      let charIndex = 0
+      const typingSpeed = 30 // millisecondes entre chaque caractère
+      
+      // Son doux de début (une seule fois au début)
+      playTypingStartSound()
+      
+      const typingInterval = setInterval(() => {
+        if (charIndex < displayedText.length) {
+          setTypingText(displayedText.slice(0, charIndex + 1))
+          charIndex++
+        } else {
+          clearInterval(typingInterval)
+          setIsTyping(false)
+          setTextComplete(true)
+          // Son doux de fin (une seule fois à la fin)
+          playTypingEndSound()
+        }
+      }, typingSpeed)
+
+      return () => clearInterval(typingInterval)
+    }
+  }, [displayedText])
+
   // Charger le texte de la ligne actuelle
   useEffect(() => {
     if (currentLine) {
@@ -175,15 +274,27 @@ export default function DialoguePage() {
       setCurrentPageIndex(0)
       setDisplayedText(pages[0] || '')
       setShowChoices(false)
+      setTextComplete(false)
     }
   }, [currentScene, currentLineIndex])
 
   // Gérer la progression du dialogue
   const handleContinue = () => {
+    playClickSound()
+    
+    // Si le texte n'est pas fini de s'afficher, l'afficher tout d'un coup
+    if (isTyping) {
+      setTypingText(displayedText)
+      setIsTyping(false)
+      setTextComplete(true)
+      return
+    }
+
     // S'il y a encore des pages à afficher pour cette ligne
     if (currentPageIndex < textPages.length - 1) {
       setCurrentPageIndex(currentPageIndex + 1)
       setDisplayedText(textPages[currentPageIndex + 1])
+      setTextComplete(false)
       return
     }
 
@@ -215,6 +326,8 @@ export default function DialoguePage() {
 
   // Gérer le choix du joueur
   const handleChoice = (choiceIndex: number) => {
+    playClickSound()
+    
     // Déterminer la prochaine scène selon le choix
     const sceneMap: { [key: number]: string } = {
       0: 'choix-1',
@@ -231,6 +344,7 @@ export default function DialoguePage() {
     setCurrentPageIndex(0)
     setDisplayedText(pages[0])
     setShowChoices(false)
+    setTextComplete(false)
   }
 
   // Déterminer la position de la bulle selon le speaker
@@ -244,9 +358,20 @@ export default function DialoguePage() {
 
   const getBubbleColor = () => {
     if (currentLine.speaker === 'jeune') {
-      return 'bg-blue-500 text-white border-blue-600'
+      return 'bg-gradient-to-br from-blue-500 to-blue-600 text-white border-blue-400 shadow-blue-500/50'
     } else {
-      return 'bg-white text-gray-900 border-gray-300'
+      return 'bg-gradient-to-br from-white to-gray-50 text-gray-900 border-gray-200 shadow-gray-500/30'
+    }
+  }
+
+  // Support pour images de personnages (optionnel)
+  const getCharacterImage = () => {
+    if (currentLine.speaker === 'jeune') {
+      // Tu pourras ajouter une image ici : return '/images/jeune.png'
+      return null
+    } else {
+      // Tu pourras ajouter une image ici : return '/images/intervenant.png'
+      return null
     }
   }
 
@@ -287,37 +412,83 @@ export default function DialoguePage() {
             transition={{ duration: 0.3 }}
             className={`absolute ${getBubblePosition()} max-w-2xl z-20`}
           >
-            <div className={`${getBubbleColor()} px-6 py-4 rounded-2xl shadow-2xl border-2`}>
-              <p className="text-base font-medium leading-relaxed mb-2">
-                {displayedText}
-              </p>
+            <motion.div 
+              className={`${getBubbleColor()} px-6 py-5 rounded-2xl shadow-2xl border-2 backdrop-blur-sm min-h-[120px] flex flex-col`}
+              initial={{ scale: 0.95 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.2 }}
+              whileHover={textComplete ? { scale: 1.02 } : {}}
+            >
+              {/* Nom du speaker */}
+              <div className="text-xs font-bold mb-3 opacity-80 uppercase tracking-wider flex-shrink-0">
+                {currentLine.speaker === 'jeune' ? '👤 Le jeune' : '👔 L\'intervenant'}
+              </div>
               
-              {/* Indicateur de continuation */}
-              {!showChoices && (
-                <div className="flex justify-end">
-                  <motion.div
-                    animate={{ opacity: [1, 0.3, 1] }}
-                    transition={{ duration: 1, repeat: Infinity }}
-                    className="text-xs opacity-60"
+              {/* Texte avec animation de typing - taille fixe */}
+              <div className="flex-1 flex items-start">
+                <p className="text-base font-medium leading-relaxed">
+                  {isTyping ? typingText : displayedText}
+                  {isTyping && (
+                    <motion.span
+                      animate={{ opacity: [1, 0, 1] }}
+                      transition={{ duration: 0.5, repeat: Infinity }}
+                      className="inline-block ml-1"
+                    >
+                      |
+                    </motion.span>
+                  )}
+                </p>
+              </div>
+              
+              {/* Indicateur de continuation - pulse amélioré */}
+              {!showChoices && textComplete && (
+                <motion.div
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex justify-end items-center gap-2 mt-2 flex-shrink-0"
+                >
+                  <motion.span
+                    animate={{ 
+                      opacity: [0.4, 1, 0.4],
+                      scale: [1, 1.2, 1]
+                    }}
+                    transition={{ 
+                      duration: 1.5, 
+                      repeat: Infinity,
+                      ease: 'easeInOut'
+                    }}
+                    className="text-sm font-bold"
                   >
-                    ▼
-                  </motion.div>
-                </div>
+                    ▶
+                  </motion.span>
+                  <span className="text-xs opacity-70">Continuer</span>
+                </motion.div>
               )}
-            </div>
+            </motion.div>
           </motion.div>
         </AnimatePresence>
 
-        {/* Instruction en bas */}
-        {!showChoices && (
-          <div className="absolute bottom-0 left-0 right-0 bg-black/80 text-white px-8 py-4 text-center z-30">
-            <button 
+        {/* Instruction en bas - avec animation pulse */}
+        {!showChoices && textComplete && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/80 to-transparent text-white px-8 py-4 text-center z-30"
+          >
+            <motion.button
               onClick={handleContinue}
-              className="text-sm font-medium hover:text-blue-400 transition-colors"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="text-sm font-medium hover:text-blue-400 transition-colors px-6 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-sm"
             >
-              PRESSER X POUR CONTINUER
-            </button>
-          </div>
+              <motion.span
+                animate={{ opacity: [1, 0.5, 1] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              >
+                CLIQUEZ ICI OU APPUYEZ SUR X
+              </motion.span>
+            </motion.button>
+          </motion.div>
         )}
       </div>
 
