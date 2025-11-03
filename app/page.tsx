@@ -72,6 +72,7 @@ export default function Home() {
                   Commencer l'aventure 🎮
                 </motion.button>
               </Link>
+              {/* Mode RPG - En développement - Désactivé pour la démo
               <Link href="/rpg">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -81,6 +82,7 @@ export default function Home() {
                   Mode Aventure RPG 🎭
                 </motion.button>
               </Link>
+              */}
               <Link href="/centre-jeunesse">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -116,7 +118,7 @@ export default function Home() {
                 loop
                 muted
                 playsInline
-                poster="/images/hero image.png"
+                poster="/images/hero_centre_jeunesse_sourire.png"
               >
                 <source src="/videos/hero.mp4" type="video/mp4" />
               </video>
