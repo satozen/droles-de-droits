@@ -512,7 +512,7 @@ export default function CentreJeunessePage() {
             <div className="bg-gray-900 text-white border-4 border-black p-6 mb-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
               <h2 className="text-2xl font-black mb-4 text-center">📋 TES DROITS LORS D'UNE FOUILLE :</h2>
               <ul className="space-y-3 font-bold text-lg">
-                <li>✓ Droit d'être <span className="text-red-400 font-black">INFORMÉ</span> des raisons AVANT la fouille</li>
+                <li>✓ Droit d'être <span className="text-red-400 font-black">INFORMÉ</span> des raisons AVANT la fouille. Ils doivent avoir des motifs raisonnables - parce qu'ils pensent que tu es en possession de quelque chose de dangereux ou illégal.</li>
                 <li>✓ Droit au <span className="text-red-400 font-black">RESPECT</span> de ta dignité</li>
               </ul>
             </div>
@@ -823,7 +823,7 @@ export default function CentreJeunessePage() {
       <div className="w-full max-w-5xl mt-6 bg-gray-900 text-white border-4 border-black p-6">
         <h3 className="font-black text-xl mb-2">💡 DROITS LORS D'UNE FOUILLE :</h3>
         <ul className="space-y-2 font-bold">
-          <li>✓ Droit d'être informé des raisons de la fouille</li>
+          <li>✓ Droit d'être informé des raisons de la fouille. Ils doivent avoir des motifs raisonnables - parce qu'ils pensent que tu es en possession de quelque chose de dangereux ou illégal.</li>
           <li>✓ Droit au respect de ta dignité pendant la fouille</li>
         </ul>
       </div>
