@@ -7,14 +7,14 @@ import Navigation from '@/components/Navigation'
 const fredoka = Fredoka({ subsets: ['latin'], weight: ['400','600','700'] })
 
 export const metadata: Metadata = {
-  title: 'DRÔLES DE DROITS - Jeu éducatif sur les droits des usagers',
-  description: 'Apprends tes droits et responsabilités en tant qu\'usager·ère du système de santé québécois',
+  title: 'DRÔLES DE DROITS - Jeu éducatif interactif sur tes 12 droits | Québec',
+  description: '🎮 Apprends tes droits et responsabilités en tant qu\'usager·ère du système de santé québécois. Jeux interactifs, dialogues et scénarios réalistes pour les jeunes.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://droles-de-droits.vercel.app'),
-  keywords: ['droits usagers', 'santé québécois', 'jeu éducatif', 'centre jeunesse', 'droits des jeunes', 'santé mentale'],
+  keywords: ['droits usagers', 'santé québécois', 'jeu éducatif', 'centre jeunesse', 'droits des jeunes', 'santé mentale', 'droits et devoirs', 'système de santé Québec'],
   authors: [{ name: 'Drôles de Droits' }],
   openGraph: {
-    title: 'DRÔLES DE DROITS - Jeu éducatif sur les droits des usagers',
-    description: 'Apprends tes 12 droits et responsabilités en tant qu\'usager·ère du système de santé québécois à travers des scénarios interactifs et engageants.',
+    title: 'DRÔLES DE DROITS 🎮 | Connais tes 12 droits en santé',
+    description: 'Jeu interactif éducatif pour apprendre tes droits et responsabilités dans le système de santé québécois. Scénarios réalistes, dialogues avec Karim et Alex, mode RPG et vidéoclip rap. Parfait pour les jeunes en centre jeunesse! 🎯',
     url: process.env.NEXT_PUBLIC_SITE_URL || 'https://droles-de-droits.vercel.app',
     siteName: 'Drôles de Droits',
     images: [
@@ -22,7 +22,8 @@ export const metadata: Metadata = {
         url: '/images/hero image.png',
         width: 1200,
         height: 630,
-        alt: 'DRÔLES DE DROITS - Jeu éducatif interactif',
+        alt: 'DRÔLES DE DROITS - Jeu interactif éducatif sur les 12 droits des usagers en santé au Québec',
+        type: 'image/png',
       },
     ],
     locale: 'fr_CA',
@@ -30,10 +31,11 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'DRÔLES DE DROITS - Jeu éducatif sur les droits des usagers',
-    description: 'Apprends tes 12 droits et responsabilités en tant qu\'usager·ère du système de santé québécois',
+    title: 'DRÔLES DE DROITS 🎮 | Connais tes 12 droits en santé',
+    description: 'Jeu interactif pour apprendre tes droits et responsabilités dans le système de santé québécois. Scénarios, dialogues, RPG et rap! 🎯',
     images: ['/images/hero image.png'],
     creator: '@drolesdedroits',
+    site: '@drolesdedroits',
   },
   robots: {
     index: true,
@@ -46,6 +48,10 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_SITE_URL || 'https://droles-de-droits.vercel.app',
+  },
+  category: 'education',
 }
 
 export const viewport: Viewport = {
