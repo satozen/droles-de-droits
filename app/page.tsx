@@ -27,7 +27,7 @@ export default function Home() {
               DRÔLES DE DROITS
             </motion.h1>
             <p className="text-2xl text-gray-700 mb-6">
-              Découvre tes 12 droits en tant qu'usager·ère du système de santé
+              Découvre tes 12 droits en tant qu'usager du système de santé
             </p>
             <motion.p
               initial={{ opacity: 0 }}
@@ -37,7 +37,7 @@ export default function Home() {
             >
               Que tu sois en centre jeunesse, à l'hôpital ou dans un CLSC, tu as des droits. 
               À travers des scénarios interactifs, apprends à les connaître et à les faire respecter. 
-              Connaître tes droits, c'est avoir du pouvoir pour te défendre.
+              Connaître tes droits, c'est avoir du pouvoir.
             </motion.p>
             
             {/* Stats rapides */}
