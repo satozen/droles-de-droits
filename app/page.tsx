@@ -112,16 +112,11 @@ export default function Home() {
             className="relative"
           >
             <div className="relative w-full aspect-square rounded-3xl overflow-hidden shadow-2xl">
-              <video
+              <img
+                src="/images/hero_centre_jeunesse_sourire.png"
+                alt="Jeune avec son chien devant le centre jeunesse"
                 className="absolute inset-0 w-full h-full object-cover"
-                autoPlay
-                loop
-                muted
-                playsInline
-                poster="/images/hero_centre_jeunesse_sourire.png"
-              >
-                <source src="/videos/hero.mp4" type="video/mp4" />
-              </video>
+              />
             </div>
             {/* Éléments décoratifs */}
             <div className="absolute -top-4 -right-4 w-24 h-24 bg-yellow-400 rounded-full opacity-50 blur-2xl" />
