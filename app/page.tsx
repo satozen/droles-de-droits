@@ -87,7 +87,16 @@ export default function Home() {
                   whileTap={{ scale: 0.95 }}
                   className="bg-gradient-to-r from-red-500 to-orange-600 text-white px-10 py-5 rounded-full text-xl font-semibold shadow-lg hover:shadow-xl transition-shadow border-4 border-black"
                 >
-                  Dialogue Centre Jeunesse 💊
+                  Fouilles et Cafouillage 💊
+                </motion.button>
+              </Link>
+              <Link href="/videoclip">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-gradient-to-r from-purple-500 to-pink-600 text-white px-10 py-5 rounded-full text-xl font-semibold shadow-lg hover:shadow-xl transition-shadow border-4 border-black"
+                >
+                  Video Clip Rap 🎵
                 </motion.button>
               </Link>
             </div>

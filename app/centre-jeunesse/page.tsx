@@ -1,5 +1,5 @@
-// Page Dialogue Centre Jeunesse - Style Néo-Brutaliste / BD
-// Histoire sur les fouilles et saisies dans un centre jeunesse
+// Page Fouilles et Cafouillage - Style Néo-Brutaliste / BD
+// Jeu interactif avec Karim sur les fouilles et saisies dans un centre jeunesse
 // Système de visual novel avec bulles de dialogue style comic book
 'use client'
 
@@ -587,7 +587,7 @@ export default function CentreJeunessePage() {
           {/* Panneau de contexte néo-brutaliste */}
           <div className="bg-yellow-300 border-8 border-black shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] p-12">
             <h1 className="text-5xl md:text-6xl font-black mb-6 text-center">
-              CENTRE JEUNESSE
+              FOUILLES ET CAFOUILLAGE
             </h1>
             
             <div className="space-y-6 text-xl font-bold leading-relaxed">
@@ -652,7 +652,7 @@ export default function CentreJeunessePage() {
         </Link>
         
         <h1 className="text-2xl md:text-3xl font-black tracking-tight flex-1 text-center">
-          CENTRE JEUNESSE
+          FOUILLES ET CAFOUILLAGE
         </h1>
         
         {/* Contrôles audio */}
