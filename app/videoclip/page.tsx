@@ -127,7 +127,7 @@ export default function VideoClipPage() {
   const [showControls, setShowControls] = useState<boolean>(true)
   // Contrôles séparés pour musique et sons
   const [musiqueMuted, setMusiqueMuted] = useState<boolean>(false)
-  const [musiqueVolume, setMusiqueVolume] = useState<number>(0.5)
+  const [musiqueVolume, setMusiqueVolume] = useState<number>(0.375)
   const [sonsMuted, setSonsMuted] = useState<boolean>(false)
   const [sonsVolume, setSonsVolume] = useState<number>(0.5)
   const [currentTime, setCurrentTime] = useState<number>(0)
