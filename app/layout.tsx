@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     siteName: 'Drôles de Droits',
     images: [
       {
-        url: '/images/hero_centre_jeunesse_sourire.png',
+        url: '/images/hero_mauve_couleurs.png',
         width: 1200,
         height: 630,
         alt: 'DRÔLES DE DROITS - Jeu interactif éducatif sur les 12 droits des usagers en santé au Québec',
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'DRÔLES DE DROITS 🎮 | Connais tes 12 droits en santé',
     description: 'Jeu interactif pour apprendre tes droits et responsabilités dans le système de santé québécois. Scénarios, dialogues, RPG et rap! 🎯',
-    images: ['/images/hero_centre_jeunesse_sourire.png'],
+    images: ['/images/hero_mauve_couleurs.png'],
     creator: '@drolesdedroits',
     site: '@drolesdedroits',
   },

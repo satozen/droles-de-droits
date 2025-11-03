@@ -113,7 +113,7 @@ export default function Home() {
           >
             <div className="relative w-full aspect-square rounded-3xl overflow-hidden shadow-2xl">
               <img
-                src="/images/hero_centre_jeunesse_sourire.png"
+                src="/images/hero_mauve_couleurs.png"
                 alt="Jeune avec son chien devant le centre jeunesse"
                 className="absolute inset-0 w-full h-full object-cover"
               />
