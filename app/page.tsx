@@ -81,6 +81,15 @@ export default function Home() {
                   Mode Aventure RPG 🎭
                 </motion.button>
               </Link>
+              <Link href="/centre-jeunesse">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-gradient-to-r from-red-500 to-orange-600 text-white px-10 py-5 rounded-full text-xl font-semibold shadow-lg hover:shadow-xl transition-shadow border-4 border-black"
+                >
+                  Dialogue Centre Jeunesse 💊
+                </motion.button>
+              </Link>
             </div>
           </motion.div>
 
