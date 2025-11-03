@@ -281,6 +281,25 @@ export default function CentreJeunessePage() {
     return `/audio/karim/karim_${scene}_${lineNumber}.mp3`
   }
 
+  // Fonction pour obtenir le nom du fichier audio d'Alex
+  const getAlexAudioFile = (scene: string, lineIndex: number): string | null => {
+    if (!dialogue[scene] || !dialogue[scene][lineIndex]) return null
+    if (dialogue[scene][lineIndex].speaker !== 'alex') return null
+    
+    // Compter combien de fois Alex a parlé avant cette ligne dans cette scène (inclus)
+    let alexLineCount = 0
+    for (let i = 0; i <= lineIndex; i++) {
+      if (dialogue[scene][i] && dialogue[scene][i].speaker === 'alex') {
+        alexLineCount++
+      }
+    }
+    
+    // Le numéro dans le fichier est alexLineCount
+    const lineNumber = String(alexLineCount).padStart(2, '0')
+    
+    return `/audio/alex/alex_${scene}_${lineNumber}.mp3`
+  }
+
   useEffect(() => {
     if (currentLine && !showIntroScreen) {
       setShowChoices(false)
@@ -289,6 +308,24 @@ export default function CentreJeunessePage() {
       // Jouer le voice-over de Karim si c'est lui qui parle (seulement après le clic pour commencer)
       if (currentLine.speaker === 'karim' && !isMuted) {
         const audioFile = getKarimAudioFile(currentScene, currentLineIndex)
+        if (audioFile) {
+          // Arrêter le voice-over précédent s'il y en a un
+          if (voiceOverRef.current) {
+            voiceOverRef.current.pause()
+            voiceOverRef.current.currentTime = 0
+          }
+          
+          // Jouer le nouveau voice-over
+          const audio = new Audio(audioFile)
+          audio.volume = volume
+          voiceOverRef.current = audio
+          audio.play().catch(e => console.log('Voice-over bloqué:', e))
+        }
+      }
+
+      // Jouer le voice-over d'Alex si c'est lui qui parle (seulement après le clic pour commencer)
+      if (currentLine.speaker === 'alex' && !isMuted) {
+        const audioFile = getAlexAudioFile(currentScene, currentLineIndex)
         if (audioFile) {
           // Arrêter le voice-over précédent s'il y en a un
           if (voiceOverRef.current) {

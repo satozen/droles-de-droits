@@ -125,8 +125,11 @@ export default function VideoClipPage() {
   const [currentBlockIndex, setCurrentBlockIndex] = useState<number>(0)
   const [isPlaying, setIsPlaying] = useState<boolean>(false)
   const [showControls, setShowControls] = useState<boolean>(true)
-  const [isMuted, setIsMuted] = useState<boolean>(false)
-  const [volume, setVolume] = useState<number>(0.5)
+  // Contrôles séparés pour musique et sons
+  const [musiqueMuted, setMusiqueMuted] = useState<boolean>(false)
+  const [musiqueVolume, setMusiqueVolume] = useState<number>(0.5)
+  const [sonsMuted, setSonsMuted] = useState<boolean>(false)
+  const [sonsVolume, setSonsVolume] = useState<number>(0.5)
   const [currentTime, setCurrentTime] = useState<number>(0)
   const audioRef = useRef<HTMLAudioElement | null>(null)
   
@@ -201,7 +204,7 @@ export default function VideoClipPage() {
   useEffect(() => {
     const audio = new Audio('/audio/karim/MON CODEX.mp3')
     audio.loop = false
-    audio.volume = volume
+    audio.volume = musiqueVolume
     audioRef.current = audio
     
     return () => {
@@ -212,14 +215,14 @@ export default function VideoClipPage() {
 
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.volume = isMuted ? 0 : volume
+      audioRef.current.volume = musiqueMuted ? 0 : musiqueVolume
       if (isPlaying && audioRef.current.paused) {
         audioRef.current.play().catch(e => console.log('Play bloqué:', e))
       } else if (!isPlaying && !audioRef.current.paused) {
         audioRef.current.pause()
       }
     }
-  }, [volume, isMuted, isPlaying])
+  }, [musiqueVolume, musiqueMuted, isPlaying])
 
   const handlePlayPause = () => {
     const audio = audioRef.current
@@ -266,6 +269,14 @@ export default function VideoClipPage() {
     } else {
       setCurrentBlockIndex(index)
     }
+  }
+
+  // Fonction helper pour jouer des sons (personnages et effets sonores)
+  const playSound = (src: string) => {
+    const audio = new Audio(src)
+    audio.volume = sonsMuted ? 0 : sonsVolume
+    audio.play().catch(e => console.log('Sound play bloqué:', e))
+    return audio
   }
 
   // Générer des notes de musique animées pour l'arrière-plan
@@ -344,29 +355,63 @@ export default function VideoClipPage() {
           ← RETOUR
         </Link>
         
-        {/* Contrôles audio */}
-        <div className="flex items-center gap-3 bg-gray-900 border-4 border-black px-4 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-          <button
-            onClick={() => setIsMuted(!isMuted)}
-            className="text-2xl hover:scale-110 transition-transform"
-          >
-            {isMuted ? '🔇' : '🔊'}
-          </button>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.1"
-            value={isMuted ? 0 : volume}
-            onChange={(e) => {
-              const newVolume = parseFloat(e.target.value)
-              setVolume(newVolume)
-              if (newVolume > 0 && isMuted) {
-                setIsMuted(false)
-              }
-            }}
-            className="w-24 h-2 bg-white border-2 border-black rounded-none appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-lime-400 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-black [&::-webkit-slider-thumb]:cursor-pointer"
-          />
+        {/* Contrôles audio séparés */}
+        <div className="flex items-center gap-4 bg-gray-900 border-4 border-black px-4 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+          {/* Contrôle Musique */}
+          <div className="flex items-center gap-2 pr-4 border-r-2 border-white/20">
+            <span className="text-white text-xs font-bold">🎵</span>
+            <button
+              onClick={() => setMusiqueMuted(!musiqueMuted)}
+              className="text-xl hover:scale-110 transition-transform"
+              title="Mute/Unmute Musique"
+            >
+              {musiqueMuted ? '🔇' : '🔊'}
+            </button>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.1"
+              value={musiqueMuted ? 0 : musiqueVolume}
+              onChange={(e) => {
+                const newVolume = parseFloat(e.target.value)
+                setMusiqueVolume(newVolume)
+                if (newVolume > 0 && musiqueMuted) {
+                  setMusiqueMuted(false)
+                }
+              }}
+              className="w-20 h-2 bg-white border-2 border-black rounded-none appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-lime-400 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-black [&::-webkit-slider-thumb]:cursor-pointer"
+              title="Volume Musique"
+            />
+          </div>
+          
+          {/* Contrôle Sons */}
+          <div className="flex items-center gap-2">
+            <span className="text-white text-xs font-bold">🎤</span>
+            <button
+              onClick={() => setSonsMuted(!sonsMuted)}
+              className="text-xl hover:scale-110 transition-transform"
+              title="Mute/Unmute Sons"
+            >
+              {sonsMuted ? '🔇' : '🔊'}
+            </button>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.1"
+              value={sonsMuted ? 0 : sonsVolume}
+              onChange={(e) => {
+                const newVolume = parseFloat(e.target.value)
+                setSonsVolume(newVolume)
+                if (newVolume > 0 && sonsMuted) {
+                  setSonsMuted(false)
+                }
+              }}
+              className="w-20 h-2 bg-white border-2 border-black rounded-none appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-black [&::-webkit-slider-thumb]:cursor-pointer"
+              title="Volume Sons"
+            />
+          </div>
         </div>
       </div>
 
