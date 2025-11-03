@@ -42,10 +42,10 @@ export default function RessourcesPage() {
 
   const organismes = [
     {
-      nom: "Commissaire aux plaintes (CAAP)",
-      description: "Si tes droits n'ont pas été respectés dans le système de santé",
-      site: "https://www.quebec.ca/sante/systeme-et-services-de-sante/porter-plainte-en-matiere-de-sante",
-      icone: "⚖️"
+      nom: "Numéro ton comité des usagers",
+      description: "Trouve le comité des usagers de ton établissement de santé",
+      site: "https://www.quebec.ca/sante/systeme-et-services-de-sante/organisation-des-services/comites-des-usagers-et-comites-de-residents",
+      icone: "📞"
     },
     {
       nom: "Commission des droits de la personne",
@@ -168,8 +168,8 @@ export default function RessourcesPage() {
               },
               {
                 num: 3,
-                titre: "Contacte le CAAP",
-                desc: "Chaque établissement a un Commissaire aux plaintes. C'est gratuit et confidentiel."
+                titre: "Contacte ton comité des usagers",
+                desc: "Chaque établissement a un comité des usagers. C'est gratuit et confidentiel."
               },
               {
                 num: 4,

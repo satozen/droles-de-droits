@@ -150,14 +150,14 @@ export default function JeuPage() {
                 🎮 Mode Aventure
               </motion.button>
             </Link>
-            <Link href="/dialogue">
+            <Link href="/centre-jeunesse">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="px-4 py-2 rounded-full text-sm font-semibold transition-all bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg"
-                title="Dialogue Cafétéria"
+                title="Fouilles et Cafouillage"
               >
-                💬 Dialogue Cafétéria
+                💊 Fouilles et Cafouillage
               </motion.button>
             </Link>
             <button
