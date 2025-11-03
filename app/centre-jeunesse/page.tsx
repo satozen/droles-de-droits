@@ -4,6 +4,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 
@@ -22,11 +23,12 @@ interface DialogueScript {
 }
 
 export default function CentreJeunessePage() {
+  const router = useRouter()
   const dialogue: DialogueScript = {
     'intro': [
       {
         speaker: 'karim',
-        text: "Yo, prends ça, ça va te calmer. Personne va le savoir.",
+        text: "Yo, j'ai un truc pour toi. Ça va t'aider à relaxer. Personne va rien savoir.",
         image: '/images/jeune_offre_drogue.jpg',
         emotion: 'pression'
       },
@@ -38,7 +40,7 @@ export default function CentreJeunessePage() {
       },
       {
         speaker: 'karim',
-        text: "Relax man! J'te dis que personne va rien savoir. Cache-les juste sous ton oreiller.",
+        text: "Relax man! J'te dis que personne va rien savoir. Cache ça juste sous ton oreiller.",
         image: '/images/jeune_offre_drogue.jpg',
         emotion: 'pression'
       },
@@ -48,7 +50,7 @@ export default function CentreJeunessePage() {
         image: '/images/jeune_reflechi.jpg',
         emotion: 'hesite',
         choices: [
-          "Ok, j'en prends et je les cache...",
+          "Ok, je prends ça et je le cache...",
           "Non! J'appelle une intervenante",
           "Non merci, j'veux rien savoir de ça"
         ]
@@ -121,13 +123,13 @@ export default function CentreJeunessePage() {
     'accepte-drogue': [
       {
         speaker: 'alex',
-        text: "Ok... juste cette fois alors. Je les cache où?",
+        text: "Ok... juste cette fois alors. Je cache ça où?",
         image: '/images/jeune_offre_drogue.jpg',
         emotion: 'cede'
       },
       {
         speaker: 'karim',
-        text: "Mets-les sous ton oreiller. Personne va fouiller là.",
+        text: "Mets ça sous ton oreiller. Personne va fouiller là.",
         image: '/images/jeune_offre_drogue.jpg',
         emotion: 'complice'
       },
@@ -139,7 +141,7 @@ export default function CentreJeunessePage() {
       },
       {
         speaker: 'narrateur',
-        text: "Les pilules sont découvertes dans la chambre d'Alex.",
+        text: "L'objet interdit est découvert dans la chambre d'Alex.",
         image: '/images/pilules_rejetees_lit.jpg',
         emotion: 'decouverte'
       },
@@ -162,16 +164,16 @@ export default function CentreJeunessePage() {
       },
       {
         speaker: 'narrateur',
-        text: "🔍 LORS DE LA FOUILLE: L'agent devait INFORMER Alex des raisons de la fouille AVANT de la faire. C'est un DROIT fondamental.",
-        image: '/images/police_parle_au_jeune.jpg',
-        emotion: 'education'
-      },
-      {
-        speaker: 'narrateur',
-        text: "🛡️ RESPECT DE LA DIGNITÉ: Même lors d'une fouille, Alex a droit au RESPECT. La fouille doit être faite en privé, avec dignité.",
-        image: '/images/police_parle_au_jeune.jpg',
-        emotion: 'droits'
-      },
+        text: "💡 PRÉVENTION: Mais tu sais quoi? La meilleure solution à tout ça, c'est peut-être de prendre de meilleures décisions dès le départ. Refuser, demander de l'aide, faire les bons choix.",
+        image: '/images/jeune_reflechi.jpg',
+        emotion: 'conseil',
+        choices: [
+          "En savoir plus sur mes droits"
+        ]
+      }
+    ],
+    /* Section complète sur les droits - En développement
+    'droits-complets': [
       {
         speaker: 'narrateur',
         text: "⚖️ PROCÉDURE DISCIPLINAIRE: Alex a le DROIT d'être informé clairement des accusations portées contre lui. Pas de surprise!",
@@ -195,32 +197,9 @@ export default function CentreJeunessePage() {
         text: "🗣️ DROIT D'ÊTRE ENTENDU: Au tribunal, Alex a le DROIT de raconter SA VERSION des faits. Le juge DOIT l'écouter.",
         image: '/images/jeune_tribunal.jpg',
         emotion: 'parole'
-      },
-      {
-        speaker: 'narrateur',
-        text: "📋 RÉSUMÉ - Tes droits lors d'une fouille et procédure: 1) Être informé POURQUOI | 2) Respect de ta dignité | 3) Avoir un avocat | 4) Famille présente | 5) Être écouté",
-        image: '/images/jeune_tribunal.jpg',
-        emotion: 'resume'
-      },
-      {
-        speaker: 'narrateur',
-        text: "❓ QUESTION POUR TOI: Si un agent veut fouiller ta chambre sans explication, que peux-tu faire? Tu peux DEMANDER les raisons et EXIGER que tes droits soient respectés!",
-        image: '/images/jeune_tribunal.jpg',
-        emotion: 'question'
-      },
-      {
-        speaker: 'narrateur',
-        text: "❓ AUTRE QUESTION: Si tu es accusé de quelque chose, qui peut t'aider? Un avocat, ta famille, un intervenant de confiance. Tu n'as PAS à affronter ça seul!",
-        image: '/images/jeune_tribunal.jpg',
-        emotion: 'question'
-      },
-      {
-        speaker: 'narrateur',
-        text: "💡 RAPPEL IMPORTANT: La meilleure façon d'éviter tout ça? REFUSER dès le départ et DEMANDER de l'aide à un intervenant.",
-        image: '/images/jeune_tribunal.jpg',
-        emotion: 'conseil'
       }
     ]
+    */
   }
 
   const [currentScene, setCurrentScene] = useState<string>('intro')
@@ -228,7 +207,7 @@ export default function CentreJeunessePage() {
   const [showChoices, setShowChoices] = useState<boolean>(false)
   const [textComplete, setTextComplete] = useState<boolean>(false)
   const [isMuted, setIsMuted] = useState<boolean>(false)
-  const [volume, setVolume] = useState<number>(0.5)
+  const [volume, setVolume] = useState<number>(0.375)
   const [showEndScreen, setShowEndScreen] = useState<boolean>(false)
   const [showIntroScreen, setShowIntroScreen] = useState<boolean>(true)
   const audioRef = useRef<HTMLAudioElement | null>(null)
@@ -399,6 +378,14 @@ export default function CentreJeunessePage() {
         setCurrentScene('consequences')
       }
     }
+    // Scène consequences
+    else if (currentScene === 'consequences') {
+      if (choiceIndex === 0) {
+        // Rediriger vers la page en développement
+        router.push('/en-developpement')
+        return
+      }
+    }
 
     setCurrentLineIndex(0)
     setShowChoices(false)
@@ -527,9 +514,6 @@ export default function CentreJeunessePage() {
               <ul className="space-y-3 font-bold text-lg">
                 <li>✓ Droit d'être <span className="text-red-400 font-black">INFORMÉ</span> des raisons AVANT la fouille</li>
                 <li>✓ Droit au <span className="text-red-400 font-black">RESPECT</span> de ta dignité</li>
-                <li>✓ Droit d'avoir un <span className="text-red-400 font-black">AVOCAT</span> ou représentant</li>
-                <li>✓ Droit d'être <span className="text-red-400 font-black">ACCOMPAGNÉ</span> par ta famille</li>
-                <li>✓ Droit d'être <span className="text-red-400 font-black">ENTENDU</span> et de présenter ta version</li>
               </ul>
             </div>
 
@@ -633,13 +617,13 @@ export default function CentreJeunessePage() {
               </p>
               
               <p className="text-center">
-                Aujourd'hui, <span className="text-red-600 font-black">KARIM</span>, un autre résident, t'offre des pilules de drogue.
+                Aujourd'hui, <span className="text-red-600 font-black">KARIM</span>, un des grands du centre, arrive avec une offre louche qui pourrait te causer des problèmes.
               </p>
 
               <div className="bg-gray-900 text-white border-4 border-black p-6 mt-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
                 <h2 className="text-2xl font-black mb-4 text-center">💡 QUE VAIS-TU FAIRE ?</h2>
                 <ul className="space-y-3 font-bold text-lg">
-                  <li>• Accepter et cacher les pilules?</li>
+                  <li>• Accepter et le cacher?</li>
                   <li>• Refuser et demander de l'aide?</li>
                   <li>• Simplement dire non?</li>
                 </ul>
@@ -841,9 +825,6 @@ export default function CentreJeunessePage() {
         <ul className="space-y-2 font-bold">
           <li>✓ Droit d'être informé des raisons de la fouille</li>
           <li>✓ Droit au respect de ta dignité pendant la fouille</li>
-          <li>✓ Droit d'avoir un avocat ou représentant si tu es accusé</li>
-          <li>✓ Droit d'être accompagné par ta famille</li>
-          <li>✓ Droit d'être entendu et de présenter ta version</li>
         </ul>
       </div>
     </div>
