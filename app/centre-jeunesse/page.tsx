@@ -1,5 +1,5 @@
 // Page Fouilles et Cafouillage - Style Néo-Brutaliste / BD
-// Jeu interactif avec Karim sur les fouilles et saisies dans un centre jeunesse
+// Jeu interactif avec Jay sur les fouilles et saisies dans un centre jeunesse
 // Système de visual novel avec bulles de dialogue style comic book
 'use client'
 
@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 
-type Speaker = 'alex' | 'karim' | 'narrateur'
+type Speaker = 'alex' | 'jay' | 'narrateur'
 
 interface DialogueLine {
   speaker: Speaker
@@ -27,7 +27,7 @@ export default function CentreJeunessePage() {
   const dialogue: DialogueScript = {
     'intro': [
       {
-        speaker: 'karim',
+        speaker: 'jay',
         text: "Yo, j'ai un truc pour toi. Ça va t'aider à relaxer. Personne va rien savoir.",
         image: '/images/jeune_offre_drogue.jpg',
         emotion: 'pression'
@@ -39,7 +39,7 @@ export default function CentreJeunessePage() {
         emotion: 'nerveux'
       },
       {
-        speaker: 'karim',
+        speaker: 'jay',
         text: "Relax man! J'te dis que personne va rien savoir. Cache ça juste sous ton oreiller.",
         image: '/images/jeune_offre_drogue.jpg',
         emotion: 'pression'
@@ -64,7 +64,7 @@ export default function CentreJeunessePage() {
         emotion: 'determine'
       },
       {
-        speaker: 'karim',
+        speaker: 'jay',
         text: "Quoi?! T'es sérieux là? Tu vas me stooler?",
         image: '/images/jeune_offre_drogue.jpg',
         emotion: 'choque'
@@ -96,7 +96,7 @@ export default function CentreJeunessePage() {
         emotion: 'confiant'
       },
       {
-        speaker: 'karim',
+        speaker: 'jay',
         text: "Come on man! T'es vraiment sérieux?",
         image: '/images/jeune_offre_drogue.jpg',
         emotion: 'frustre'
@@ -128,7 +128,7 @@ export default function CentreJeunessePage() {
         emotion: 'cede'
       },
       {
-        speaker: 'karim',
+        speaker: 'jay',
         text: "Mets ça sous ton oreiller. Personne va fouiller là.",
         image: '/images/jeune_offre_drogue.jpg',
         emotion: 'complice'
@@ -207,11 +207,59 @@ export default function CentreJeunessePage() {
   const [showChoices, setShowChoices] = useState<boolean>(false)
   const [textComplete, setTextComplete] = useState<boolean>(false)
   const [isMuted, setIsMuted] = useState<boolean>(false)
-  const [volume, setVolume] = useState<number>(0.375)
+  const [volume, setVolume] = useState<number>(0.5) // Volume pour voice-overs
   const [showEndScreen, setShowEndScreen] = useState<boolean>(false)
   const [showIntroScreen, setShowIntroScreen] = useState<boolean>(true)
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const voiceOverRef = useRef<HTMLAudioElement | null>(null)
+  
+  // Système de déblocage progressif des droits
+  const [unlockedRights, setUnlockedRights] = useState<Set<number>>(new Set())
+  
+  // Débloquer les droits progressivement selon la scène et la progression
+  useEffect(() => {
+    const newUnlocked = new Set(unlockedRights)
+    
+    // Droit 1: Dès qu'on parle de fouille (scène accepte-drogue, ligne 2+)
+    if (currentScene === 'accepte-drogue' && currentLineIndex >= 2) {
+      newUnlocked.add(1) // Droit d'être informé des raisons
+    }
+    
+    // Droit 2: Quand l'objet est découvert (scène accepte-drogue, ligne 3+)
+    if (currentScene === 'accepte-drogue' && currentLineIndex >= 3) {
+      newUnlocked.add(2) // Motifs raisonnables
+    }
+    
+    // Droit 3: Dans la scène des conséquences
+    if (currentScene === 'consequences' && currentLineIndex >= 0) {
+      newUnlocked.add(1)
+      newUnlocked.add(2)
+      newUnlocked.add(3) // Possession de quelque chose de dangereux/illégal
+    }
+    
+    // Droit 4: Dans toutes les fins (quand on parle du respect et de la dignité)
+    if (currentScene === 'appelle-intervenante' && currentLineIndex >= 2) {
+      newUnlocked.add(1)
+      newUnlocked.add(2)
+      newUnlocked.add(3)
+      newUnlocked.add(4) // Respect de la dignité
+    }
+    
+    if (currentScene === 'refus-ferme' && currentLineIndex >= 1) {
+      newUnlocked.add(1)
+      newUnlocked.add(2)
+      newUnlocked.add(3)
+      newUnlocked.add(4) // Respect de la dignité
+    }
+    
+    if (currentScene === 'consequences' && currentLineIndex >= 2) {
+      newUnlocked.add(4) // Respect de la dignité
+    }
+    
+    if (newUnlocked.size !== unlockedRights.size) {
+      setUnlockedRights(newUnlocked)
+    }
+  }, [currentScene, currentLineIndex])
 
   const currentDialogue = dialogue[currentScene]
   const currentLine = currentDialogue?.[currentLineIndex]
@@ -219,11 +267,11 @@ export default function CentreJeunessePage() {
   // Vérifier si l'histoire est terminée
   const isStoryEnded = !currentLine || (currentLineIndex >= currentDialogue.length - 1 && !currentLine.choices && currentScene !== 'intro')
 
-  // Gestion de la musique de fond
+  // Gestion de la musique de fond (25% plus basse que les voice-overs)
   useEffect(() => {
     const audio = new Audio('/audio/Droles de droits.mp3')
     audio.loop = true
-    audio.volume = volume
+    audio.volume = volume * 0.75 // Musique à 75% du volume des voice-overs
     audioRef.current = audio
     audio.play().catch(e => console.log('Autoplay bloqué:', e))
     
@@ -234,29 +282,29 @@ export default function CentreJeunessePage() {
     }
   }, [])
 
-  // Mise à jour du volume et mute
+  // Mise à jour du volume et mute (musique à 75% du volume des voice-overs)
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.volume = isMuted ? 0 : volume
+      audioRef.current.volume = isMuted ? 0 : (volume * 0.75)
     }
   }, [volume, isMuted])
 
-  // Fonction pour obtenir le nom du fichier audio de Karim
-  const getKarimAudioFile = (scene: string, lineIndex: number): string | null => {
+  // Fonction pour obtenir le nom du fichier audio de Jay
+  const getJayAudioFile = (scene: string, lineIndex: number): string | null => {
     if (!dialogue[scene] || !dialogue[scene][lineIndex]) return null
-    if (dialogue[scene][lineIndex].speaker !== 'karim') return null
-    
-    // Compter combien de fois Karim a parlé avant cette ligne dans cette scène (inclus)
-    let karimLineCount = 0
+    if (dialogue[scene][lineIndex].speaker !== 'jay') return null
+
+    // Compter combien de fois Jay a parlé avant cette ligne dans cette scène (inclus)
+    let jayLineCount = 0
     for (let i = 0; i <= lineIndex; i++) {
-      if (dialogue[scene][i] && dialogue[scene][i].speaker === 'karim') {
-        karimLineCount++
+      if (dialogue[scene][i] && dialogue[scene][i].speaker === 'jay') {
+        jayLineCount++
       }
     }
-    
-    // Le numéro dans le fichier est karimLineCount
-    const lineNumber = String(karimLineCount).padStart(2, '0')
-    
+
+    // Le numéro dans le fichier est jayLineCount
+    const lineNumber = String(jayLineCount).padStart(2, '0')
+
     return `/audio/karim/karim_${scene}_${lineNumber}.mp3`
   }
 
@@ -284,9 +332,9 @@ export default function CentreJeunessePage() {
       setShowChoices(false)
       setTextComplete(false)
       
-      // Jouer le voice-over de Karim si c'est lui qui parle (seulement après le clic pour commencer)
-      if (currentLine.speaker === 'karim' && !isMuted) {
-        const audioFile = getKarimAudioFile(currentScene, currentLineIndex)
+      // Jouer le voice-over de Jay si c'est lui qui parle (seulement après le clic pour commencer)
+      if (currentLine.speaker === 'jay' && !isMuted) {
+        const audioFile = getJayAudioFile(currentScene, currentLineIndex)
         if (audioFile) {
           // Arrêter le voice-over précédent s'il y en a un
           if (voiceOverRef.current) {
@@ -401,7 +449,7 @@ export default function CentreJeunessePage() {
         text: 'text-black',
         position: 'left-8 bottom-24'
       }
-    } else if (currentLine.speaker === 'karim') {
+    } else if (currentLine.speaker === 'jay') {
       return {
         bg: 'bg-red-500',
         border: 'border-black border-4',
@@ -423,9 +471,84 @@ export default function CentreJeunessePage() {
   const getSpeakerLabel = () => {
     switch (currentLine.speaker) {
       case 'alex': return '💪 ALEX'
-      case 'karim': return '😈 KARIM'
+      case 'jay': return '😈 JAY'
       case 'narrateur': return '📖 NARRATEUR'
       default: return ''
+    }
+  }
+  
+  // Définition des droits
+  const rightsData = [
+    { id: 1, text: "Droit d'être informé des raisons de la fouille" },
+    { id: 2, text: "Ils doivent avoir des motifs raisonnables" },
+    { id: 3, text: "Penser que tu es en possession de quelque chose de dangereux ou illégal" },
+    { id: 4, text: "Droit au respect de ta dignité pendant la fouille" }
+  ]
+  
+  // Composant pour afficher un droit (débloqué ou verrouillé)
+  const RightItem = ({ right, isUnlocked }: { right: typeof rightsData[0], isUnlocked: boolean }) => {
+    if (isUnlocked) {
+      return (
+        <motion.li
+          initial={{ opacity: 0, x: -20, scale: 0.8 }}
+          animate={{ opacity: 1, x: 0, scale: 1 }}
+          transition={{ type: "spring", stiffness: 200, damping: 15 }}
+          className="flex items-start gap-3 font-bold text-lg"
+        >
+          <motion.span 
+            className="text-lime-400 text-2xl"
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ delay: 0.2, type: "spring" }}
+          >
+            ✓
+          </motion.span>
+          <span>{right.text}</span>
+        </motion.li>
+      )
+    } else {
+      return (
+        <motion.li 
+          className="flex items-start gap-3 font-bold text-lg opacity-40 relative"
+          animate={{ 
+            opacity: [0.3, 0.5, 0.3]
+          }}
+          transition={{ 
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        >
+          <motion.span 
+            className="text-gray-500 text-2xl"
+            animate={{ 
+              rotate: [0, 5, -5, 0]
+            }}
+            transition={{ 
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          >
+            🔒
+          </motion.span>
+          <div className="relative">
+            <span className="blur-[3px] select-none">Droit à débloquer...</span>
+            <motion.div 
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+              animate={{ 
+                x: [-100, 200]
+              }}
+              transition={{ 
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+                repeatDelay: 1
+              }}
+            />
+          </div>
+        </motion.li>
+      )
     }
   }
 
@@ -455,7 +578,7 @@ export default function CentreJeunessePage() {
         }
       } else if (currentScene === 'consequences') {
         return {
-          title: "⚠️ CONSEQUENCES APPRISES",
+          title: "⚠️ CONSÉQUENCES APPRISES",
           message: "Tu as vu les conséquences d'accepter des drogues, mais tu connais maintenant TES DROITS même dans cette situation difficile!",
           color: "bg-yellow-300"
         }
@@ -511,10 +634,169 @@ export default function CentreJeunessePage() {
             {/* Résumé des droits appris */}
             <div className="bg-gray-900 text-white border-4 border-black p-6 mb-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
               <h2 className="text-2xl font-black mb-4 text-center">📋 TES DROITS LORS D'UNE FOUILLE :</h2>
-              <ul className="space-y-3 font-bold text-lg">
-                <li>✓ Droit d'être <span className="text-red-400 font-black">INFORMÉ</span> des raisons AVANT la fouille. Ils doivent avoir des motifs raisonnables - parce qu'ils pensent que tu es en possession de quelque chose de dangereux ou illégal.</li>
-                <li>✓ Droit au <span className="text-red-400 font-black">RESPECT</span> de ta dignité</li>
+              <ul className="space-y-3">
+                {rightsData.map(right => (
+                  <RightItem key={right.id} right={right} isUnlocked={unlockedRights.has(right.id)} />
+                ))}
               </ul>
+              <p className="text-center mt-4 text-lime-400 font-bold text-sm">
+                {unlockedRights.size}/{rightsData.length} droits débloqués
+              </p>
+            </div>
+
+            {/* Panneau des prochains chapitres */}
+            <div className="bg-gradient-to-br from-purple-500 to-pink-500 border-4 border-black p-8 mb-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+              <h2 className="text-3xl font-black mb-6 text-center text-white">
+                📚 PROCHAINS CHAPITRES
+              </h2>
+              
+              <p className="text-white text-center font-bold text-lg mb-6">
+                L'aventure continue ! D'autres histoires immersives arrivent pour explorer les 12 droits :
+              </p>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                {/* Chapitre 1 - LA FUGUE */}
+                <motion.div
+                  whileHover={{ scale: 1.05, rotate: -1 }}
+                  className="relative border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-not-allowed overflow-hidden h-80"
+                >
+                  {/* Image de fond */}
+                  <div className="absolute inset-0">
+                    <img 
+                      src="/images/fugue_course.jpg" 
+                      alt="La Fugue"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                  </div>
+                  
+                  {/* Contenu */}
+                  <div className="relative h-full p-5 flex flex-col justify-end">
+                    <div className="absolute top-3 right-3">
+                      <span className="text-xs bg-yellow-300 border-2 border-black px-2 py-1 font-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">BIENTÔT</span>
+                    </div>
+                    <div className="space-y-2">
+                      <h3 className="font-black text-3xl text-white" style={{ textShadow: '3px 3px 0px rgba(0,0,0,1), -1px -1px 0px rgba(0,0,0,1), 1px -1px 0px rgba(0,0,0,1), -1px 1px 0px rgba(0,0,0,1)' }}>LA FUGUE</h3>
+                      <div className="bg-cyan-400 border-4 border-black p-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                        <p className="text-sm text-black font-bold mb-1">
+                          🏃 Le droit à l'hébergement
+                        </p>
+                        <p className="text-sm text-black font-semibold">
+                          Un toit digne et sécuritaire
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Chapitre 2 - L'ÉLIXIR DES CHOIX */}
+                <motion.div
+                  whileHover={{ scale: 1.05, rotate: 1 }}
+                  className="relative border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-not-allowed overflow-hidden h-80"
+                >
+                  {/* Image de fond */}
+                  <div className="absolute inset-0">
+                    <img 
+                      src="/images/crystaux_decision.jpg" 
+                      alt="L'Élixir des Choix"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                  </div>
+                  
+                  {/* Contenu */}
+                  <div className="relative h-full p-5 flex flex-col justify-end">
+                    <div className="absolute top-3 right-3">
+                      <span className="text-xs bg-yellow-300 border-2 border-black px-2 py-1 font-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">BIENTÔT</span>
+                    </div>
+                    <div className="space-y-2">
+                      <h3 className="font-black text-3xl text-white" style={{ textShadow: '3px 3px 0px rgba(0,0,0,1), -1px -1px 0px rgba(0,0,0,1), 1px -1px 0px rgba(0,0,0,1), -1px 1px 0px rgba(0,0,0,1)' }}>L'ÉLIXIR DES CHOIX</h3>
+                      <div className="bg-yellow-300 border-4 border-black p-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                        <p className="text-sm text-black font-bold mb-1">
+                          ⚗️ Le droit de participer aux décisions
+                        </p>
+                        <p className="text-sm text-black font-semibold">
+                          Ton pouvoir de décision
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Chapitre 3 - LE PLAN D'INTERVENTION */}
+                <motion.div
+                  whileHover={{ scale: 1.05, rotate: -1 }}
+                  className="relative border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-not-allowed overflow-hidden h-80"
+                >
+                  {/* Image de fond */}
+                  <div className="absolute inset-0">
+                    <img 
+                      src="/images/plan d'intervention_gemini.png" 
+                      alt="Le Plan d'Intervention"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                  </div>
+                  
+                  {/* Contenu */}
+                  <div className="relative h-full p-5 flex flex-col justify-end">
+                    <div className="absolute top-3 right-3">
+                      <span className="text-xs bg-yellow-300 border-2 border-black px-2 py-1 font-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">BIENTÔT</span>
+                    </div>
+                    <div className="space-y-2">
+                      <h3 className="font-black text-3xl text-white" style={{ textShadow: '3px 3px 0px rgba(0,0,0,1), -1px -1px 0px rgba(0,0,0,1), 1px -1px 0px rgba(0,0,0,1), -1px 1px 0px rgba(0,0,0,1)' }}>LE PLAN D'INTERVENTION</h3>
+                      <div className="bg-lime-400 border-4 border-black p-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                        <p className="text-sm text-black font-bold mb-1">
+                          📋 Le droit de consulter son dossier
+                        </p>
+                        <p className="text-sm text-black font-semibold">
+                          Accède à ton dossier
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Chapitre 4 - TEXTO À L'EAU */}
+                <motion.div
+                  whileHover={{ scale: 1.05, rotate: 1 }}
+                  className="relative border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-not-allowed overflow-hidden h-80"
+                >
+                  {/* Image de fond */}
+                  <div className="absolute inset-0">
+                    <img 
+                      src="/images/droit_confidentialite_top_confidentiel.jpg" 
+                      alt="Texto à l'Eau"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                  </div>
+                  
+                  {/* Contenu */}
+                  <div className="relative h-full p-5 flex flex-col justify-end">
+                    <div className="absolute top-3 right-3">
+                      <span className="text-xs bg-yellow-300 border-2 border-black px-2 py-1 font-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">BIENTÔT</span>
+                    </div>
+                    <div className="space-y-2">
+                      <h3 className="font-black text-3xl text-white" style={{ textShadow: '3px 3px 0px rgba(0,0,0,1), -1px -1px 0px rgba(0,0,0,1), 1px -1px 0px rgba(0,0,0,1), -1px 1px 0px rgba(0,0,0,1)' }}>TEXTO À L'EAU</h3>
+                      <div className="bg-pink-400 border-4 border-black p-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                        <p className="text-sm text-black font-bold mb-1">
+                          📱 Le droit à la communication
+                        </p>
+                        <p className="text-sm text-black font-semibold">
+                          Reste en contact avec tes proches
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+
+              <div className="mt-6 text-center bg-black/20 border-2 border-black p-4 rounded">
+                <p className="text-white font-bold text-sm">
+                  ✨ Chaque chapitre = Une nouvelle aventure interactive pour découvrir tes droits !
+                </p>
+              </div>
             </div>
 
             {/* Boutons d'action */}
@@ -533,6 +815,7 @@ export default function CentreJeunessePage() {
                   setCurrentLineIndex(0)
                   setShowChoices(false)
                   setTextComplete(false)
+                  setUnlockedRights(new Set()) // Réinitialiser les droits débloqués
                 }}
                 className="px-10 py-5 bg-cyan-400 text-black border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] font-black text-xl hover:translate-x-1 hover:translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
               >
@@ -605,6 +888,24 @@ export default function CentreJeunessePage() {
             />
           </div>
 
+          {/* Message de bienvenue pour les décideurs */}
+          <div className="bg-gradient-to-br from-purple-50 to-blue-50 border-6 border-purple-400 shadow-[12px_12px_0px_0px_rgba(147,51,234,0.3)] p-8 mb-8 rounded-xl">
+            <h2 className="text-2xl md:text-3xl font-black mb-4 text-gray-800 text-center">
+              👥 Bienvenue aux membres des comités d'usagers
+            </h2>
+            <div className="space-y-3 text-base md:text-lg text-gray-700 max-w-4xl mx-auto">
+              <p className="leading-relaxed">
+                <strong>Cette démo interactive</strong> a été conçue pour sensibiliser vos jeunes en centre jeunesse à leurs droits, notamment en ce qui concerne <strong>les fouilles et saisies</strong> (Droit #9).
+              </p>
+              <p className="leading-relaxed">
+                À travers une histoire réaliste avec des personnages auxquels vos jeunes peuvent s'identifier, ce jeu présente des situations concrètes où leurs droits entrent en jeu. Les jeunes font des <strong>choix qui ont des conséquences</strong>, apprenant ainsi de façon interactive plutôt que passive.
+              </p>
+              <p className="leading-relaxed bg-white/80 rounded-lg p-4 border-l-4 border-purple-500">
+                <strong>🎮 Fonctionnalités de cette démo :</strong> Narration immersive style bande dessinée • Choix multiples avec conséquences • Voice-over des personnages • Apprentissage par l'expérience • Style visuel engageant
+              </p>
+            </div>
+          </div>
+
           {/* Panneau de contexte néo-brutaliste */}
           <div className="bg-yellow-300 border-8 border-black shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] p-12">
             <h1 className="text-5xl md:text-6xl font-black mb-6 text-center">
@@ -617,7 +918,7 @@ export default function CentreJeunessePage() {
               </p>
               
               <p className="text-center">
-                Aujourd'hui, <span className="text-red-600 font-black">KARIM</span>, un des grands du centre, arrive avec une offre louche qui pourrait te causer des problèmes.
+                Aujourd'hui, <span className="text-red-600 font-black">JAY</span>, un des grands du centre, arrive avec une offre louche qui pourrait te causer des problèmes.
               </p>
 
               <div className="bg-gray-900 text-white border-4 border-black p-6 mt-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
@@ -821,10 +1122,16 @@ export default function CentreJeunessePage() {
 
       {/* Info des droits en bas */}
       <div className="w-full max-w-5xl mt-6 bg-gray-900 text-white border-4 border-black p-6">
-        <h3 className="font-black text-xl mb-2">💡 DROITS LORS D'UNE FOUILLE :</h3>
-        <ul className="space-y-2 font-bold">
-          <li>✓ Droit d'être informé des raisons de la fouille. Ils doivent avoir des motifs raisonnables - parce qu'ils pensent que tu es en possession de quelque chose de dangereux ou illégal.</li>
-          <li>✓ Droit au respect de ta dignité pendant la fouille</li>
+        <div className="flex justify-between items-center mb-3">
+          <h3 className="font-black text-xl">💡 DROITS LORS D'UNE FOUILLE</h3>
+          <span className="text-lime-400 font-bold text-sm">
+            {unlockedRights.size}/{rightsData.length} débloqués
+          </span>
+        </div>
+        <ul className="space-y-2">
+          {rightsData.map(right => (
+            <RightItem key={right.id} right={right} isUnlocked={unlockedRights.has(right.id)} />
+          ))}
         </ul>
       </div>
     </div>

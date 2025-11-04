@@ -14,7 +14,7 @@ Cela permet de :
 ## ✅ Ce qui est actif dans la démo
 
 1. **Commencer l'aventure** - Jeu principal avec les 12 droits
-2. **Fouilles et Cafouillage** - Dialogue interactif avec Karim et Alex
+2. **Fouilles et Cafouillage** - Dialogue interactif avec Jay et Alex
 3. **Video Clip Rap** - Paroles synchronisées avec images
 4. **Assistant Milo** - Assistant IA pour répondre aux questions
 5. **Ressources** - Contacts et numéros d'urgence

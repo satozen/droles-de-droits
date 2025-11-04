@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   authors: [{ name: 'Drôles de Droits' }],
   openGraph: {
     title: 'DRÔLES DE DROITS 🎮 | Connais tes 12 droits en santé',
-    description: 'Jeu interactif éducatif pour apprendre tes droits et responsabilités dans le système de santé québécois. Scénarios réalistes, dialogues avec Karim et Alex, mode RPG et vidéoclip rap. Parfait pour les jeunes en centre jeunesse! 🎯',
+    description: 'Jeu interactif éducatif pour apprendre tes droits et responsabilités dans le système de santé québécois. Scénarios réalistes, dialogues avec Jay et Alex, mode RPG et vidéoclip rap. Parfait pour les jeunes en centre jeunesse! 🎯',
     url: process.env.NEXT_PUBLIC_SITE_URL || 'https://droles-de-droits.vercel.app',
     siteName: 'Drôles de Droits',
     images: [

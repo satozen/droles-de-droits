@@ -76,7 +76,7 @@ export default function VideoClipPage() {
       imageFolder: 'videoclip_12'
     },
     {
-      text: "Karim m'a donné son briquet à cacher, j'ai dit non\nPas pour le snitch, mais parce que j'choisis mes actions\nAider un ami c'est pas être complice de ses erreurs\nVraie amitié c'est lui montrer y'a d'autres valeurs",
+      text: "Jay m'a donné son briquet à cacher, j'ai dit non\nPas pour le snitch, mais parce que j'choisis mes actions\nAider un ami c'est pas être complice de ses erreurs\nVraie amitié c'est lui montrer y'a d'autres valeurs",
       type: 'pont',
       imageFolder: 'videoclip_13'
     },
@@ -132,9 +132,15 @@ export default function VideoClipPage() {
   const [sonsVolume, setSonsVolume] = useState<number>(0.5)
   const [currentTime, setCurrentTime] = useState<number>(0)
   const audioRef = useRef<HTMLAudioElement | null>(null)
+  const currentBlockIndexRef = useRef<number>(currentBlockIndex)
   
   const SONG_DURATION = 262 // 4:22 en secondes
-  const BLOCK_DURATION = SONG_DURATION / lyrics.length // ~12.5 secondes par bloc
+  const BLOCK_DURATION = useMemo(() => SONG_DURATION / lyrics.length, [lyrics.length]) // ~12.5 secondes par bloc
+
+  // Mettre à jour la ref quand currentBlockIndex change
+  useEffect(() => {
+    currentBlockIndexRef.current = currentBlockIndex
+  }, [currentBlockIndex])
 
   const currentBlock = lyrics[currentBlockIndex]
   
@@ -164,26 +170,35 @@ export default function VideoClipPage() {
     }
   }
 
-  // Synchronisation avec l'audio
+  // Synchronisation avec l'audio - vérification fréquente via intervalle
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const audio = audioRef.current
+      if (!audio || audio.paused) return
+      
+      const currentTime = audio.currentTime
+      setCurrentTime(currentTime)
+      
+      // Calculer quel bloc devrait être affiché selon le temps
+      const blockIndex = Math.floor(currentTime / BLOCK_DURATION)
+      const clampedIndex = Math.min(blockIndex, lyrics.length - 1)
+      
+      // Utiliser la ref pour éviter les dépendances circulaires
+      if (clampedIndex !== currentBlockIndexRef.current) {
+        console.log(`Changement de bloc: ${currentBlockIndexRef.current} -> ${clampedIndex} (temps: ${currentTime.toFixed(2)}s)`)
+        setCurrentBlockIndex(clampedIndex)
+      }
+    }, 100) // Vérification toutes les 100ms pour une synchronisation précise
+
+    return () => {
+      clearInterval(intervalId)
+    }
+  }, [BLOCK_DURATION, lyrics.length])
+
+  // Gestion des événements audio
   useEffect(() => {
     const audio = audioRef.current
     if (!audio) return
-
-    const updateTime = () => {
-      setCurrentTime(audio.currentTime)
-      
-      // Calculer quel bloc devrait être affiché selon le temps
-      const blockIndex = Math.floor(audio.currentTime / BLOCK_DURATION)
-      const clampedIndex = Math.min(blockIndex, lyrics.length - 1)
-      
-      if (clampedIndex !== currentBlockIndex) {
-        setCurrentBlockIndex(clampedIndex)
-      }
-    }
-
-    const handleTimeUpdate = () => {
-      updateTime()
-    }
 
     const handleEnded = () => {
       setIsPlaying(false)
@@ -191,14 +206,12 @@ export default function VideoClipPage() {
       setCurrentTime(0)
     }
 
-    audio.addEventListener('timeupdate', handleTimeUpdate)
     audio.addEventListener('ended', handleEnded)
 
     return () => {
-      audio.removeEventListener('timeupdate', handleTimeUpdate)
       audio.removeEventListener('ended', handleEnded)
     }
-  }, [currentBlockIndex, BLOCK_DURATION, lyrics.length])
+  }, [])
 
   // Gestion de la musique de fond
   useEffect(() => {
@@ -388,29 +401,29 @@ export default function VideoClipPage() {
           {/* Contrôle Sons */}
           <div className="flex items-center gap-2">
             <span className="text-white text-xs font-bold">🎤</span>
-            <button
+          <button
               onClick={() => setSonsMuted(!sonsMuted)}
               className="text-xl hover:scale-110 transition-transform"
               title="Mute/Unmute Sons"
-            >
+          >
               {sonsMuted ? '🔇' : '🔊'}
-            </button>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.1"
+          </button>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.1"
               value={sonsMuted ? 0 : sonsVolume}
-              onChange={(e) => {
-                const newVolume = parseFloat(e.target.value)
+            onChange={(e) => {
+              const newVolume = parseFloat(e.target.value)
                 setSonsVolume(newVolume)
                 if (newVolume > 0 && sonsMuted) {
                   setSonsMuted(false)
-                }
-              }}
+              }
+            }}
               className="w-20 h-2 bg-white border-2 border-black rounded-none appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-black [&::-webkit-slider-thumb]:cursor-pointer"
               title="Volume Sons"
-            />
+          />
           </div>
         </div>
       </div>
@@ -429,8 +442,8 @@ export default function VideoClipPage() {
             transition={{ opacity: { duration: 0.5 } }}
           >
             <motion.img
-              src={getImagePath(currentBlock.imageFolder)}
-              alt="Video clip"
+            src={getImagePath(currentBlock.imageFolder)}
+            alt="Video clip"
               className="w-full h-full object-cover"
               style={{
                 minWidth: '110%',
@@ -438,33 +451,33 @@ export default function VideoClipPage() {
                 display: 'block'
               }}
               initial={{ scale: 1.1 }}
-              animate={{ 
-                scale: [1, 1.05, 1],
+            animate={{ 
+              scale: [1, 1.05, 1],
                 x: [0, -15, 15, 0],
                 y: [0, 10, -10, 0]
-              }}
-              transition={{ 
-                scale: { duration: 8, repeat: Infinity, ease: "easeInOut" },
-                x: { duration: 12, repeat: Infinity, ease: "easeInOut" },
-                y: { duration: 10, repeat: Infinity, ease: "easeInOut" }
-              }}
-              onLoad={() => {
-                console.log('✅ Image loaded successfully:', currentBlock.imageFolder, getImagePath(currentBlock.imageFolder))
-              }}
-              onError={(e) => {
-                const target = e.target as HTMLImageElement
-                const folder = currentBlock.imageFolder
-                const currentSrc = target.src
-                console.error('❌ Image load error:', currentSrc, 'Trying fallback for folder:', folder)
-                if (currentSrc.endsWith('.jpg')) {
-                  target.src = `/images/videoclip/${folder}.png`
-                } else if (currentSrc.endsWith('.png')) {
-                  target.src = `/images/videoclip/${folder}.jpeg`
-                } else {
-                  target.src = '/images/establishing_centre jeunesse.jpg'
-                }
-              }}
-            />
+            }}
+            transition={{ 
+              scale: { duration: 8, repeat: Infinity, ease: "easeInOut" },
+              x: { duration: 12, repeat: Infinity, ease: "easeInOut" },
+              y: { duration: 10, repeat: Infinity, ease: "easeInOut" }
+            }}
+            onLoad={() => {
+              console.log('✅ Image loaded successfully:', currentBlock.imageFolder, getImagePath(currentBlock.imageFolder))
+            }}
+            onError={(e) => {
+              const target = e.target as HTMLImageElement
+              const folder = currentBlock.imageFolder
+              const currentSrc = target.src
+              console.error('❌ Image load error:', currentSrc, 'Trying fallback for folder:', folder)
+              if (currentSrc.endsWith('.jpg')) {
+                target.src = `/images/videoclip/${folder}.png`
+              } else if (currentSrc.endsWith('.png')) {
+                target.src = `/images/videoclip/${folder}.jpeg`
+              } else {
+                target.src = '/images/establishing_centre jeunesse.jpg'
+              }
+            }}
+          />
           </motion.div>
         </AnimatePresence>
 

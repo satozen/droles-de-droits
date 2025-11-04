@@ -2,13 +2,13 @@
 
 ## SCÈNE: INTRO
 
-**KARIM:**
+**JAY:**
 Yo, prends ça, ça va te calmer. Personne va le savoir.
 
 **ALEX:**
 Je... je sais pas... Et si on se fait prendre?
 
-**KARIM:**
+**JAY:**
 Relax man! J'te dis que personne va rien savoir. Cache-les juste sous ton oreiller.
 
 **ALEX:**
@@ -21,7 +21,7 @@ Sous mon oreiller... Je sais pas... Ils font des fouilles des fois. Et si je me 
 **ALEX:**
 Non! Je vais appeler une intervenante. Ce que tu fais, c'est pas correct.
 
-**KARIM:**
+**JAY:**
 Quoi?! T'es sérieux là? Tu vas me stooler?
 
 **NARRATEUR:**
@@ -40,7 +40,7 @@ En signalant la situation, Alex se protège lui-même ET les autres résidents d
 **ALEX:**
 Non merci, j'veux rien savoir de ça. Garde tes affaires.
 
-**KARIM:**
+**JAY:**
 Come on man! T'es vraiment sérieux?
 
 **ALEX:**
@@ -59,7 +59,7 @@ En refusant, Alex évite des conséquences graves comme une fouille ou des sanct
 **ALEX:**
 Ok... juste cette fois alors. Je les cache où?
 
-**KARIM:**
+**JAY:**
 Mets-les sous ton oreiller. Personne va fouiller là.
 
 **NARRATEUR:**
@@ -118,7 +118,7 @@ RAPPEL IMPORTANT: La meilleure façon d'éviter tout ça? REFUSER dès le dépar
 - Refus ferme: voix ferme, confiante
 - Accepte drogue: voix qui cède, inquiète
 
-### KARIM (VOIX PLUS ASSURÉE, PRESSION)
+### JAY (VOIX PLUS ASSURÉE, PRESSION)
 - Intro: voix persuasive, pressante
 - Réaction: voix choquée, frustrée
 

@@ -37,7 +37,7 @@ export default function Home() {
               DRÔLES DE DROITS
             </motion.h1>
             <p className="text-2xl text-gray-700 mb-6">
-              Découvre tes 12 droits en tant qu'usager du système de santé
+              Un jeu pour sensibiliser les jeunes à leurs 12 droits d'usagers
             </p>
             <motion.p
               initial={{ opacity: 0 }}
@@ -45,9 +45,8 @@ export default function Home() {
               transition={{ delay: 0.3 }}
               className="text-lg text-gray-600 mb-8 max-w-2xl"
             >
-              Que tu sois en centre jeunesse, à l'hôpital ou dans un CLSC, tu as des droits. 
-              À travers des scénarios interactifs, apprends à les connaître et à les faire respecter. 
-              Connaître tes droits, c'est avoir du pouvoir.
+              Une plateforme interactive qui permet aux jeunes en centre jeunesse de découvrir leurs droits à travers des scénarios engageants qui leur ressemblent. 
+              Un outil pédagogique qui transforme l'apprentissage passif des droits en expérience captivante.
             </motion.p>
             
             {/* Stats rapides */}

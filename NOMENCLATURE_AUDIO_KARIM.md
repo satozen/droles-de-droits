@@ -1,8 +1,9 @@
-# NOMENCLATURE DES FICHIERS AUDIO - KARIM
+# NOMENCLATURE DES FICHIERS AUDIO - JAY (fichiers nommés "karim_*")
 
 ## Système de nommage recommandé :
 
 ### Format : `karim_SCENE_NUMERO.mp3`
+*Note: Les fichiers audio gardent le préfixe "karim" pour des raisons techniques, mais ils correspondent au personnage Jay.*
 
 ---
 
