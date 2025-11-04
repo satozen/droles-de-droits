@@ -13,8 +13,8 @@ export const metadata: Metadata = {
   keywords: ['droits usagers', 'santé québécois', 'jeu éducatif', 'centre jeunesse', 'droits des jeunes', 'santé mentale', 'droits et devoirs', 'système de santé Québec'],
   authors: [{ name: 'Drôles de Droits' }],
   openGraph: {
-    title: 'DRÔLES DE DROITS 🎮 | Connais tes 12 droits en santé',
-    description: 'Jeu interactif éducatif pour apprendre tes droits et responsabilités dans le système de santé québécois. Scénarios réalistes, dialogues avec Jay et Alex, mode RPG et vidéoclip rap. Parfait pour les jeunes en centre jeunesse! 🎯',
+    title: 'DRÔLES DE DROITS 🎮 | Tes 12 droits en santé au Québec',
+    description: 'Une plateforme interactive pour les jeunes en centre jeunesse. Des scénarios engageants qui leur ressemblent. Des droits qui prennent vie. L\'apprentissage passif devient une expérience captivante.',
     url: process.env.NEXT_PUBLIC_SITE_URL || 'https://droles-de-droits.vercel.app',
     siteName: 'Drôles de Droits',
     images: [
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
         url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://droles-de-droits.vercel.app'}/images/hero_mauve_couleurs.png`,
         width: 1200,
         height: 630,
-        alt: 'DRÔLES DE DROITS - Jeu interactif éducatif sur les 12 droits des usagers en santé au Québec',
+        alt: 'DRÔLES DE DROITS - Jeu interactif éducatif pour les jeunes en centre jeunesse',
         type: 'image/png',
       },
     ],
@@ -31,8 +31,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'DRÔLES DE DROITS 🎮 | Connais tes 12 droits en santé',
-    description: 'Jeu interactif pour apprendre tes droits et responsabilités dans le système de santé québécois. Scénarios, dialogues, RPG et rap! 🎯',
+    title: 'DRÔLES DE DROITS 🎮 | Tes 12 droits en santé au Québec',
+    description: 'Plateforme interactive pour les jeunes en centre jeunesse. Des scénarios qui leur ressemblent. Des droits qui prennent vie.',
     images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://droles-de-droits.vercel.app'}/images/hero_mauve_couleurs.png`],
     creator: '@drolesdedroits',
     site: '@drolesdedroits',
