@@ -12,7 +12,8 @@ export default function Navigation() {
 
   const links = [
     { href: '/', label: 'Accueil' },
-    { href: '/jeu', label: 'Jeu' },
+    { href: '/centre-jeunesse', label: 'Jeu' },
+    { href: '/jeu', label: 'Quiz' },
     { href: '/assistant', label: 'Assistant IA' },
     { href: '/ressources', label: 'Ressources' },
     { href: '/guide', label: 'Guide' },

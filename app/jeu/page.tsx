@@ -155,16 +155,6 @@ export default function JeuPage() {
               </motion.button>
             </Link>
             */}
-            <Link href="/centre-jeunesse">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-4 py-2 rounded-full text-sm font-semibold transition-all bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg"
-                title="Fouilles et Cafouillage"
-              >
-                💊 Fouilles et Cafouillage
-              </motion.button>
-            </Link>
             <button
               onClick={() => {
                 if (confirm('Es-tu sûr de vouloir réinitialiser toute ta progression? Cette action ne peut pas être annulée.')) {
@@ -202,10 +192,13 @@ export default function JeuPage() {
         >
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-800 mb-4 text-center">
-              Explorez l'Expérience Interactive 🎮
+              Quiz Interactif 📝
             </h2>
             <p className="text-lg text-gray-700 leading-relaxed mb-4 text-center">
-              Ce que vous voyez ci-dessous est <strong>un aperçu des chapitres</strong> du roman visuel complet. Chaque "droit" représente un module d'apprentissage avec des scénarios interactifs, des choix conséquents et une progression narrative engageante.
+              Voici un <strong>quiz interactif</strong> pour tester vos connaissances sur les 12 droits des usagers. Idéal pour consolider votre apprentissage après avoir essayé le jeu "Fouilles et Cafouillage" !
+            </p>
+            <p className="text-base text-gray-600 leading-relaxed mb-4 text-center">
+              Ce que vous voyez ci-dessous est <strong>un aperçu des modules</strong> du quiz complet. Chaque "droit" représente un module d'apprentissage avec des scénarios interactifs, des choix conséquents et une progression narrative engageante.
             </p>
             
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 mb-4">
