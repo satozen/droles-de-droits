@@ -7,7 +7,7 @@ import Link from 'next/link'
 export default function AProposPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
-      <div className="max-w-4xl mx-auto px-4 py-10">
+      <div className="max-w-5xl mx-auto px-4 py-10">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -45,6 +45,29 @@ export default function AProposPage() {
             <p className="text-gray-700 leading-relaxed mb-10">
               Mais une opportunité s'est révélée : <strong>« Et si on pouvait prolonger cet élan? »</strong>
             </p>
+
+            {/* Section Le Problème */}
+            <div className="bg-red-50 border-l-4 border-red-500 p-6 rounded-r-lg mb-10">
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                Le Problème : Un Écart Criant
+              </h2>
+              <p className="text-gray-700 leading-relaxed mb-4">
+                Trop de jeunes en centre jeunesse ne connaissent pas leurs droits fondamentaux en matière de santé. Les conséquences sont réelles et préoccupantes.
+              </p>
+              
+              <h3 className="text-lg font-bold text-gray-800 mb-3 mt-6">Les Conséquences Observées :</h3>
+              <ul className="space-y-2 text-gray-700">
+                <li>• Consentements signés sans comprendre</li>
+                <li>• Traitements subis par pression ou ignorance</li>
+                <li>• Incapacité à s'exprimer lors de rendez-vous médicaux</li>
+                <li>• Sentiment d'impuissance face au système</li>
+              </ul>
+
+              <h3 className="text-lg font-bold text-gray-800 mb-3 mt-6">La Méthode Actuelle Ne Suffit Pas :</h3>
+              <p className="text-gray-700 leading-relaxed">
+                Les pamphlets traditionnels sont rarement lus et encore moins retenus dans des moments de stress réel. Les jeunes ont besoin d'une approche qui parle <strong>LEUR</strong> langage et utilise <strong>LEURS</strong> médiums.
+              </p>
+            </div>
 
             {/* Section Opportunité */}
             <div className="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-lg mb-10">
@@ -84,6 +107,115 @@ export default function AProposPage() {
               </p>
             </div>
 
+            {/* Section Pourquoi ça marche */}
+            <div className="bg-green-50 border-l-4 border-green-500 p-6 rounded-r-lg mb-10">
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                Pourquoi Cette Approche Fonctionne
+              </h2>
+              
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-lg font-bold text-green-700 mb-2">🎮 Gamification Authentique</h3>
+                  <p className="text-gray-700">
+                    Pas un quiz ennuyant. Un vrai roman visuel avec personnages, émotions, et conséquences réelles. Les jeunes VEULENT jouer.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-bold text-green-700 mb-2">🎭 Créé AVEC des jeunes, POUR des jeunes</h3>
+                  <p className="text-gray-700">
+                    Dialogues authentiques, références culturelles actuelles, design qui parle à leur génération.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-bold text-green-700 mb-2">🌐 Accessible 24/7</h3>
+                  <p className="text-gray-700">
+                    Pas besoin de réserver un intervenant. Le jeu est TOUJOURS disponible, avant un rendez-vous, pendant une pause, à 2h du matin.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-bold text-green-700 mb-2">🔄 Évolutif et Mesurable</h3>
+                  <p className="text-gray-700">
+                    Architecture modulaire qui permet d'ajouter facilement de nouveaux droits, scénarios, et de mesurer l'engagement réel.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Section Roadmap */}
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 border-l-4 border-indigo-500 p-6 rounded-r-lg mb-10">
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">
+                🗺️ Feuille de Route : Du Prototype au Déploiement
+              </h2>
+              
+              <div className="space-y-6">
+                <div className="border-l-4 border-yellow-400 pl-4">
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">
+                    📍 PHASE 1 - DÉMO (Vous êtes ici)
+                  </h3>
+                  <p className="text-sm text-gray-600 mb-3"><strong>Objectif</strong> : Valider l'approche et lever le financement</p>
+                  <ul className="space-y-1 text-gray-700 text-sm">
+                    <li>✅ 1 scénario complet interactif (Fouilles et Cafouillage)</li>
+                    <li>✅ Système de choix et conséquences</li>
+                    <li>✅ Interface néo-brutaliste engageante</li>
+                    <li>✅ Vidéoclip rap éducatif original</li>
+                  </ul>
+                  <p className="mt-2 text-sm font-semibold text-indigo-600">🎯 Livrable : Prototype fonctionnel pour présentation</p>
+                </div>
+
+                <div className="border-l-4 border-blue-400 pl-4">
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">
+                    📍 PHASE 2 - MVP COMPLET
+                  </h3>
+                  <p className="text-sm text-gray-600 mb-3"><strong>Objectif</strong> : Version complète pour les centres jeunesse</p>
+                  <ul className="space-y-1 text-gray-700 text-sm">
+                    <li>• 12 droits couverts avec scénarios dédiés</li>
+                    <li>• 18+ situations interactives réalistes</li>
+                    <li>• Voix-off professionnelles pour tous les personnages</li>
+                    <li>• Mode histoire avec progression narrative</li>
+                    <li>• Tableau de bord pour intervenants</li>
+                  </ul>
+                  <p className="mt-2 text-sm font-semibold text-indigo-600">🎯 Livrable : Application prête pour déploiement pilote</p>
+                </div>
+
+                <div className="border-l-4 border-purple-400 pl-4">
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">
+                    📍 PHASE 3 - DÉPLOIEMENT ÉLARGI
+                  </h3>
+                  <p className="text-sm text-gray-600 mb-3"><strong>Objectif</strong> : Portée provinciale et analytics</p>
+                  <ul className="space-y-1 text-gray-700 text-sm">
+                    <li>• Application mobile iOS/Android</li>
+                    <li>• Adaptation pour autres milieux (hôpitaux, CLSC, écoles)</li>
+                    <li>• Tableau de bord analytics pour mesurer l'impact</li>
+                    <li>• Formation des intervenants</li>
+                    <li>• Certification éducative</li>
+                  </ul>
+                  <p className="mt-2 text-sm font-semibold text-indigo-600">🎯 Livrable : Plateforme complète multi-établissements</p>
+                </div>
+
+                <div className="border-l-4 border-pink-400 pl-4">
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">
+                    📍 PHASE 4 - EXPANSION
+                  </h3>
+                  <p className="text-sm text-gray-600 mb-3"><strong>Objectif</strong> : Rayonnement et adaptation</p>
+                  <ul className="space-y-1 text-gray-700 text-sm">
+                    <li>• Adaptation pour populations spécifiques (autochtones, allophones)</li>
+                    <li>• Versions pour adultes et aînés</li>
+                    <li>• Intégration IA pour parcours personnalisés</li>
+                    <li>• Expansion Canada/International</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="mt-6 p-4 bg-white rounded-lg border-2 border-indigo-200">
+                <p className="text-center text-gray-700 font-semibold">
+                  💡 Cette démo représente environ 8% du projet final
+                </p>
+              </div>
+            </div>
+
             {/* Section Pourquoi les jeunes */}
             <h2 className="text-2xl font-bold text-gray-800 mb-4">
               Pourquoi cibler les jeunes d'abord?
@@ -97,6 +229,50 @@ export default function AProposPage() {
             <p className="text-gray-700 leading-relaxed mb-10">
               Le jeu utilise <em>leur</em> langage, <em>leurs</em> plateformes (le mobile) et un ton qui respecte leur intelligence, tout en dédramatisant la situation.
             </p>
+
+            {/* Section Partenaires */}
+            <div className="bg-gradient-to-r from-orange-50 to-pink-50 border-l-4 border-orange-500 p-6 rounded-r-lg mb-10">
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                💰 Partenaires Recherchés
+              </h2>
+              
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-bold text-orange-700 mb-2">🏛️ Pour les CIUSSS & Centres Jeunesse</h3>
+                  <p className="text-gray-700 mb-2"><strong>Retour sur investissement :</strong></p>
+                  <ul className="space-y-1 text-gray-700 text-sm ml-4">
+                    <li>• Licence d'utilisation illimitée pour votre établissement</li>
+                    <li>• Formation des intervenants incluse</li>
+                    <li>• Personnalisation avec vos logos et ressources locales</li>
+                    <li>• Support technique prioritaire</li>
+                    <li>• Co-développement de scénarios adaptés à VOS réalités</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-bold text-blue-700 mb-2">🛡️ Pour les Comités des Usagers</h3>
+                  <p className="text-gray-700 mb-2"><strong>Retour sur investissement :</strong></p>
+                  <ul className="space-y-1 text-gray-700 text-sm ml-4">
+                    <li>• Outil de prévention pour réduire les plaintes</li>
+                    <li>• Reconnaissance comme partenaire fondateur</li>
+                    <li>• Accès aux données d'impact anonymisées</li>
+                    <li>• Possibilité de personnaliser les ressources d'aide</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-bold text-purple-700 mb-2">🏢 Pour les Fondations & Bailleurs de Fonds</h3>
+                  <p className="text-gray-700 mb-2"><strong>Retour sur investissement :</strong></p>
+                  <ul className="space-y-1 text-gray-700 text-sm ml-4">
+                    <li>• Impact social mesurable et documenté</li>
+                    <li>• Reconnaissance publique majeure</li>
+                    <li>• Rapports d'impact trimestriels</li>
+                    <li>• Participation au comité consultatif</li>
+                    <li>• Possibilité de nommer un module/scénario</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
 
             {/* Section MVP */}
             <div className="bg-gradient-to-r from-pink-50 to-purple-50 border-l-4 border-pink-500 p-6 rounded-r-lg mb-10">
@@ -116,12 +292,12 @@ export default function AProposPage() {
                   <strong className="text-purple-700">Pour les Centres Jeunesse :</strong> Offrir un outil d'intervention « toujours disponible » (24/7) pour vos intervenants. Une façon concrète de préparer un jeune à un rendez-vous ou de dédramatiser une situation de soins.
                 </li>
                 <li className="text-gray-700">
-                  <strong className="text-blue-700">Pour les CAAP :</strong> Devenir un outil de première ligne incroyable pour éduquer les usagers <em>avant</em> même qu'ils n'aient besoin de porter plainte, démystifiant les droits et redonnant le pouvoir au citoyen.
+                  <strong className="text-blue-700">Pour les Comités des Usagers :</strong> Devenir un outil de première ligne pour éduquer les usagers <em>avant</em> même qu'ils n'aient besoin de porter plainte, démystifiant les droits et redonnant le pouvoir au citoyen.
                 </li>
               </ul>
 
               <p className="text-gray-700 leading-relaxed">
-                Nous sommes activement à la recherche de partenaires (CAAP, CIUSSS, Fondations, Centres Jeunesse) pour co-développer la suite, valider les scénarios et déployer cet outil à grande échelle.
+                Nous sommes activement à la recherche de partenaires (Comités des usagers, CIUSSS, Fondations, Centres Jeunesse) pour co-développer la suite, valider les scénarios et déployer cet outil à grande échelle.
               </p>
             </div>
 
@@ -130,8 +306,11 @@ export default function AProposPage() {
               <h3 className="text-2xl font-bold mb-4">
                 Vous voyez un potentiel? Vous avez des idées?
               </h3>
-              <p className="text-lg mb-6 opacity-90">
+              <p className="text-lg mb-2 opacity-90">
                 Collaborons ensemble pour faire une différence dans la vie des jeunes.
+              </p>
+              <p className="text-sm mb-6 opacity-75">
+                Les 10 premiers partenaires bénéficieront du statut de "Partenaire Fondateur" avec reconnaissance permanente.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/jeu">
@@ -150,4 +329,3 @@ export default function AProposPage() {
     </main>
   )
 }
-

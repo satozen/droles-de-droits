@@ -7,6 +7,16 @@ import { motion } from 'framer-motion'
 export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+      {/* Banner Démo */}
+      <div className="bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 text-white py-3 px-4 text-center shadow-lg">
+        <p className="text-sm md:text-base font-bold">
+          🚧 VERSION DÉMO PROTOTYPE | Cette démo présente une fraction du projet complet.{' '}
+          <Link href="/a-propos" className="underline hover:text-yellow-100 transition-colors">
+            → Découvrez la vision complète
+          </Link>
+        </p>
+      </div>
+      
       <div className="container mx-auto px-4 py-8 md:py-16">
         {/* Hero Section */}
         <div className="grid md:grid-cols-2 gap-12 items-center max-w-7xl mx-auto min-h-[calc(100vh-12rem)]">
