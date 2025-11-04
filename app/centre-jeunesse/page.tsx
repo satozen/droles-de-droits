@@ -259,6 +259,7 @@ export default function CentreJeunessePage() {
     if (newUnlocked.size !== unlockedRights.size) {
       setUnlockedRights(newUnlocked)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentScene, currentLineIndex])
 
   const currentDialogue = dialogue[currentScene]
@@ -280,6 +281,7 @@ export default function CentreJeunessePage() {
       audio.currentTime = 0
       audioRef.current = null
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Mise à jour du volume et mute (musique à 75% du volume des voice-overs)
@@ -382,6 +384,8 @@ export default function CentreJeunessePage() {
         }
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // currentLine, getAlexAudioFile, getJayAudioFile sont dérivés de currentScene/currentLineIndex
   }, [currentScene, currentLineIndex, isMuted, volume, showIntroScreen])
 
   const handleContinue = () => {

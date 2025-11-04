@@ -381,6 +381,21 @@ function ScenarioComponent({
 
   const currentScenario = droit.scenarios[currentScenarioIndex]
   
+  const scenarioKey = currentScenario ? `${droitId}-${currentScenario.id}` : ''
+  const isCompleted = progress.some(p => p.key === scenarioKey && p.completed)
+
+  // Vérifier si ce droit est déjà entièrement complété
+  const isDroitCompleted = droit.scenarios.every(scenario => 
+    progress.some(p => p.key === `${droitId}-${scenario.id}` && p.completed)
+  )
+
+  // Afficher l'écran de complétion si le droit est déjà complété
+  useEffect(() => {
+    if (currentScenario && isDroitCompleted && currentScenarioIndex === 0 && !selectedAnswer) {
+      setShowCompletion(true)
+    }
+  }, [isDroitCompleted, currentScenarioIndex, selectedAnswer, currentScenario])
+  
   // Si pas de scénario disponible (droit vide), retourner à la liste
   if (!currentScenario) {
     return (
@@ -398,21 +413,6 @@ function ScenarioComponent({
       </div>
     )
   }
-
-  const scenarioKey = `${droitId}-${currentScenario.id}`
-  const isCompleted = progress.some(p => p.key === scenarioKey && p.completed)
-
-  // Vérifier si ce droit est déjà entièrement complété
-  const isDroitCompleted = droit.scenarios.every(scenario => 
-    progress.some(p => p.key === `${droitId}-${scenario.id}` && p.completed)
-  )
-
-  // Afficher l'écran de complétion si le droit est déjà complété
-  useEffect(() => {
-    if (isDroitCompleted && currentScenarioIndex === 0 && !selectedAnswer) {
-      setShowCompletion(true)
-    }
-  }, [isDroitCompleted, currentScenarioIndex, selectedAnswer])
 
   const handleAnswer = (answerId: string) => {
     if (showExplanation) return
