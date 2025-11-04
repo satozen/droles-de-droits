@@ -114,7 +114,7 @@ export default function Home() {
             </div>
           </motion.div>
 
-          {/* Vidéo hero */}
+          {/* Image hero */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -122,11 +122,14 @@ export default function Home() {
             className="relative"
           >
             <div className="relative w-full aspect-square rounded-3xl overflow-hidden shadow-2xl">
-              <img
-                src="/images/hero_mauve_couleurs.png"
-                alt="Jeune avec son chien devant le centre jeunesse"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
+              <picture>
+                <source srcSet="/images/hero_mauve_couleurs.webp" type="image/webp" />
+                <img
+                  src="/images/hero_mauve_couleurs.png"
+                  alt="Jeune avec son chien devant le centre jeunesse"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              </picture>
             </div>
             {/* Éléments décoratifs */}
             <div className="absolute -top-4 -right-4 w-24 h-24 bg-yellow-400 rounded-full opacity-50 blur-2xl" />
