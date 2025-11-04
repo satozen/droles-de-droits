@@ -7,14 +7,14 @@ import Link from 'next/link'
 export default function AProposPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
-      <div className="max-w-5xl mx-auto px-4 py-10">
+      <div className="max-w-4xl mx-auto px-4 py-10">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           className="bg-white rounded-2xl shadow-xl p-8 md:p-12"
         >
           {/* En-tête */}
-          <div className="text-center mb-12">
+          <div className="text-center mb-8">
             <motion.h1
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -31,291 +31,193 @@ export default function AProposPage() {
           {/* Contenu */}
           <div className="prose prose-lg max-w-none">
             <p className="text-lg text-gray-700 leading-relaxed mb-6">
-              Ce projet n'est pas né d'un <em>brainstorm</em> d'affaires. Il est né d'une frustration positive, directement sur le terrain.
-            </p>
-
-            <p className="text-gray-700 leading-relaxed mb-6">
-              Depuis des années, je présente mon spectacle-conférence <strong>« J'ai ben l'droit! »</strong> dans des dizaines d'organismes, notamment en Centres Jeunesse. La réaction est toujours incroyable. Les jeunes rient, participent, et une lumière s'allume.
-            </p>
-
-            <p className="text-gray-700 leading-relaxed mb-8">
-              Le spectacle fait son travail : il sensibilise, il décloisonne, il inspire.
-            </p>
-
-            <p className="text-gray-700 leading-relaxed mb-10">
-              Mais une opportunité s'est révélée : <strong>« Et si on pouvait prolonger cet élan? »</strong>
+              Depuis des années, je présente mon spectacle-conférence <strong>« J'ai ben l'droit! »</strong> dans des dizaines d'organismes, notamment en Centres Jeunesse. Le spectacle sensibilise, décloisonne et inspire. Mais une question s'est imposée : <strong>« Et si on pouvait prolonger cet élan? »</strong>
             </p>
 
             {/* Section Le Problème */}
-            <div className="bg-red-50 border-l-4 border-red-500 p-6 rounded-r-lg mb-10">
+            <div className="bg-red-50 border-l-4 border-red-500 p-6 rounded-r-lg mb-8">
               <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                Le Problème : Un Écart Criant
+                Le Problème
               </h2>
               <p className="text-gray-700 leading-relaxed mb-4">
-                Trop de jeunes en centre jeunesse ne connaissent pas leurs droits fondamentaux en matière de santé. Les conséquences sont réelles et préoccupantes.
+                Trop de jeunes en centre jeunesse ne connaissent pas leurs droits fondamentaux. <strong>Vous vous réinventez constamment pour accrocher vos jeunes</strong>, vous essayez différentes approches avec dévouement. Mais force est de constater que les méthodes traditionnelles, malgré tous vos efforts, ne donnent pas toujours les résultats espérés :
               </p>
               
-              <h3 className="text-lg font-bold text-gray-800 mb-3 mt-6">Les Conséquences Observées :</h3>
-              <ul className="space-y-2 text-gray-700">
-                <li>• Consentements signés sans comprendre</li>
-                <li>• Traitements subis par pression ou ignorance</li>
-                <li>• Incapacité à s'exprimer lors de rendez-vous médicaux</li>
-                <li>• Sentiment d'impuissance face au système</li>
-              </ul>
-
-              <h3 className="text-lg font-bold text-gray-800 mb-3 mt-6">La Méthode Actuelle Ne Suffit Pas :</h3>
-              <p className="text-gray-700 leading-relaxed">
-                Les pamphlets traditionnels sont rarement lus et encore moins retenus dans des moments de stress réel. Les jeunes ont besoin d'une approche qui parle <strong>LEUR</strong> langage et utilise <strong>LEURS</strong> médiums.
-              </p>
-            </div>
-
-            {/* Section Opportunité */}
-            <div className="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-lg mb-10">
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                L'Opportunité : Transformer l'inspiration en action
-              </h2>
-              <p className="text-gray-700 leading-relaxed mb-4">
-                Le spectacle crée une prise de conscience puissante et durable. Il brise la glace, démystifie, et donne confiance.
-              </p>
-              <p className="text-gray-700 leading-relaxed mb-4">
-                Mais le droit des usagers, c'est aussi complexe. C'est parfois intimidant. Un jeune qui se retrouve seul dans un bureau de médecin, confus et stressé, a besoin de plus qu'une compréhension théorique. Il a besoin de réflexes pratiques.
-              </p>
-              <p className="text-gray-700 leading-relaxed mb-2">Comment un jeune (ou n'importe quel usager) peut-il :</p>
-              <ul className="list-disc list-inside text-gray-700 space-y-2 ml-4">
-                <li>Se souvenir de son <strong>droit à l'information</strong> quand on lui parle en jargon?</li>
-                <li>Oser exercer son <strong>droit de consentir</strong> quand il se sent pressé?</li>
-                <li>Comprendre son <strong>droit d'accès au dossier</strong> sans avoir l'air "parano"?</li>
-              </ul>
-              <p className="text-gray-700 leading-relaxed mt-4">
-                La réponse n'est pas un autre pamphlet. <strong>La réponse, c'est la pratique.</strong>
-              </p>
+              <div className="grid md:grid-cols-2 gap-3">
+                <div className="bg-white border-2 border-red-300 rounded-lg p-3">
+                  <p className="text-red-700 font-bold mb-1">📹 Vidéos éducatives</p>
+                  <p className="text-sm text-gray-600">Visionnement passif, souvent oublié après</p>
+                </div>
+                <div className="bg-white border-2 border-red-300 rounded-lg p-3">
+                  <p className="text-red-700 font-bold mb-1">📚 Livres & Pamphlets</p>
+                  <p className="text-sm text-gray-600">Rarement lus, jamais retenus en situation de stress</p>
+                </div>
+                <div className="bg-white border-2 border-red-300 rounded-lg p-3">
+                  <p className="text-red-700 font-bold mb-1">🎓 Formations statiques</p>
+                  <p className="text-sm text-gray-600">Une seule fois, aucune répétition possible</p>
+                </div>
+                <div className="bg-white border-2 border-red-300 rounded-lg p-3">
+                  <p className="text-red-700 font-bold mb-1">📖 Approches théoriques</p>
+                  <p className="text-sm text-gray-600">Aucune mise en situation concrète</p>
+                </div>
+              </div>
             </div>
 
             {/* Section Solution */}
-            <div className="bg-purple-50 border-l-4 border-purple-500 p-6 rounded-r-lg mb-10">
+            <div className="bg-gradient-to-r from-purple-50 to-blue-50 border-l-4 border-purple-500 p-6 rounded-r-lg mb-8">
               <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                La Solution : Un simulateur de vol pour tes droits
+                Notre Approche : L'Apprentissage Actif
               </h2>
               <p className="text-gray-700 leading-relaxed mb-4">
-                L'idée de <strong>« Drôles de Droits »</strong> (le jeu interactif) est simple : prolonger l'éveil créé par le spectacle en offrant une <strong>simulation active et pratique</strong>.
+                <strong>« Drôles de Droits »</strong> prolonge l'éveil créé par le spectacle avec une approche radicalement différente. Au lieu de <em>parler</em> des droits, on les <em>vit</em>.
               </p>
-              <p className="text-gray-700 leading-relaxed mb-4">
-                Au lieu de <em>parler</em> des droits, on les <em>vit</em>.
+              
+              <div className="grid md:grid-cols-2 gap-3 mb-4">
+                <div className="bg-green-50 border-2 border-green-400 rounded-lg p-3">
+                  <p className="text-green-800 font-bold mb-1">🎮 Engageant</p>
+                  <p className="text-sm text-gray-700">Les jeunes JOUENT et participent activement, pas juste écoutent</p>
+                </div>
+                <div className="bg-green-50 border-2 border-green-400 rounded-lg p-3">
+                  <p className="text-green-800 font-bold mb-1">🔄 Répétable</p>
+                  <p className="text-sm text-gray-700">On peut rejouer, essayer d'autres choix, pratiquer à volonté</p>
+                </div>
+                <div className="bg-green-50 border-2 border-green-400 rounded-lg p-3">
+                  <p className="text-green-800 font-bold mb-1">💪 Pratique</p>
+                  <p className="text-sm text-gray-700">Scénarios réalistes avec conséquences, comme dans la vraie vie</p>
+                </div>
+                <div className="bg-green-50 border-2 border-green-400 rounded-lg p-3">
+                  <p className="text-green-800 font-bold mb-1">🛡️ Sécuritaire</p>
+                  <p className="text-sm text-gray-700">Apprendre par l'essai-erreur sans risque, sans jargon, sans jugement</p>
+                </div>
+              </div>
+
+              <p className="text-gray-700 leading-relaxed bg-purple-100 border-l-4 border-purple-600 p-4 rounded-r">
+                <strong>Résultat :</strong> Les jeunes retiennent leurs droits parce qu'ils les ont <em>expérimentés</em>, pas seulement entendus.
               </p>
-              <p className="text-gray-700 leading-relaxed">
-                Ce jeu de rôle est un "simulateur de vol" pour le système de santé. L'usager est le héros. Il est plongé dans des scénarios (drôles, frustrants, mais toujours réalistes) et doit faire des choix. Il apprend par l'essai-erreur, dans un environnement sécuritaire, sans jargon et sans jugement.
-              </p>
             </div>
 
-            {/* Section Pourquoi ça marche */}
-            <div className="bg-green-50 border-l-4 border-green-500 p-6 rounded-r-lg mb-10">
+            {/* Section État actuel */}
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 border-l-4 border-indigo-500 p-6 rounded-r-lg mb-8">
               <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                Pourquoi Cette Approche Fonctionne
-              </h2>
-              
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-lg font-bold text-green-700 mb-2">🎮 Gamification Authentique</h3>
-                  <p className="text-gray-700">
-                    Pas un quiz ennuyant. Un vrai roman visuel avec personnages, émotions, et conséquences réelles. Les jeunes VEULENT jouer.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-bold text-green-700 mb-2">🎭 Créé AVEC des jeunes, POUR des jeunes</h3>
-                  <p className="text-gray-700">
-                    Dialogues authentiques, références culturelles actuelles, design qui parle à leur génération.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-bold text-green-700 mb-2">🌐 Accessible 24/7</h3>
-                  <p className="text-gray-700">
-                    Pas besoin de réserver un intervenant. Le jeu est TOUJOURS disponible, avant un rendez-vous, pendant une pause, à 2h du matin.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-bold text-green-700 mb-2">🔄 Évolutif et Mesurable</h3>
-                  <p className="text-gray-700">
-                    Architecture modulaire qui permet d'ajouter facilement de nouveaux droits, scénarios, et de mesurer l'engagement réel.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Section Roadmap */}
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 border-l-4 border-indigo-500 p-6 rounded-r-lg mb-10">
-              <h2 className="text-2xl font-bold text-gray-800 mb-6">
-                🗺️ Feuille de Route : Du Prototype au Déploiement
-              </h2>
-              
-              <div className="space-y-6">
-                <div className="border-l-4 border-yellow-400 pl-4">
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">
-                    📍 PHASE 1 - DÉMO (Vous êtes ici)
-                  </h3>
-                  <p className="text-sm text-gray-600 mb-3"><strong>Objectif</strong> : Valider l'approche et lever le financement</p>
-                  <ul className="space-y-1 text-gray-700 text-sm">
-                    <li>✅ 1 scénario complet interactif (Fouilles et Cafouillage)</li>
-                    <li>✅ Système de choix et conséquences</li>
-                    <li>✅ Interface néo-brutaliste engageante</li>
-                    <li>✅ Vidéoclip rap éducatif original</li>
-                  </ul>
-                  <p className="mt-2 text-sm font-semibold text-indigo-600">🎯 Livrable : Prototype fonctionnel pour présentation</p>
-                </div>
-
-                <div className="border-l-4 border-blue-400 pl-4">
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">
-                    📍 PHASE 2 - MVP COMPLET
-                  </h3>
-                  <p className="text-sm text-gray-600 mb-3"><strong>Objectif</strong> : Version complète pour les centres jeunesse</p>
-                  <ul className="space-y-1 text-gray-700 text-sm">
-                    <li>• 12 droits couverts avec scénarios dédiés</li>
-                    <li>• 18+ situations interactives réalistes</li>
-                    <li>• Voix-off professionnelles pour tous les personnages</li>
-                    <li>• Mode histoire avec progression narrative</li>
-                    <li>• Tableau de bord pour intervenants</li>
-                  </ul>
-                  <p className="mt-2 text-sm font-semibold text-indigo-600">🎯 Livrable : Application prête pour déploiement pilote</p>
-                </div>
-
-                <div className="border-l-4 border-purple-400 pl-4">
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">
-                    📍 PHASE 3 - DÉPLOIEMENT ÉLARGI
-                  </h3>
-                  <p className="text-sm text-gray-600 mb-3"><strong>Objectif</strong> : Portée provinciale et analytics</p>
-                  <ul className="space-y-1 text-gray-700 text-sm">
-                    <li>• Application mobile iOS/Android</li>
-                    <li>• Adaptation pour autres milieux (hôpitaux, CLSC, écoles)</li>
-                    <li>• Tableau de bord analytics pour mesurer l'impact</li>
-                    <li>• Formation des intervenants</li>
-                    <li>• Certification éducative</li>
-                  </ul>
-                  <p className="mt-2 text-sm font-semibold text-indigo-600">🎯 Livrable : Plateforme complète multi-établissements</p>
-                </div>
-
-                <div className="border-l-4 border-pink-400 pl-4">
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">
-                    📍 PHASE 4 - EXPANSION
-                  </h3>
-                  <p className="text-sm text-gray-600 mb-3"><strong>Objectif</strong> : Rayonnement et adaptation</p>
-                  <ul className="space-y-1 text-gray-700 text-sm">
-                    <li>• Adaptation pour populations spécifiques (autochtones, allophones)</li>
-                    <li>• Versions pour adultes et aînés</li>
-                    <li>• Intégration IA pour parcours personnalisés</li>
-                    <li>• Expansion Canada/International</li>
-                  </ul>
-                </div>
-              </div>
-
-              <div className="mt-6 p-4 bg-white rounded-lg border-2 border-indigo-200">
-                <p className="text-center text-gray-700 font-semibold">
-                  💡 Cette démo représente environ 8% du projet final
-                </p>
-              </div>
-            </div>
-
-            {/* Section Pourquoi les jeunes */}
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">
-              Pourquoi cibler les jeunes d'abord?
-            </h2>
-            <p className="text-gray-700 leading-relaxed mb-4">
-              Le système de santé est universel, mais l'autonomie, elle, s'apprend.
-            </p>
-            <p className="text-gray-700 leading-relaxed mb-10">
-              Cette première version du jeu est pensée pour les <strong>jeunes en Centre Jeunesse</strong> parce qu'ils sont à un moment charnière. Apprendre à naviguer le système et à défendre ses droits est un outil d'autonomie (un <em>life skill</em>) aussi fondamental que de savoir faire un budget.
-            </p>
-            <p className="text-gray-700 leading-relaxed mb-10">
-              Le jeu utilise <em>leur</em> langage, <em>leurs</em> plateformes (le mobile) et un ton qui respecte leur intelligence, tout en dédramatisant la situation.
-            </p>
-
-            {/* Section Partenaires */}
-            <div className="bg-gradient-to-r from-orange-50 to-pink-50 border-l-4 border-orange-500 p-6 rounded-r-lg mb-10">
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                💰 Partenaires Recherchés
-              </h2>
-              
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-lg font-bold text-orange-700 mb-2">🏛️ Pour les CIUSSS & Centres Jeunesse</h3>
-                  <p className="text-gray-700 mb-2"><strong>Retour sur investissement :</strong></p>
-                  <ul className="space-y-1 text-gray-700 text-sm ml-4">
-                    <li>• Licence d'utilisation illimitée pour votre établissement</li>
-                    <li>• Formation des intervenants incluse</li>
-                    <li>• Personnalisation avec vos logos et ressources locales</li>
-                    <li>• Support technique prioritaire</li>
-                    <li>• Co-développement de scénarios adaptés à VOS réalités</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-bold text-blue-700 mb-2">🛡️ Pour les Comités des Usagers</h3>
-                  <p className="text-gray-700 mb-2"><strong>Retour sur investissement :</strong></p>
-                  <ul className="space-y-1 text-gray-700 text-sm ml-4">
-                    <li>• Outil de prévention pour réduire les plaintes</li>
-                    <li>• Reconnaissance comme partenaire fondateur</li>
-                    <li>• Accès aux données d'impact anonymisées</li>
-                    <li>• Possibilité de personnaliser les ressources d'aide</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-bold text-purple-700 mb-2">🏢 Pour les Fondations & Bailleurs de Fonds</h3>
-                  <p className="text-gray-700 mb-2"><strong>Retour sur investissement :</strong></p>
-                  <ul className="space-y-1 text-gray-700 text-sm ml-4">
-                    <li>• Impact social mesurable et documenté</li>
-                    <li>• Reconnaissance publique majeure</li>
-                    <li>• Rapports d'impact trimestriels</li>
-                    <li>• Participation au comité consultatif</li>
-                    <li>• Possibilité de nommer un module/scénario</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            {/* Section MVP */}
-            <div className="bg-gradient-to-r from-pink-50 to-purple-50 border-l-4 border-pink-500 p-6 rounded-r-lg mb-10">
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                Vous êtes ici : La Phase Préliminaire (Le MVP)
+                Où en sommes-nous?
               </h2>
               <p className="text-gray-700 leading-relaxed mb-4">
-                Ce que vous voyez sur ce site est le <strong>prototype (MVP)</strong>. C'est le cœur du réacteur.
+                Cette démo présente <strong>1 scénario complet</strong> (Fouilles et Cafouillage) pour valider l'approche. La version complète couvrira les <strong>12 droits</strong> avec 18+ situations interactives.
               </p>
               <p className="text-gray-700 leading-relaxed mb-6">
-                L'objectif est de prouver que l'on peut éduquer sur un sujet complexe de façon engageante, rapide et efficace.
+                <strong>Vision :</strong> Application accessible 24/7 pour les jeunes en centre jeunesse, avec tableau de bord pour intervenants et adaptation possible pour hôpitaux et CLSC.
               </p>
-              
-              <h3 className="text-xl font-bold text-gray-800 mb-3">Notre vision :</h3>
-              <ul className="space-y-4 mb-6">
-                <li className="text-gray-700">
-                  <strong className="text-purple-700">Pour les Centres Jeunesse :</strong> Offrir un outil d'intervention « toujours disponible » (24/7) pour vos intervenants. Une façon concrète de préparer un jeune à un rendez-vous ou de dédramatiser une situation de soins.
-                </li>
-                <li className="text-gray-700">
-                  <strong className="text-blue-700">Pour les Comités des Usagers :</strong> Devenir un outil de première ligne pour éduquer les usagers <em>avant</em> même qu'ils n'aient besoin de porter plainte, démystifiant les droits et redonnant le pouvoir au citoyen.
-                </li>
-              </ul>
 
+              {/* Carte Preview Fouilles et Cafouillage - Style BD */}
+              <div className="mt-6">
+                <h3 className="text-xl font-bold text-gray-800 mb-4 text-center">
+                  🎮 Essayez la démo maintenant
+                </h3>
+                <Link href="/centre-jeunesse">
+                  <motion.div
+                    whileHover={{ scale: 1.02, rotate: -0.5 }}
+                    className="relative border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] cursor-pointer overflow-hidden bg-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
+                  >
+                    {/* Titre en haut */}
+                    <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-4 border-b-4 border-black">
+                      <h3 className="font-black text-2xl md:text-3xl text-white text-center" style={{ textShadow: '2px 2px 0px rgba(0,0,0,0.5)' }}>
+                        FOUILLES ET CAFOUILLAGE
+                      </h3>
+                      <div className="absolute top-3 right-3">
+                        <span className="text-xs bg-lime-400 border-2 border-black px-2 py-1 font-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">DISPONIBLE</span>
+                      </div>
+                    </div>
+
+                    {/* Grille d'images style BD */}
+                    <div className="grid grid-cols-2 gap-0">
+                      {/* Image 1 - L'offre */}
+                      <div className="relative border-r-2 border-b-2 border-black h-48 overflow-hidden group">
+                        <img 
+                          src="/images/jeune_offre_drogue.jpg" 
+                          alt="L'offre"
+                          className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                        />
+                        <div className="absolute bottom-0 left-0 right-0 bg-red-500 border-t-2 border-black p-1.5">
+                          <p className="text-xs font-black text-white text-center">L'OFFRE</p>
+                        </div>
+                      </div>
+
+                      {/* Image 2 - La fouille */}
+                      <div className="relative border-b-2 border-black h-48 overflow-hidden group">
+                        <img 
+                          src="/images/police_centre_jeunesse.jpg" 
+                          alt="La fouille"
+                          className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                        />
+                        <div className="absolute bottom-0 left-0 right-0 bg-orange-500 border-t-2 border-black p-1.5">
+                          <p className="text-xs font-black text-white text-center">LA FOUILLE</p>
+                        </div>
+                      </div>
+
+                      {/* Image 3 - L'intervenante */}
+                      <div className="relative border-r-2 border-black h-48 overflow-hidden group">
+                        <img 
+                          src="/images/intervenante_arrive_lieu_echange_drogues.jpg" 
+                          alt="L'intervenante"
+                          className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                        />
+                        <div className="absolute bottom-0 left-0 right-0 bg-purple-600 border-t-2 border-black p-1.5">
+                          <p className="text-xs font-black text-white text-center">L'INTERVENANTE</p>
+                        </div>
+                      </div>
+
+                      {/* Image 4 - Tes choix */}
+                      <div className="relative h-48 overflow-hidden group">
+                        <img 
+                          src="/images/jeune_reflechi.jpg" 
+                          alt="Tes choix"
+                          className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                        />
+                        <div className="absolute bottom-0 left-0 right-0 bg-green-600 border-t-2 border-black p-1.5">
+                          <p className="text-xs font-black text-white text-center">TES CHOIX</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Bas avec description */}
+                    <div className="bg-yellow-300 border-t-4 border-black p-3">
+                      <p className="text-sm text-black font-bold text-center mb-1">
+                        🔍 Le droit au respect lors d'une fouille
+                      </p>
+                      <p className="text-xs text-black font-semibold text-center">
+                        Découvre tes droits dans une situation concrète
+                      </p>
+                    </div>
+                  </motion.div>
+                </Link>
+              </div>
+            </div>
+
+            {/* Section Partenaires */}
+            <div className="bg-gradient-to-r from-orange-50 to-pink-50 border-l-4 border-orange-500 p-6 rounded-r-lg mb-8">
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                Partenaires Recherchés
+              </h2>
+              <p className="text-gray-700 leading-relaxed mb-4">
+                Pour les <strong>Comités des Usagers</strong>, les <strong>CAAPs</strong> (Centres d'Assistance et d'Accompagnement aux Plaintes), les <strong>CIUSSS</strong>, les <strong>Centres Jeunesse</strong> et les <strong>Fondations</strong> : nous recherchons des partenaires pour co-développer la version complète et déployer cet outil à grande échelle.
+              </p>
               <p className="text-gray-700 leading-relaxed">
-                Nous sommes activement à la recherche de partenaires (Comités des usagers, CIUSSS, Fondations, Centres Jeunesse) pour co-développer la suite, valider les scénarios et déployer cet outil à grande échelle.
+                Les premiers partenaires bénéficieront du statut de <strong>"Partenaire Fondateur"</strong> avec reconnaissance permanente et participation au développement.
               </p>
             </div>
 
             {/* CTA Final */}
-            <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl p-8 text-center mt-12">
+            <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl p-8 text-center mt-8">
               <h3 className="text-2xl font-bold mb-4">
-                Vous voyez un potentiel? Vous avez des idées?
+                Vous voyez un potentiel?
               </h3>
-              <p className="text-lg mb-2 opacity-90">
+              <p className="text-lg mb-6 opacity-90">
                 Collaborons ensemble pour faire une différence dans la vie des jeunes.
               </p>
-              <p className="text-sm mb-6 opacity-75">
-                Les 10 premiers partenaires bénéficieront du statut de "Partenaire Fondateur" avec reconnaissance permanente.
-              </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/jeu">
+                <Link href="/centre-jeunesse">
                   <button className="bg-white text-purple-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors">
-                    Essayer le jeu
+                    Essayer la démo
                   </button>
                 </Link>
                 <a href="mailto:dstl.st.laurent@gmail.com" className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-full font-semibold hover:bg-white/10 transition-colors">
