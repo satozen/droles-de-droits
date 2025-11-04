@@ -3,12 +3,15 @@
 
 import { useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { droits } from '@/data/droits'
 import { useProgress } from '@/hooks/useProgress'
 import IntroUsager from '@/components/IntroUsager'
+import DevBadge from '@/components/DevBadge'
 
 export default function JeuPage() {
+  const router = useRouter()
   const { progress } = useProgress()
   const [selectedDroit, setSelectedDroit] = useState<number | null>(null)
   const [modeLibre, setModeLibre] = useState(false)
@@ -140,6 +143,7 @@ export default function JeuPage() {
             </motion.button>
           </Link>
           <div className="flex items-center gap-4">
+            {/* Mode RPG - En développement - Désactivé pour la démo
             <Link href="/rpg">
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -150,6 +154,7 @@ export default function JeuPage() {
                 🎮 Mode Aventure
               </motion.button>
             </Link>
+            */}
             <Link href="/centre-jeunesse">
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -189,7 +194,56 @@ export default function JeuPage() {
           </div>
         </div>
 
-        {/* Barre de progression */}
+        {/* Section d'introduction pour décideurs */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-white rounded-2xl p-8 shadow-lg mb-8"
+        >
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl font-bold text-gray-800 mb-4 text-center">
+              Explorez l'Expérience Interactive 🎮
+            </h2>
+            <p className="text-lg text-gray-700 leading-relaxed mb-4 text-center">
+              Ce que vous voyez ci-dessous est <strong>un aperçu des chapitres</strong> du roman visuel complet. Chaque "droit" représente un module d'apprentissage avec des scénarios interactifs, des choix conséquents et une progression narrative engageante.
+            </p>
+            
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 mb-4">
+              <p className="text-gray-700 leading-relaxed mb-3">
+                💡 <strong>Dans cette démo</strong>, vous pouvez explorer <strong>"Fouilles et Cafouillage"</strong>, un chapitre complet qui illustre la puissance pédagogique du jeu : personnages attachants, dilemmes réalistes, conséquences immédiates et apprentissage par l'action.
+              </p>
+              <p className="text-gray-700 leading-relaxed">
+                🎯 <strong>Le jeu complet</strong> développera les 12 droits avec la même profondeur, créant une expérience d'apprentissage immersive de plusieurs heures où les jeunes deviennent véritablement acteurs de leurs droits.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-4 text-center">
+              <div className="bg-white border-2 border-purple-200 rounded-lg p-4">
+                <div className="text-3xl font-bold text-purple-600 mb-1">1/12</div>
+                <div className="text-sm text-gray-600">Chapitre disponible</div>
+                <div className="text-xs text-gray-500 mt-1">dans cette démo</div>
+              </div>
+              <div className="bg-white border-2 border-blue-200 rounded-lg p-4">
+                <div className="text-3xl font-bold text-blue-600 mb-1">18+</div>
+                <div className="text-sm text-gray-600">Scénarios prévus</div>
+                <div className="text-xs text-gray-500 mt-1">dans la version complète</div>
+              </div>
+              <div className="bg-white border-2 border-pink-200 rounded-lg p-4">
+                <div className="text-3xl font-bold text-pink-600 mb-1">~3h</div>
+                <div className="text-sm text-gray-600">D'expérience</div>
+                <div className="text-xs text-gray-500 mt-1">gameplay estimé</div>
+              </div>
+            </div>
+
+            <div className="mt-6 text-center">
+              <p className="text-sm text-gray-600 italic">
+                ⚡ Cliquez sur un droit ci-dessous pour découvrir ce qui est actuellement disponible
+              </p>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Ancien code des badges - commenté pour démo
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -221,14 +275,14 @@ export default function JeuPage() {
           </p>
 
           {/* Section des badges */}
-          <div className="border-t pt-4 mt-4">
+          <div className="border-t pt-4 mt-4 hidden">
             <div className="flex justify-between items-center mb-3">
               <h3 className="text-lg font-bold text-gray-800">Badges collectés</h3>
               <span className="text-sm font-semibold text-gray-600">
                 {badgesDebloques}/{badges.length}
               </span>
             </div>
-            <div className="flex flex-wrap gap-3 justify-center">
+            <div className="flex flex-wrap gap-3 justify-center hidden">
               {badges.map((badge, index) => (
                 <motion.div
                   key={badge.id}
@@ -264,6 +318,7 @@ export default function JeuPage() {
             </div>
           </div>
         </motion.div>
+        */}
 
         {/* Parcours des droits */}
         <div className="space-y-4">
@@ -290,7 +345,15 @@ export default function JeuPage() {
 
                 <motion.div
                   whileHover={isUnlocked ? { scale: 1.02, x: 5 } : {}}
-                  onClick={() => isUnlocked && setSelectedDroit(droit.id)}
+                  onClick={() => {
+                    if (!isUnlocked) return
+                    // Droits 4-12 : rediriger vers la page en développement
+                    if (droit.id >= 4) {
+                      router.push('/en-developpement')
+                    } else {
+                      setSelectedDroit(droit.id)
+                    }
+                  }}
                   className={`bg-white rounded-2xl p-6 shadow-md transition-all ${
                     isUnlocked ? 'cursor-pointer hover:shadow-xl' : 'opacity-60 cursor-not-allowed'
                   } ${isCurrent ? 'ring-4 ring-purple-400 ring-opacity-50' : ''} ${
@@ -317,11 +380,12 @@ export default function JeuPage() {
 
                     {/* Contenu */}
                     <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
+                      <div className="flex items-center gap-2 mb-1 flex-wrap">
                         <span className="text-sm font-bold text-gray-500">Droit #{droit.id}</span>
                         {!isUnlocked && <span className="text-xs bg-gray-200 px-2 py-1 rounded">🔒 Verrouillé</span>}
                         {isCurrent && <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded font-semibold">En cours</span>}
                         {isCompleted && <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded font-semibold">✓ Complété</span>}
+                        {droit.id >= 4 && <DevBadge text="Bientôt" size="sm" />}
                       </div>
                       <h3 className="text-xl font-bold text-gray-800 mb-2">{droit.titre}</h3>
                       <p className="text-sm text-gray-600 mb-3">{droit.description}</p>
