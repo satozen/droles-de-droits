@@ -380,6 +380,25 @@ function ScenarioComponent({
   const { progress } = useProgress()
 
   const currentScenario = droit.scenarios[currentScenarioIndex]
+  
+  // Si pas de scénario disponible (droit vide), retourner à la liste
+  if (!currentScenario) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-2xl p-8 shadow-xl text-center max-w-md">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Aucun scénario disponible</h2>
+          <p className="text-gray-600 mb-6">Ce droit n'a pas encore de scénarios dans cette démo.</p>
+          <button
+            onClick={onBack}
+            className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full font-semibold hover:shadow-lg transition-all"
+          >
+            ← Retour
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   const scenarioKey = `${droitId}-${currentScenario.id}`
   const isCompleted = progress.some(p => p.key === scenarioKey && p.completed)
 
