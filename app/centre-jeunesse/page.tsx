@@ -662,7 +662,7 @@ export default function CentreJeunessePage() {
   const bubbleStyle = getBubbleStyle()
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4" style={{ cursor: "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='48' style='font-size:32px'><text y='32'>👆</text></svg>\") 16 0, pointer" }}>
       {/* Header néo-brutaliste */}
       <div className="w-full max-w-6xl mb-6 flex justify-between items-center gap-4">
         <Link 
