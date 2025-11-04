@@ -13,8 +13,8 @@ export const metadata: Metadata = {
   keywords: ['droits usagers', 'santé québécois', 'jeu éducatif', 'centre jeunesse', 'droits des jeunes', 'santé mentale', 'droits et devoirs', 'système de santé Québec'],
   authors: [{ name: 'Drôles de Droits' }],
   openGraph: {
-    title: 'DRÔLES DE DROITS 🎮 | Tes 12 droits en santé au Québec',
-    description: 'Une plateforme interactive pour les jeunes en centre jeunesse. Des scénarios engageants qui leur ressemblent. Des droits qui prennent vie. L\'apprentissage passif devient une expérience captivante.',
+    title: 'DRÔLES DE DROITS 🎮 | Connais tes 12 droits en santé',
+    description: 'Jeu interactif éducatif spécialisé pour les jeunes en centre jeunesse. Des scénarios réalistes qui leur ressemblent. L\'apprentissage actif remplace l\'apprentissage passif : vos jeunes découvrent leurs droits en jouant, pas en lisant.',
     url: process.env.NEXT_PUBLIC_SITE_URL || 'https://droles-de-droits.vercel.app',
     siteName: 'Drôles de Droits',
     images: [
@@ -31,8 +31,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'DRÔLES DE DROITS 🎮 | Tes 12 droits en santé au Québec',
-    description: 'Plateforme interactive pour les jeunes en centre jeunesse. Des scénarios qui leur ressemblent. Des droits qui prennent vie.',
+    title: 'DRÔLES DE DROITS 🎮 | Connais tes 12 droits en santé',
+    description: 'Jeu interactif éducatif spécialisé pour les jeunes en centre jeunesse. Des scénarios réalistes qui leur ressemblent. Apprentissage actif vs passif.',
     images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://droles-de-droits.vercel.app'}/images/hero_mauve_couleurs.png`],
     creator: '@drolesdedroits',
     site: '@drolesdedroits',
