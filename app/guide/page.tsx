@@ -1,19 +1,21 @@
-// Guide de référence imprimable des 12 droits
+// Guide de référence imprimable des 12 droits - Page d'aperçu, téléchargement à venir
 'use client'
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { droits } from '@/data/droits'
 
 export default function GuidePage() {
+  const router = useRouter()
+
   const handlePrint = () => {
     window.print()
   }
 
   const handleDownloadPDF = () => {
-    // Pour l'instant, utilise la fonction d'impression du navigateur
-    // qui permet de sauvegarder en PDF
-    window.print()
+    // Rediriger vers la page "à venir bientôt"
+    router.push('/en-developpement')
   }
 
   return (
@@ -36,7 +38,7 @@ export default function GuidePage() {
               Guide de référence
             </h1>
             <p className="text-gray-700 mb-6">
-              Télécharge ou imprime ce guide pour avoir tes 12 droits toujours à portée de main!
+              Consulte ce guide pour avoir tes 12 droits toujours à portée de main!
             </p>
             
             <div className="flex flex-wrap gap-4">
@@ -54,9 +56,9 @@ export default function GuidePage() {
               </button>
             </div>
             
-            <div className="mt-6 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
+            <div className="mt-6 bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-r-lg">
               <p className="text-sm text-gray-700">
-                <strong>💡 Astuce :</strong> Sur mobile, clique sur "Télécharger (PDF)" puis sélectionne "Sauvegarder en tant que PDF" pour garder une copie sur ton téléphone!
+                <strong>📢 Note :</strong> Le téléchargement du PDF sera bientôt disponible ! Pour l'instant, tu peux utiliser l'option d'impression de ton navigateur.
               </p>
             </div>
           </motion.div>
@@ -158,7 +160,7 @@ export default function GuidePage() {
               onClick={handleDownloadPDF}
               className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg transition-all"
             >
-              📄 Télécharger maintenant
+              📄 Télécharger (à venir bientôt)
             </button>
           </div>
         </div>

@@ -91,7 +91,7 @@ export default function EnDeveloppementPage() {
           transition={{ delay: 0.7 }}
           className="mt-8 text-sm text-gray-500"
         >
-          En attendant, découvre <Link href="/centre-jeunesse" className="text-purple-600 font-semibold hover:underline">Fouilles et Cafouillage</Link> ou écoute le <Link href="/videoclip" className="text-purple-600 font-semibold hover:underline">Video Clip Rap</Link> !
+          En attendant, découvre <Link href="/centre-jeunesse" className="text-purple-600 font-semibold hover:underline">Fouilles et Cafouillage</Link> ou écoute le <Link href="/videoclip" className="text-purple-600 font-semibold hover:underline">Bonus Musical</Link> !
         </motion.p>
       </motion.div>
     </main>

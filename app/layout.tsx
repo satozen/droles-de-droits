@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     siteName: 'Drôles de Droits',
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://droles-de-droits.vercel.app'}/images/hero_mauve_couleurs.png`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://droles-de-droits.vercel.app'}/images/hero_centre_jeunesse_sourire.png`,
         width: 1200,
         height: 630,
         alt: 'DRÔLES DE DROITS - Jeu interactif éducatif pour les jeunes en centre jeunesse',
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'DRÔLES DE DROITS 🎮 | Connais tes 12 droits en santé',
     description: 'Jeu interactif éducatif spécialisé pour les jeunes en centre jeunesse. Des scénarios réalistes qui leur ressemblent. Apprentissage actif vs passif.',
-    images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://droles-de-droits.vercel.app'}/images/hero_mauve_couleurs.png`],
+    images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://droles-de-droits.vercel.app'}/images/hero_centre_jeunesse_sourire.png`],
     creator: '@drolesdedroits',
     site: '@drolesdedroits',
   },

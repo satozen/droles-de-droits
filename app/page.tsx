@@ -96,7 +96,7 @@ export default function Home() {
                   whileTap={{ scale: 0.95 }}
                   className="bg-gradient-to-r from-purple-500 to-pink-600 text-white px-10 py-5 rounded-full text-xl font-semibold shadow-lg hover:shadow-xl transition-shadow border-4 border-black"
                 >
-                  Video Clip Rap 🎵
+                  Bonus Musical 🎵
                 </motion.button>
               </Link>
             </div>
@@ -111,9 +111,9 @@ export default function Home() {
           >
             <div className="relative w-full aspect-square rounded-3xl overflow-hidden shadow-2xl">
               <picture>
-                <source srcSet="/images/hero_mauve_couleurs.webp" type="image/webp" />
+                <source srcSet="/images/hero_centre_jeunesse_sourire.webp" type="image/webp" />
                 <img
-                  src="/images/hero_mauve_couleurs.png"
+                  src="/images/hero_centre_jeunesse_sourire.png"
                   alt="Jeune avec son chien devant le centre jeunesse"
                   className="absolute inset-0 w-full h-full object-cover"
                 />
