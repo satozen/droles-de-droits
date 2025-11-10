@@ -38,9 +38,14 @@ en santé, convivial et éducatif"
 ## Comment ajouter votre image
 
 ### Étape 1 : Placez l'image
-Copiez votre image dans le dossier `/public/images/` :
+Copiez votre image dans le dossier `/public/images/` et convertissez-la en WebP :
 ```
-/public/images/hero-image.png
+/public/images/hero-image.webp
+```
+
+**Note** : Toutes les images du site sont converties en format WebP pour de meilleures performances. Utilisez le script de conversion :
+```bash
+node scripts/convert-to-webp.js
 ```
 
 ### Étape 2 : Modifiez le code
@@ -52,7 +57,7 @@ import Image from 'next/image'
 
 // Puis remplacez le placeholder par :
 <Image
-  src="/images/hero-image.png"
+  src="/images/hero-image.webp"
   alt="Jeunes apprenant leurs droits"
   fill
   className="object-cover"
@@ -65,7 +70,7 @@ Supprimez le div avec le gradient et les icônes (lignes 55-70 dans `app/page.ts
 
 ## Spécifications techniques
 
-- **Format** : PNG, JPG ou WebP
+- **Format** : WebP (recommandé pour de meilleures performances), PNG ou JPG
 - **Dimensions recommandées** : 800x800px minimum (carré)
 - **Poids** : < 500KB pour des performances optimales
 - **Style** : Moderne, coloré, adapté aux ados

@@ -131,14 +131,14 @@ export default function AssistantPage() {
                     const target = e.target as HTMLVideoElement
                     const parent = target.parentElement
                     if (parent) {
-                      parent.innerHTML = '<img src="/images/personnage_ai_assistant_droits.png" alt="Milo" class="w-full h-full object-cover" />'
+                      parent.innerHTML = '<img src="/images/personnage_ai_assistant_droits.webp" alt="Milo" class="w-full h-full object-cover" />'
                     }
                   }}
                 >
                   <source src="/videos/ai assistant video loop2.mp4" type="video/mp4" />
                   {/* Fallback si vidéo non supportée */}
                   <img 
-                    src="/images/personnage_ai_assistant_droits.png" 
+                    src="/images/personnage_ai_assistant_droits.webp" 
                     alt="Milo - Assistant IA"
                     className="w-full h-full object-cover"
                   />

@@ -47,25 +47,25 @@ export default function CentreJeunessePage() {
       {
         speaker: 'jay',
         text: "Yo, j'ai un truc pour toi. Ça va t'aider à relaxer. Personne va rien savoir.",
-        image: '/images/jeune_offre_drogue.jpg',
+        image: '/images/jeune_offre_drogue.webp',
         emotion: 'pression'
       },
       {
         speaker: 'alex',
         text: "Je... je sais pas... Et si on se fait prendre?",
-        image: '/images/jeune_reflechi.jpg',
+        image: '/images/jeune_reflechi.webp',
         emotion: 'nerveux'
       },
       {
         speaker: 'jay',
         text: "Relax man! J'te dis que personne va rien savoir. Cache ça juste sous ton oreiller.",
-        image: '/images/jeune_offre_drogue.jpg',
+        image: '/images/jeune_offre_drogue.webp',
         emotion: 'pression'
       },
       {
         speaker: 'alex',
         text: "Sous mon oreiller... Je sais pas... Ils font des fouilles des fois. Et si je me fais prendre, qu'est-ce qui va m'arriver?",
-        image: '/images/jeune_reflechi.jpg',
+        image: '/images/jeune_reflechi.webp',
         emotion: 'hesite',
         choices: [
           "Ok, je prends ça et je le cache...",
@@ -78,31 +78,31 @@ export default function CentreJeunessePage() {
       {
         speaker: 'alex',
         text: "Non! Je vais appeler une intervenante. Ce que tu fais, c'est pas correct.",
-        image: '/images/jeune_reflechi.jpg',
+        image: '/images/jeune_reflechi.webp',
         emotion: 'determine'
       },
       {
         speaker: 'jay',
         text: "Quoi?! T'es sérieux là? Tu vas me stooler?",
-        image: '/images/jeune_offre_drogue.jpg',
+        image: '/images/jeune_offre_drogue.webp',
         emotion: 'choque'
       },
       {
         speaker: 'narrateur',
         text: "Alex se dirige vers le bureau des intervenants...",
-        image: '/images/intervenante_arrive_lieu_echange_drogues.jpg',
+        image: '/images/intervenante_arrive_lieu_echange_drogues.webp',
         emotion: 'action'
       },
       {
         speaker: 'narrateur',
         text: "L'intervenante arrive rapidement et prend la situation en charge. Alex a fait le bon choix en demandant de l'aide.",
-        image: '/images/intervenante_arrive_lieu_echange_drogues.jpg',
+        image: '/images/intervenante_arrive_lieu_echange_drogues.webp',
         emotion: 'resolution'
       },
       {
         speaker: 'narrateur',
         text: "En signalant la situation, Alex se protège lui-même ET les autres résidents du centre. Il a le droit de vivre dans un environnement sécuritaire.",
-        image: '/images/intervenante_arrive_lieu_echange_drogues.jpg',
+        image: '/images/intervenante_arrive_lieu_echange_drogues.webp',
         emotion: 'lecon'
       }
     ],
@@ -110,31 +110,31 @@ export default function CentreJeunessePage() {
       {
         speaker: 'alex',
         text: "Non merci, j'veux rien savoir de ça. Garde tes affaires.",
-        image: '/images/refus_drogue_non.jpg',
+        image: '/images/refus_drogue_non.webp',
         emotion: 'confiant'
       },
       {
         speaker: 'jay',
         text: "Come on man! T'es vraiment sérieux?",
-        image: '/images/jeune_offre_drogue.jpg',
+        image: '/images/jeune_offre_drogue.webp',
         emotion: 'frustre'
       },
       {
         speaker: 'alex',
         text: "Ouais, j'suis sérieux. Laisse-moi tranquille avec ça.",
-        image: '/images/refus_drogue_non.jpg',
+        image: '/images/refus_drogue_non.webp',
         emotion: 'fort'
       },
       {
         speaker: 'narrateur',
         text: "Alex a refusé clairement. Il a le droit de dire NON et d'être respecté dans sa décision.",
-        image: '/images/jeune_reflechi.jpg',
+        image: '/images/jeune_reflechi.webp',
         emotion: 'victoire'
       },
       {
         speaker: 'narrateur',
         text: "En refusant, Alex évite des conséquences graves comme une fouille ou des sanctions disciplinaires.",
-        image: '/images/jeune_reflechi.jpg',
+        image: '/images/jeune_reflechi.webp',
         emotion: 'lecon'
       }
     ],
@@ -142,31 +142,31 @@ export default function CentreJeunessePage() {
       {
         speaker: 'alex',
         text: "Ok... juste cette fois alors. Je cache ça où?",
-        image: '/images/jeune_offre_drogue.jpg',
+        image: '/images/jeune_offre_drogue.webp',
         emotion: 'cede'
       },
       {
         speaker: 'jay',
         text: "Mets ça sous ton oreiller. Personne va fouiller là.",
-        image: '/images/jeune_offre_drogue.jpg',
+        image: '/images/jeune_offre_drogue.webp',
         emotion: 'complice'
       },
       {
         speaker: 'narrateur',
         text: "Plus tard le même jour... L'équipe de sécurité fait une inspection de routine.",
-        image: '/images/police_centre_jeunesse.jpg',
+        image: '/images/police_centre_jeunesse.webp',
         emotion: 'tension'
       },
       {
         speaker: 'narrateur',
         text: "L'objet interdit est découvert dans la chambre d'Alex.",
-        image: '/images/pilules_rejetees_lit.jpg',
+        image: '/images/pilules_rejetees_lit.webp',
         emotion: 'decouverte'
       },
       {
         speaker: 'narrateur',
         text: "L'agent de sécurité vient parler à Alex.",
-        image: '/images/police_parle_au_jeune.jpg',
+        image: '/images/police_parle_au_jeune.webp',
         emotion: 'serieux',
         choices: [
           "Que se passe-t-il maintenant?"
@@ -177,13 +177,13 @@ export default function CentreJeunessePage() {
       {
         speaker: 'narrateur',
         text: "Alex se retrouve dans une situation difficile. Une procédure disciplinaire est lancée.",
-        image: '/images/police_parle_au_jeune.jpg',
+        image: '/images/police_parle_au_jeune.webp',
         emotion: 'grave'
       },
       {
         speaker: 'narrateur',
         text: "💡 PRÉVENTION: Mais tu sais quoi? La meilleure solution à tout ça, c'est peut-être de prendre de meilleures décisions dès le départ. Refuser, demander de l'aide, faire les bons choix.",
-        image: '/images/jeune_reflechi.jpg',
+        image: '/images/jeune_reflechi.webp',
         emotion: 'conseil',
         choices: [
           "En savoir plus sur mes droits"
@@ -195,25 +195,25 @@ export default function CentreJeunessePage() {
       {
         speaker: 'narrateur',
         text: "⚖️ PROCÉDURE DISCIPLINAIRE: Alex a le DROIT d'être informé clairement des accusations portées contre lui. Pas de surprise!",
-        image: '/images/jeune_entoure_famille_avocats.jpg',
+        image: '/images/jeune_entoure_famille_avocats.webp',
         emotion: 'info'
       },
       {
         speaker: 'narrateur',
         text: "👨‍⚖️ REPRÉSENTATION LÉGALE: Alex a le DROIT d'avoir un avocat ou un représentant pour le défendre. C'est GRATUIT si nécessaire!",
-        image: '/images/jeune_entoure_famille_avocats.jpg',
+        image: '/images/jeune_entoure_famille_avocats.webp',
         emotion: 'support'
       },
       {
         speaker: 'narrateur',
         text: "👨‍👩‍👦 SOUTIEN FAMILIAL: Alex a le DROIT d'être accompagné par sa famille dans cette épreuve. Il n'est PAS seul.",
-        image: '/images/jeune_entoure_famille_avocats.jpg',
+        image: '/images/jeune_entoure_famille_avocats.webp',
         emotion: 'famille'
       },
       {
         speaker: 'narrateur',
         text: "🗣️ DROIT D'ÊTRE ENTENDU: Au tribunal, Alex a le DROIT de raconter SA VERSION des faits. Le juge DOIT l'écouter.",
-        image: '/images/jeune_tribunal.jpg',
+        image: '/images/jeune_tribunal.webp',
         emotion: 'parole'
       }
     ]
@@ -714,7 +714,7 @@ export default function CentreJeunessePage() {
                   {/* Image de fond */}
                   <div className="absolute inset-0">
                     <img 
-                      src="/images/fugue_course.jpg" 
+                      src="/images/fugue_course.webp" 
                       alt="La Fugue"
                       className="w-full h-full object-cover"
                     />
@@ -748,7 +748,7 @@ export default function CentreJeunessePage() {
                   {/* Image de fond */}
                   <div className="absolute inset-0">
                     <img 
-                      src="/images/crystaux_decision.jpg" 
+                      src="/images/crystaux_decision.webp" 
                       alt="L'Élixir des Choix"
                       className="w-full h-full object-cover"
                     />
@@ -782,7 +782,7 @@ export default function CentreJeunessePage() {
                   {/* Image de fond */}
                   <div className="absolute inset-0">
                     <img 
-                      src="/images/plan d'intervention_gemini.png" 
+                      src="/images/plan d'intervention_gemini.webp" 
                       alt="Le Plan d'Intervention"
                       className="w-full h-full object-cover"
                     />
@@ -816,7 +816,7 @@ export default function CentreJeunessePage() {
                   {/* Image de fond */}
                   <div className="absolute inset-0">
                     <img 
-                      src="/images/droit_confidentialite_top_confidentiel.jpg" 
+                      src="/images/droit_confidentialite_top_confidentiel.webp" 
                       alt="Texto à l'Eau"
                       className="w-full h-full object-cover"
                     />
@@ -922,7 +922,7 @@ export default function CentreJeunessePage() {
           {/* Image d'établissement avec zoom lent */}
           <div className="relative w-full aspect-video border-4 sm:border-6 md:border-8 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] md:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] overflow-hidden bg-gray-200 mb-4 sm:mb-6 md:mb-8">
             <motion.img
-              src="/images/establishing_centre jeunesse.jpg"
+              src="/images/establishing_centre jeunesse.webp"
               alt="Centre Jeunesse"
               className="w-full h-full object-cover"
               animate={{
@@ -1074,7 +1074,7 @@ export default function CentreJeunessePage() {
               transition={{ duration: 0.3 }}
               className="w-full h-full object-cover"
               onError={(e) => {
-                e.currentTarget.src = '/images/cafeteria_triste.png'
+                e.currentTarget.src = '/images/cafeteria_triste.webp'
               }}
             />
           </AnimatePresence>

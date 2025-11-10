@@ -113,7 +113,7 @@ export default function Home() {
               <picture>
                 <source srcSet="/images/hero_centre_jeunesse_sourire.webp" type="image/webp" />
                 <img
-                  src="/images/hero_centre_jeunesse_sourire.png"
+                  src="/images/hero_centre_jeunesse_sourire.webp"
                   alt="Jeune avec son chien devant le centre jeunesse"
                   className="absolute inset-0 w-full h-full object-cover"
                 />

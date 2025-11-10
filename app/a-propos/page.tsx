@@ -17,7 +17,7 @@ export default function AProposPage() {
           {/* Photo spectacle en filigrane */}
           <div className="absolute inset-0 z-0">
             <img 
-              src="/images/j'ai ben l'droit.png" 
+              src="/images/j'ai ben l'droit.webp" 
               alt="Le spectacle J'ai ben l'droit"
               className="w-full h-full object-cover"
               style={{ objectPosition: 'center 35%' }}
@@ -57,7 +57,7 @@ export default function AProposPage() {
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-400 to-pink-400 rounded-2xl blur-2xl opacity-20"></div>
                 <img 
-                  src="/images/Casting_2024_dominic.png" 
+                  src="/images/Casting_2024_dominic.webp" 
                   alt="Dominic St-Laurent"
                   className="relative w-64 h-64 object-cover rounded-2xl shadow-2xl"
                   style={{ objectPosition: 'center 65%' }}
@@ -189,7 +189,7 @@ export default function AProposPage() {
                       {/* Image 1 - L'offre */}
                       <div className="relative border-r-2 border-b-2 border-black h-48 overflow-hidden group">
                         <img 
-                          src="/images/jeune_offre_drogue.jpg" 
+                          src="/images/jeune_offre_drogue.webp" 
                           alt="L'offre"
                           className="w-full h-full object-cover transition-transform group-hover:scale-105"
                         />
@@ -201,7 +201,7 @@ export default function AProposPage() {
                       {/* Image 2 - La fouille */}
                       <div className="relative border-b-2 border-black h-48 overflow-hidden group">
                         <img 
-                          src="/images/police_centre_jeunesse.jpg" 
+                          src="/images/police_centre_jeunesse.webp" 
                           alt="La fouille"
                           className="w-full h-full object-cover transition-transform group-hover:scale-105"
                         />
@@ -213,7 +213,7 @@ export default function AProposPage() {
                       {/* Image 3 - L'intervenante */}
                       <div className="relative border-r-2 border-black h-48 overflow-hidden group">
                         <img 
-                          src="/images/intervenante_arrive_lieu_echange_drogues.jpg" 
+                          src="/images/intervenante_arrive_lieu_echange_drogues.webp" 
                           alt="L'intervenante"
                           className="w-full h-full object-cover transition-transform group-hover:scale-105"
                         />
@@ -225,7 +225,7 @@ export default function AProposPage() {
                       {/* Image 4 - Tes choix */}
                       <div className="relative h-48 overflow-hidden group">
                         <img 
-                          src="/images/jeune_reflechi.jpg" 
+                          src="/images/jeune_reflechi.webp" 
                           alt="Tes choix"
                           className="w-full h-full object-cover transition-transform group-hover:scale-105"
                         />

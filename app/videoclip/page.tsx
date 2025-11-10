@@ -147,7 +147,7 @@ export default function VideoClipPage() {
   // Charger l'image depuis le dossier videoclip
   const getImagePath = (folder: string) => {
     // Le folder est déjà au format "videoclip_X"
-    const path = `/images/videoclip/${folder}.jpg`
+    const path = `/images/videoclip/${folder}.webp`
     console.log('Image path:', path, 'Folder:', folder)
     return path
   }
@@ -360,72 +360,13 @@ export default function VideoClipPage() {
       </div>
 
       {/* Header */}
-      <div className="absolute top-4 left-4 right-4 z-50 flex justify-between items-center">
+      <div className="absolute top-4 left-4 right-4 z-50 flex justify-start items-center">
         <Link 
           href="/"
-          className="px-6 py-3 bg-red-500 text-white border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] font-black hover:translate-x-1 hover:translate-y-1 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
+          className="px-4 sm:px-6 py-2 sm:py-3 bg-red-500 text-white border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] font-black text-sm sm:text-base hover:translate-x-1 hover:translate-y-1 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
         >
           ← RETOUR
         </Link>
-        
-        {/* Contrôles audio séparés */}
-        <div className="flex items-center gap-4 bg-gray-900 border-4 border-black px-4 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-          {/* Contrôle Musique */}
-          <div className="flex items-center gap-2 pr-4 border-r-2 border-white/20">
-            <span className="text-white text-xs font-bold">🎵</span>
-            <button
-              onClick={() => setMusiqueMuted(!musiqueMuted)}
-              className="text-xl hover:scale-110 transition-transform"
-              title="Mute/Unmute Musique"
-            >
-              {musiqueMuted ? '🔇' : '🔊'}
-            </button>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.1"
-              value={musiqueMuted ? 0 : musiqueVolume}
-              onChange={(e) => {
-                const newVolume = parseFloat(e.target.value)
-                setMusiqueVolume(newVolume)
-                if (newVolume > 0 && musiqueMuted) {
-                  setMusiqueMuted(false)
-                }
-              }}
-              className="w-20 h-2 bg-white border-2 border-black rounded-none appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-lime-400 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-black [&::-webkit-slider-thumb]:cursor-pointer"
-              title="Volume Musique"
-            />
-          </div>
-          
-          {/* Contrôle Sons */}
-          <div className="flex items-center gap-2">
-            <span className="text-white text-xs font-bold">🎤</span>
-          <button
-              onClick={() => setSonsMuted(!sonsMuted)}
-              className="text-xl hover:scale-110 transition-transform"
-              title="Mute/Unmute Sons"
-          >
-              {sonsMuted ? '🔇' : '🔊'}
-          </button>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.1"
-              value={sonsMuted ? 0 : sonsVolume}
-            onChange={(e) => {
-              const newVolume = parseFloat(e.target.value)
-                setSonsVolume(newVolume)
-                if (newVolume > 0 && sonsMuted) {
-                  setSonsMuted(false)
-              }
-            }}
-              className="w-20 h-2 bg-white border-2 border-black rounded-none appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-black [&::-webkit-slider-thumb]:cursor-pointer"
-              title="Volume Sons"
-          />
-          </div>
-        </div>
       </div>
 
       {/* Zone principale avec image */}
@@ -469,12 +410,12 @@ export default function VideoClipPage() {
               const folder = currentBlock.imageFolder
               const currentSrc = target.src
               console.error('❌ Image load error:', currentSrc, 'Trying fallback for folder:', folder)
-              if (currentSrc.endsWith('.jpg')) {
+              if (currentSrc.endsWith('.webp')) {
+                target.src = `/images/videoclip/${folder}.jpg`
+              } else if (currentSrc.endsWith('.jpg')) {
                 target.src = `/images/videoclip/${folder}.png`
-              } else if (currentSrc.endsWith('.png')) {
-                target.src = `/images/videoclip/${folder}.jpeg`
               } else {
-                target.src = '/images/establishing_centre jeunesse.jpg'
+                target.src = '/images/establishing_centre jeunesse.webp'
               }
             }}
           />
@@ -482,7 +423,7 @@ export default function VideoClipPage() {
         </AnimatePresence>
 
         {/* Overlay très léger uniquement pour les paroles */}
-        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" style={{ zIndex: 10 }} />
+        <div className="absolute bottom-0 left-0 right-0 h-24 sm:h-32 md:h-40 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" style={{ zIndex: 10 }} />
 
         {/* Bloc de paroles néo-brutaliste */}
         <motion.div
@@ -491,27 +432,27 @@ export default function VideoClipPage() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.5 }}
-          className={`absolute bottom-4 left-4 right-4 max-w-4xl mx-auto ${getBlockStyle(currentBlock.type)} border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-4 z-30`}
+          className={`absolute bottom-2 sm:bottom-4 left-2 sm:left-4 right-2 sm:right-4 max-w-4xl mx-auto ${getBlockStyle(currentBlock.type)} border-2 sm:border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-2 sm:p-4 z-30`}
         >
-          <div className="text-black font-black text-lg md:text-xl leading-tight whitespace-pre-line max-h-[200px] overflow-y-auto">
+          <div className="text-black font-black text-xs sm:text-sm md:text-base leading-tight whitespace-pre-line max-h-[120px] sm:max-h-[150px] md:max-h-[180px] overflow-y-auto">
             {currentBlock.text}
           </div>
         </motion.div>
       </div>
 
       {/* Contrôles de lecture */}
-      <div className="w-full max-w-6xl flex gap-4 justify-center items-center mb-6">
+      <div className="w-full max-w-6xl flex gap-2 sm:gap-4 justify-center items-center mb-4 sm:mb-6">
         <button
           onClick={handlePrevious}
           disabled={currentBlockIndex === 0}
-          className="px-6 py-3 bg-cyan-400 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] font-black text-xl disabled:opacity-50 disabled:cursor-not-allowed hover:translate-x-1 hover:translate-y-1 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
+          className="px-3 sm:px-4 md:px-6 py-2 sm:py-2.5 md:py-3 bg-cyan-400 border-2 sm:border-3 md:border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] font-black text-xs sm:text-sm md:text-base lg:text-xl disabled:opacity-50 disabled:cursor-not-allowed hover:translate-x-1 hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
         >
-          ◀ PRÉCÉDENT
+          ◀ PRÉC
         </button>
 
         <button
           onClick={handlePlayPause}
-          className="px-8 py-4 bg-lime-400 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] font-black text-2xl hover:translate-x-1 hover:translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
+          className="px-4 sm:px-6 md:px-8 py-2 sm:py-3 md:py-4 bg-lime-400 border-2 sm:border-3 md:border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] font-black text-sm sm:text-base md:text-lg lg:text-2xl hover:translate-x-1 hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
         >
           {isPlaying ? '⏸ PAUSE' : '▶ JOUER'}
         </button>
@@ -519,9 +460,9 @@ export default function VideoClipPage() {
         <button
           onClick={handleNext}
           disabled={currentBlockIndex === lyrics.length - 1}
-          className="px-6 py-3 bg-cyan-400 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] font-black text-xl disabled:opacity-50 disabled:cursor-not-allowed hover:translate-x-1 hover:translate-y-1 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
+          className="px-3 sm:px-4 md:px-6 py-2 sm:py-2.5 md:py-3 bg-cyan-400 border-2 sm:border-3 md:border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] font-black text-xs sm:text-sm md:text-base lg:text-xl disabled:opacity-50 disabled:cursor-not-allowed hover:translate-x-1 hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
         >
-          SUIVANT ▶
+          SUIV ▶
         </button>
       </div>
 
@@ -541,10 +482,12 @@ export default function VideoClipPage() {
                 onError={(e) => {
                   const target = e.target as HTMLImageElement
                   const currentSrc = target.src
-                  if (currentSrc.endsWith('.jpg')) {
+                  if (currentSrc.endsWith('.webp')) {
+                    target.src = `/images/videoclip/${block.imageFolder}.jpg`
+                  } else if (currentSrc.endsWith('.jpg')) {
                     target.src = `/images/videoclip/${block.imageFolder}.png`
                   } else {
-                    target.src = '/images/establishing_centre jeunesse.jpg'
+                    target.src = '/images/establishing_centre jeunesse.webp'
                   }
                 }}
               />

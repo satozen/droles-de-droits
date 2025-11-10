@@ -4,7 +4,12 @@ import './globals.css'
 import { Fredoka } from 'next/font/google'
 import Navigation from '@/components/Navigation'
 
-const fredoka = Fredoka({ subsets: ['latin'], weight: ['400','600','700'] })
+const fredoka = Fredoka({ 
+  subsets: ['latin'], 
+  weight: ['400','600','700'],
+  display: 'swap',
+  adjustFontFallback: false
+})
 
 export const metadata: Metadata = {
   title: 'DRÔLES DE DROITS - Jeu éducatif interactif sur tes 12 droits | Québec',
@@ -19,11 +24,11 @@ export const metadata: Metadata = {
     siteName: 'Drôles de Droits',
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://droles-de-droits.vercel.app'}/images/hero_centre_jeunesse_sourire.png`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://droles-de-droits.vercel.app'}/images/hero_centre_jeunesse_sourire.webp`,
         width: 1200,
         height: 630,
         alt: 'DRÔLES DE DROITS - Jeu interactif éducatif pour les jeunes en centre jeunesse',
-        type: 'image/png',
+        type: 'image/webp',
       },
     ],
     locale: 'fr_CA',
@@ -33,7 +38,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'DRÔLES DE DROITS 🎮 | Connais tes 12 droits en santé',
     description: 'Jeu interactif éducatif spécialisé pour les jeunes en centre jeunesse. Des scénarios réalistes qui leur ressemblent. Apprentissage actif vs passif.',
-    images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://droles-de-droits.vercel.app'}/images/hero_centre_jeunesse_sourire.png`],
+    images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://droles-de-droits.vercel.app'}/images/hero_centre_jeunesse_sourire.webp`],
     creator: '@drolesdedroits',
     site: '@drolesdedroits',
   },

@@ -393,12 +393,12 @@ export default function DialoguePage() {
       <div className="relative w-full max-w-5xl aspect-video rounded-2xl overflow-hidden shadow-2xl bg-black">
         {/* Image de fond */}
         <img
-          src="/images/cafeteria_triste.png"
+          src="/images/cafeteria_triste.webp"
           alt="Cafétéria - Dialogue"
           className="w-full h-full object-cover"
           onError={(e) => {
             console.error('Erreur chargement image')
-            e.currentTarget.src = '/images/cafeteria_dialogue.png'
+            e.currentTarget.src = '/images/cafeteria_dialogue.webp'
           }}
         />
 
