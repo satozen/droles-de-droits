@@ -1,4 +1,4 @@
-// Page d'accueil - hero avec vidéo
+// Page d'accueil - hero avec image
 'use client'
 
 import Link from 'next/link'
@@ -103,7 +103,7 @@ export default function Home() {
             </div>
           </motion.div>
 
-          {/* Vidéo hero */}
+          {/* Image hero */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -111,32 +111,14 @@ export default function Home() {
             className="relative"
           >
             <div className="relative w-full aspect-square rounded-3xl overflow-hidden shadow-2xl">
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
+              <img
+                src="/images/droles-de-droits-hero-10nov2025.png"
+                alt="DRÔLES DE DROITS - Le jeu"
                 className="absolute inset-0 w-full h-full object-cover"
                 style={{
                   objectPosition: 'center bottom'
                 }}
-                onError={(e) => {
-                  // Fallback vers l'image si la vidéo ne charge pas
-                  const target = e.target as HTMLVideoElement
-                  const parent = target.parentElement
-                  if (parent) {
-                    parent.innerHTML = '<img src="/images/hero_centre_jeunesse_sourire.webp" alt="Jeune avec son chien devant le centre jeunesse" class="absolute inset-0 w-full h-full object-cover" />'
-                  }
-                }}
-              >
-                <source src="/videos/hero_video.mp4" type="video/mp4" />
-                {/* Fallback si vidéo non supportée */}
-                <img 
-                  src="/images/hero_centre_jeunesse_sourire.webp" 
-                  alt="Jeune avec son chien devant le centre jeunesse"
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-              </video>
+              />
             </div>
             {/* Éléments décoratifs */}
             <div className="absolute -top-4 -right-4 w-24 h-24 bg-yellow-400 rounded-full opacity-50 blur-2xl" />
