@@ -1,10 +1,11 @@
-// Page d'accueil - hero et appel à l'action principal
+// Page d'accueil - hero avec vidéo
 'use client'
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
 export default function Home() {
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
       {/* Banner Démo */}
@@ -71,30 +72,30 @@ export default function Home() {
             </motion.div>
 
             {/* Boutons d'action principaux */}
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center md:justify-start">
-              <Link href="/centre-jeunesse" className="w-full sm:w-auto">
+            <div className="flex flex-col gap-3 md:gap-4 justify-center md:justify-start">
+              <Link href="/centre-jeunesse">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="w-full sm:w-auto bg-gradient-to-r from-red-500 to-orange-600 text-white px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-full text-base sm:text-lg md:text-xl font-semibold shadow-lg hover:shadow-xl transition-shadow border-4 border-black"
+                  className="w-full md:w-auto bg-gradient-to-r from-red-500 to-orange-600 text-white px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-3 rounded-xl text-base sm:text-lg md:text-xl font-semibold shadow-lg hover:shadow-xl transition-shadow border-4 border-black whitespace-nowrap"
                 >
                   Démarrer l'aventure 🎮
                 </motion.button>
               </Link>
-              <Link href="/jeu" className="w-full sm:w-auto">
+              <Link href="/jeu">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-full text-base sm:text-lg md:text-xl font-semibold shadow-lg hover:shadow-xl transition-shadow"
+                  className="w-full md:w-auto bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-3 rounded-xl text-base sm:text-lg md:text-xl font-semibold shadow-lg hover:shadow-xl transition-shadow whitespace-nowrap"
                 >
                   Quiz Interactif 📝
                 </motion.button>
               </Link>
-              <Link href="/videoclip" className="w-full sm:w-auto">
+              <Link href="/videoclip">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="w-full sm:w-auto bg-gradient-to-r from-purple-500 to-pink-600 text-white px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-full text-base sm:text-lg md:text-xl font-semibold shadow-lg hover:shadow-xl transition-shadow border-4 border-black"
+                  className="w-full md:w-auto bg-gradient-to-r from-purple-500 to-pink-600 text-white px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-3 rounded-xl text-base sm:text-lg md:text-xl font-semibold shadow-lg hover:shadow-xl transition-shadow border-4 border-black whitespace-nowrap"
                 >
                   Bonus Musical 🎵
                 </motion.button>
@@ -102,7 +103,7 @@ export default function Home() {
             </div>
           </motion.div>
 
-          {/* Image hero */}
+          {/* Vidéo hero */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -110,14 +111,32 @@ export default function Home() {
             className="relative"
           >
             <div className="relative w-full aspect-square rounded-3xl overflow-hidden shadow-2xl">
-              <picture>
-                <source srcSet="/images/hero_centre_jeunesse_sourire.webp" type="image/webp" />
-                <img
-                  src="/images/hero_centre_jeunesse_sourire.webp"
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{
+                  objectPosition: 'center bottom'
+                }}
+                onError={(e) => {
+                  // Fallback vers l'image si la vidéo ne charge pas
+                  const target = e.target as HTMLVideoElement
+                  const parent = target.parentElement
+                  if (parent) {
+                    parent.innerHTML = '<img src="/images/hero_centre_jeunesse_sourire.webp" alt="Jeune avec son chien devant le centre jeunesse" class="absolute inset-0 w-full h-full object-cover" />'
+                  }
+                }}
+              >
+                <source src="/videos/hero_video.mp4" type="video/mp4" />
+                {/* Fallback si vidéo non supportée */}
+                <img 
+                  src="/images/hero_centre_jeunesse_sourire.webp" 
                   alt="Jeune avec son chien devant le centre jeunesse"
                   className="absolute inset-0 w-full h-full object-cover"
                 />
-              </picture>
+              </video>
             </div>
             {/* Éléments décoratifs */}
             <div className="absolute -top-4 -right-4 w-24 h-24 bg-yellow-400 rounded-full opacity-50 blur-2xl" />
