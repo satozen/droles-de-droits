@@ -8,6 +8,23 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 
+// Hook pour détecter si on est sur mobile
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(true)
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+  
+  return isMobile
+}
+
 type Speaker = 'alex' | 'jay' | 'narrateur'
 
 interface DialogueLine {
@@ -24,6 +41,7 @@ interface DialogueScript {
 
 export default function CentreJeunessePage() {
   const router = useRouter()
+  const isMobile = useIsMobile()
   const dialogue: DialogueScript = {
     'intro': [
       {
@@ -334,10 +352,14 @@ export default function CentreJeunessePage() {
       setShowChoices(false)
       setTextComplete(false)
       
+      let hasAudio = false
+      let timer: NodeJS.Timeout | null = null
+      
       // Jouer le voice-over de Jay si c'est lui qui parle (seulement après le clic pour commencer)
       if (currentLine.speaker === 'jay' && !isMuted) {
         const audioFile = getJayAudioFile(currentScene, currentLineIndex)
         if (audioFile) {
+          hasAudio = true
           // Arrêter le voice-over précédent s'il y en a un
           if (voiceOverRef.current) {
             voiceOverRef.current.pause()
@@ -348,7 +370,17 @@ export default function CentreJeunessePage() {
           const audio = new Audio(audioFile)
           audio.volume = volume
           voiceOverRef.current = audio
-          audio.play().catch(e => console.log('Voice-over bloqué:', e))
+          
+          // Écouter la fin de l'audio pour mettre à jour textComplete
+          audio.addEventListener('ended', () => {
+            setTextComplete(true)
+          })
+          
+          audio.play().catch(e => {
+            console.log('Voice-over bloqué:', e)
+            // Si l'audio ne peut pas jouer, mettre textComplete à true après un délai
+            timer = setTimeout(() => setTextComplete(true), 1000)
+          })
         }
       }
 
@@ -356,6 +388,7 @@ export default function CentreJeunessePage() {
       if (currentLine.speaker === 'alex' && !isMuted) {
         const audioFile = getAlexAudioFile(currentScene, currentLineIndex)
         if (audioFile) {
+          hasAudio = true
           // Arrêter le voice-over précédent s'il y en a un
           if (voiceOverRef.current) {
             voiceOverRef.current.pause()
@@ -366,17 +399,31 @@ export default function CentreJeunessePage() {
           const audio = new Audio(audioFile)
           audio.volume = volume
           voiceOverRef.current = audio
-          audio.play().catch(e => console.log('Voice-over bloqué:', e))
+          
+          // Écouter la fin de l'audio pour mettre à jour textComplete
+          audio.addEventListener('ended', () => {
+            setTextComplete(true)
+          })
+          
+          audio.play().catch(e => {
+            console.log('Voice-over bloqué:', e)
+            // Si l'audio ne peut pas jouer, mettre textComplete à true après un délai
+            timer = setTimeout(() => setTextComplete(true), 1000)
+          })
         }
       }
       
-      // Simuler l'apparition du texte
-      const timer = setTimeout(() => {
-        setTextComplete(true)
-      }, 1000)
+      // Si pas de voice-over (narrateur ou muted), simuler l'apparition du texte
+      if (!hasAudio) {
+        timer = setTimeout(() => {
+          setTextComplete(true)
+        }, 1000)
+      }
       
       return () => {
-        clearTimeout(timer)
+        if (timer) {
+          clearTimeout(timer)
+        }
         // Nettoyer le voice-over si la ligne change
         if (voiceOverRef.current) {
           voiceOverRef.current.pause()
@@ -451,7 +498,7 @@ export default function CentreJeunessePage() {
         border: 'border-black border-4',
         shadow: 'shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]',
         text: 'text-black',
-        position: 'left-8 bottom-24'
+        position: 'left-2 sm:left-4 md:left-8 bottom-16 sm:bottom-20 md:bottom-24'
       }
     } else if (currentLine.speaker === 'jay') {
       return {
@@ -459,7 +506,7 @@ export default function CentreJeunessePage() {
         border: 'border-black border-4',
         shadow: 'shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]',
         text: 'text-white',
-        position: 'right-8 bottom-24'
+        position: 'right-2 sm:right-4 md:right-8 bottom-16 sm:bottom-20 md:bottom-24'
       }
     } else {
       return {
@@ -467,7 +514,7 @@ export default function CentreJeunessePage() {
         border: 'border-black border-4',
         shadow: 'shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]',
         text: 'text-black',
-        position: 'left-1/2 -translate-x-1/2 top-12'
+        position: 'left-2 sm:left-4 right-2 sm:right-4 md:left-1/2 md:-translate-x-1/2 top-2 sm:top-4 md:top-12'
       }
     }
   }
@@ -497,23 +544,23 @@ export default function CentreJeunessePage() {
           initial={{ opacity: 0, x: -20, scale: 0.8 }}
           animate={{ opacity: 1, x: 0, scale: 1 }}
           transition={{ type: "spring", stiffness: 200, damping: 15 }}
-          className="flex items-start gap-3 font-bold text-lg"
+          className="flex items-start gap-2 sm:gap-3 font-bold text-sm sm:text-base md:text-lg"
         >
           <motion.span 
-            className="text-lime-400 text-2xl"
+            className="text-lime-400 text-lg sm:text-xl md:text-2xl flex-shrink-0"
             initial={{ scale: 0, rotate: -180 }}
             animate={{ scale: 1, rotate: 0 }}
             transition={{ delay: 0.2, type: "spring" }}
           >
             ✓
           </motion.span>
-          <span>{right.text}</span>
+          <span className="break-words">{right.text}</span>
         </motion.li>
       )
     } else {
       return (
         <motion.li 
-          className="flex items-start gap-3 font-bold text-lg opacity-40 relative"
+          className="flex items-start gap-2 sm:gap-3 font-bold text-sm sm:text-base md:text-lg opacity-40 relative"
           animate={{ 
             opacity: [0.3, 0.5, 0.3]
           }}
@@ -524,7 +571,7 @@ export default function CentreJeunessePage() {
           }}
         >
           <motion.span 
-            className="text-gray-500 text-2xl"
+            className="text-gray-500 text-lg sm:text-xl md:text-2xl flex-shrink-0"
             animate={{ 
               rotate: [0, 5, -5, 0]
             }}
@@ -537,7 +584,7 @@ export default function CentreJeunessePage() {
             🔒
           </motion.span>
           <div className="relative">
-            <span className="blur-[3px] select-none">Droit à débloquer...</span>
+            <span className="blur-[3px] select-none text-sm sm:text-base md:text-lg">Droit à débloquer...</span>
             <motion.div 
               className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
               animate={{ 
@@ -597,15 +644,15 @@ export default function CentreJeunessePage() {
     const endContent = getEndMessage()
 
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center p-4">
+      <div className="min-h-screen bg-white flex items-center justify-center p-2 sm:p-4">
         <div className="w-full max-w-4xl">
           {/* Header avec contrôles audio */}
-          <div className="w-full mb-6 flex justify-end">
+          <div className="w-full mb-4 sm:mb-6 flex justify-end">
             {/* Contrôles audio */}
-            <div className="flex items-center gap-3 bg-gray-900 border-4 border-black px-4 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            <div className="flex items-center gap-2 sm:gap-3 bg-gray-900 border-2 sm:border-4 border-black px-2 sm:px-3 md:px-4 py-1 sm:py-2 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
               <button
                 onClick={() => setIsMuted(!isMuted)}
-                className="text-2xl hover:scale-110 transition-transform"
+                className="text-xl sm:text-2xl hover:scale-110 transition-transform"
               >
                 {isMuted ? '🔇' : '🔊'}
               </button>
@@ -622,22 +669,22 @@ export default function CentreJeunessePage() {
                     setIsMuted(false)
                   }
                 }}
-                className="w-24 h-2 bg-white border-2 border-black rounded-none appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-lime-400 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-black [&::-webkit-slider-thumb]:cursor-pointer"
+                className="w-16 sm:w-20 md:w-24 h-2 bg-white border-2 border-black rounded-none appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 sm:[&::-webkit-slider-thumb]:w-4 sm:[&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-lime-400 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-black [&::-webkit-slider-thumb]:cursor-pointer"
               />
             </div>
           </div>
 
           {/* Panneau de fin néo-brutaliste */}
-          <div className={`${endContent.color} border-8 border-black shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] p-12`}>
-            <h1 className="text-5xl md:text-6xl font-black mb-6 text-center">{endContent.title}</h1>
+          <div className={`${endContent.color} border-4 sm:border-6 md:border-8 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] sm:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] md:shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] p-4 sm:p-6 md:p-8 lg:p-12`}>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-4 sm:mb-5 md:mb-6 text-center">{endContent.title}</h1>
             
-            <p className="text-2xl font-bold mb-8 text-center leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold mb-4 sm:mb-6 md:mb-8 text-center leading-relaxed">
               {endContent.message}
             </p>
 
             {/* Résumé des droits appris */}
-            <div className="bg-gray-900 text-white border-4 border-black p-6 mb-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-              <h2 className="text-2xl font-black mb-4 text-center">📋 TES DROITS LORS D'UNE FOUILLE :</h2>
+            <div className="bg-gray-900 text-white border-2 sm:border-4 border-black p-3 sm:p-4 md:p-6 mb-4 sm:mb-6 md:mb-8 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-black mb-3 sm:mb-4 text-center">📋 TES DROITS LORS D'UNE FOUILLE :</h2>
               <ul className="space-y-3">
                 {rightsData.map(right => (
                   <RightItem key={right.id} right={right} isUnlocked={unlockedRights.has(right.id)} />
@@ -649,20 +696,20 @@ export default function CentreJeunessePage() {
             </div>
 
             {/* Panneau des prochains chapitres */}
-            <div className="bg-gradient-to-br from-purple-500 to-pink-500 border-4 border-black p-8 mb-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-              <h2 className="text-3xl font-black mb-6 text-center text-white">
+            <div className="bg-gradient-to-br from-purple-500 to-pink-500 border-2 sm:border-4 border-black p-4 sm:p-6 md:p-8 mb-4 sm:mb-6 md:mb-8 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-black mb-4 sm:mb-5 md:mb-6 text-center text-white">
                 📚 PROCHAINS CHAPITRES
               </h2>
               
-              <p className="text-white text-center font-bold text-lg mb-6">
+              <p className="text-white text-center font-bold text-sm sm:text-base md:text-lg mb-4 sm:mb-5 md:mb-6">
                 L'aventure continue ! D'autres histoires immersives arrivent pour explorer les 12 droits :
               </p>
 
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
                 {/* Chapitre 1 - LA FUGUE */}
                 <motion.div
                   whileHover={{ scale: 1.05, rotate: -1 }}
-                  className="relative border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-not-allowed overflow-hidden h-80"
+                  className="relative border-2 sm:border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-not-allowed overflow-hidden h-48 sm:h-64 md:h-80"
                 >
                   {/* Image de fond */}
                   <div className="absolute inset-0">
@@ -675,17 +722,17 @@ export default function CentreJeunessePage() {
                   </div>
                   
                   {/* Contenu */}
-                  <div className="relative h-full p-5 flex flex-col justify-end">
-                    <div className="absolute top-3 right-3">
-                      <span className="text-xs bg-yellow-300 border-2 border-black px-2 py-1 font-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">BIENTÔT</span>
+                  <div className="relative h-full p-3 sm:p-4 md:p-5 flex flex-col justify-end">
+                    <div className="absolute top-2 sm:top-3 right-2 sm:right-3">
+                      <span className="text-xs bg-yellow-300 border-2 border-black px-1 sm:px-2 py-0.5 sm:py-1 font-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">BIENTÔT</span>
                     </div>
-                    <div className="space-y-2">
-                      <h3 className="font-black text-3xl text-white" style={{ textShadow: '3px 3px 0px rgba(0,0,0,1), -1px -1px 0px rgba(0,0,0,1), 1px -1px 0px rgba(0,0,0,1), -1px 1px 0px rgba(0,0,0,1)' }}>LA FUGUE</h3>
-                      <div className="bg-cyan-400 border-4 border-black p-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                        <p className="text-sm text-black font-bold mb-1">
+                    <div className="space-y-1 sm:space-y-2">
+                      <h3 className="font-black text-lg sm:text-xl md:text-2xl lg:text-3xl text-white" style={{ textShadow: '2px 2px 0px rgba(0,0,0,1), -1px -1px 0px rgba(0,0,0,1), 1px -1px 0px rgba(0,0,0,1), -1px 1px 0px rgba(0,0,0,1)' }}>LA FUGUE</h3>
+                      <div className="bg-cyan-400 border-2 sm:border-4 border-black p-2 sm:p-3 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                        <p className="text-xs sm:text-sm text-black font-bold mb-1">
                           🏃 Le droit à l'hébergement
                         </p>
-                        <p className="text-sm text-black font-semibold">
+                        <p className="text-xs sm:text-sm text-black font-semibold">
                           Un toit digne et sécuritaire
                         </p>
                       </div>
@@ -696,7 +743,7 @@ export default function CentreJeunessePage() {
                 {/* Chapitre 2 - L'ÉLIXIR DES CHOIX */}
                 <motion.div
                   whileHover={{ scale: 1.05, rotate: 1 }}
-                  className="relative border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-not-allowed overflow-hidden h-80"
+                  className="relative border-2 sm:border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-not-allowed overflow-hidden h-48 sm:h-64 md:h-80"
                 >
                   {/* Image de fond */}
                   <div className="absolute inset-0">
@@ -709,17 +756,17 @@ export default function CentreJeunessePage() {
                   </div>
                   
                   {/* Contenu */}
-                  <div className="relative h-full p-5 flex flex-col justify-end">
-                    <div className="absolute top-3 right-3">
-                      <span className="text-xs bg-yellow-300 border-2 border-black px-2 py-1 font-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">BIENTÔT</span>
+                  <div className="relative h-full p-3 sm:p-4 md:p-5 flex flex-col justify-end">
+                    <div className="absolute top-2 sm:top-3 right-2 sm:right-3">
+                      <span className="text-xs bg-yellow-300 border-2 border-black px-1 sm:px-2 py-0.5 sm:py-1 font-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">BIENTÔT</span>
                     </div>
-                    <div className="space-y-2">
-                      <h3 className="font-black text-3xl text-white" style={{ textShadow: '3px 3px 0px rgba(0,0,0,1), -1px -1px 0px rgba(0,0,0,1), 1px -1px 0px rgba(0,0,0,1), -1px 1px 0px rgba(0,0,0,1)' }}>L'ÉLIXIR DES CHOIX</h3>
-                      <div className="bg-yellow-300 border-4 border-black p-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                        <p className="text-sm text-black font-bold mb-1">
+                    <div className="space-y-1 sm:space-y-2">
+                      <h3 className="font-black text-lg sm:text-xl md:text-2xl lg:text-3xl text-white" style={{ textShadow: '2px 2px 0px rgba(0,0,0,1), -1px -1px 0px rgba(0,0,0,1), 1px -1px 0px rgba(0,0,0,1), -1px 1px 0px rgba(0,0,0,1)' }}>L'ÉLIXIR DES CHOIX</h3>
+                      <div className="bg-yellow-300 border-2 sm:border-4 border-black p-2 sm:p-3 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                        <p className="text-xs sm:text-sm text-black font-bold mb-1">
                           ⚗️ Le droit de participer aux décisions
                         </p>
-                        <p className="text-sm text-black font-semibold">
+                        <p className="text-xs sm:text-sm text-black font-semibold">
                           Ton pouvoir de décision
                         </p>
                       </div>
@@ -730,7 +777,7 @@ export default function CentreJeunessePage() {
                 {/* Chapitre 3 - LE PLAN D'INTERVENTION */}
                 <motion.div
                   whileHover={{ scale: 1.05, rotate: -1 }}
-                  className="relative border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-not-allowed overflow-hidden h-80"
+                  className="relative border-2 sm:border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-not-allowed overflow-hidden h-48 sm:h-64 md:h-80"
                 >
                   {/* Image de fond */}
                   <div className="absolute inset-0">
@@ -743,17 +790,17 @@ export default function CentreJeunessePage() {
                   </div>
                   
                   {/* Contenu */}
-                  <div className="relative h-full p-5 flex flex-col justify-end">
-                    <div className="absolute top-3 right-3">
-                      <span className="text-xs bg-yellow-300 border-2 border-black px-2 py-1 font-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">BIENTÔT</span>
+                  <div className="relative h-full p-3 sm:p-4 md:p-5 flex flex-col justify-end">
+                    <div className="absolute top-2 sm:top-3 right-2 sm:right-3">
+                      <span className="text-xs bg-yellow-300 border-2 border-black px-1 sm:px-2 py-0.5 sm:py-1 font-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">BIENTÔT</span>
                     </div>
-                    <div className="space-y-2">
-                      <h3 className="font-black text-3xl text-white" style={{ textShadow: '3px 3px 0px rgba(0,0,0,1), -1px -1px 0px rgba(0,0,0,1), 1px -1px 0px rgba(0,0,0,1), -1px 1px 0px rgba(0,0,0,1)' }}>LE PLAN D'INTERVENTION</h3>
-                      <div className="bg-lime-400 border-4 border-black p-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                        <p className="text-sm text-black font-bold mb-1">
+                    <div className="space-y-1 sm:space-y-2">
+                      <h3 className="font-black text-lg sm:text-xl md:text-2xl lg:text-3xl text-white" style={{ textShadow: '2px 2px 0px rgba(0,0,0,1), -1px -1px 0px rgba(0,0,0,1), 1px -1px 0px rgba(0,0,0,1), -1px 1px 0px rgba(0,0,0,1)' }}>LE PLAN D'INTERVENTION</h3>
+                      <div className="bg-lime-400 border-2 sm:border-4 border-black p-2 sm:p-3 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                        <p className="text-xs sm:text-sm text-black font-bold mb-1">
                           📋 Le droit de consulter son dossier
                         </p>
-                        <p className="text-sm text-black font-semibold">
+                        <p className="text-xs sm:text-sm text-black font-semibold">
                           Accède à ton dossier
                         </p>
                       </div>
@@ -764,7 +811,7 @@ export default function CentreJeunessePage() {
                 {/* Chapitre 4 - TEXTO À L'EAU */}
                 <motion.div
                   whileHover={{ scale: 1.05, rotate: 1 }}
-                  className="relative border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-not-allowed overflow-hidden h-80"
+                  className="relative border-2 sm:border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-not-allowed overflow-hidden h-48 sm:h-64 md:h-80"
                 >
                   {/* Image de fond */}
                   <div className="absolute inset-0">
@@ -777,17 +824,17 @@ export default function CentreJeunessePage() {
                   </div>
                   
                   {/* Contenu */}
-                  <div className="relative h-full p-5 flex flex-col justify-end">
-                    <div className="absolute top-3 right-3">
-                      <span className="text-xs bg-yellow-300 border-2 border-black px-2 py-1 font-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">BIENTÔT</span>
+                  <div className="relative h-full p-3 sm:p-4 md:p-5 flex flex-col justify-end">
+                    <div className="absolute top-2 sm:top-3 right-2 sm:right-3">
+                      <span className="text-xs bg-yellow-300 border-2 border-black px-1 sm:px-2 py-0.5 sm:py-1 font-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">BIENTÔT</span>
                     </div>
-                    <div className="space-y-2">
-                      <h3 className="font-black text-3xl text-white" style={{ textShadow: '3px 3px 0px rgba(0,0,0,1), -1px -1px 0px rgba(0,0,0,1), 1px -1px 0px rgba(0,0,0,1), -1px 1px 0px rgba(0,0,0,1)' }}>TEXTO À L'EAU</h3>
-                      <div className="bg-pink-400 border-4 border-black p-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                        <p className="text-sm text-black font-bold mb-1">
+                    <div className="space-y-1 sm:space-y-2">
+                      <h3 className="font-black text-lg sm:text-xl md:text-2xl lg:text-3xl text-white" style={{ textShadow: '2px 2px 0px rgba(0,0,0,1), -1px -1px 0px rgba(0,0,0,1), 1px -1px 0px rgba(0,0,0,1), -1px 1px 0px rgba(0,0,0,1)' }}>TEXTO À L'EAU</h3>
+                      <div className="bg-pink-400 border-2 sm:border-4 border-black p-2 sm:p-3 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                        <p className="text-xs sm:text-sm text-black font-bold mb-1">
                           📱 Le droit à la communication
                         </p>
-                        <p className="text-sm text-black font-semibold">
+                        <p className="text-xs sm:text-sm text-black font-semibold">
                           Reste en contact avec tes proches
                         </p>
                       </div>
@@ -804,10 +851,10 @@ export default function CentreJeunessePage() {
             </div>
 
             {/* Boutons d'action */}
-            <div className="flex gap-6 justify-center flex-wrap">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6 justify-center">
               <Link 
                 href="/"
-                className="px-10 py-5 bg-red-500 text-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] font-black text-xl hover:translate-x-1 hover:translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
+                className="px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 bg-red-500 text-white border-2 sm:border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] font-black text-sm sm:text-base md:text-lg lg:text-xl hover:translate-x-1 hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] md:hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all text-center"
               >
                 RETOUR À L'ACCUEIL
               </Link>
@@ -821,7 +868,7 @@ export default function CentreJeunessePage() {
                   setTextComplete(false)
                   setUnlockedRights(new Set()) // Réinitialiser les droits débloqués
                 }}
-                className="px-10 py-5 bg-cyan-400 text-black border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] font-black text-xl hover:translate-x-1 hover:translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
+                className="px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 bg-cyan-400 text-black border-2 sm:border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] font-black text-sm sm:text-base md:text-lg lg:text-xl hover:translate-x-1 hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] md:hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
               >
                 REJOUER L'HISTOIRE
               </button>
@@ -835,19 +882,19 @@ export default function CentreJeunessePage() {
   // Panneau d'introduction
   if (showIntroScreen) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center p-4">
+      <div className="min-h-screen bg-white flex items-center justify-center p-2 sm:p-4">
         <div className="w-full max-w-6xl">
           {/* Header avec contrôles audio */}
-          <div className="w-full mb-6 flex justify-between items-center">
+          <div className="w-full mb-4 sm:mb-6 flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0">
             <Link 
               href="/"
-              className="px-6 py-3 bg-red-500 text-white border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] font-black hover:translate-x-1 hover:translate-y-1 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
+              className="px-3 sm:px-4 md:px-6 py-2 sm:py-3 bg-red-500 text-white border-2 sm:border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] font-black text-xs sm:text-sm md:text-base hover:translate-x-1 hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
             >
               ← RETOUR
             </Link>
             
             {/* Contrôles audio */}
-            <div className="flex items-center gap-3 bg-gray-900 border-4 border-black px-4 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            <div className="flex items-center gap-2 sm:gap-3 bg-gray-900 border-2 sm:border-4 border-black px-2 sm:px-3 md:px-4 py-1 sm:py-2 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
               <button
                 onClick={() => setIsMuted(!isMuted)}
                 className="text-2xl hover:scale-110 transition-transform"
@@ -867,13 +914,13 @@ export default function CentreJeunessePage() {
                     setIsMuted(false)
                   }
                 }}
-                className="w-24 h-2 bg-white border-2 border-black rounded-none appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-lime-400 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-black [&::-webkit-slider-thumb]:cursor-pointer"
+                className="w-16 sm:w-20 md:w-24 h-2 bg-white border-2 border-black rounded-none appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 sm:[&::-webkit-slider-thumb]:w-4 sm:[&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-lime-400 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-black [&::-webkit-slider-thumb]:cursor-pointer"
               />
             </div>
           </div>
 
           {/* Image d'établissement avec zoom lent */}
-          <div className="relative w-full aspect-video border-8 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] overflow-hidden bg-gray-200 mb-8">
+          <div className="relative w-full aspect-video border-4 sm:border-6 md:border-8 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] md:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] overflow-hidden bg-gray-200 mb-4 sm:mb-6 md:mb-8">
             <motion.img
               src="/images/establishing_centre jeunesse.jpg"
               alt="Centre Jeunesse"
@@ -893,11 +940,11 @@ export default function CentreJeunessePage() {
           </div>
 
           {/* Message de bienvenue pour les décideurs */}
-          <div className="bg-gradient-to-br from-purple-50 to-blue-50 border-6 border-purple-400 shadow-[12px_12px_0px_0px_rgba(147,51,234,0.3)] p-8 mb-8 rounded-xl">
-            <h2 className="text-2xl md:text-3xl font-black mb-4 text-gray-800 text-center">
+          <div className="bg-gradient-to-br from-purple-50 to-blue-50 border-4 sm:border-6 border-purple-400 shadow-[6px_6px_0px_0px_rgba(147,51,234,0.3)] sm:shadow-[12px_12px_0px_0px_rgba(147,51,234,0.3)] p-4 sm:p-6 md:p-8 mb-4 sm:mb-6 md:mb-8 rounded-xl">
+            <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-black mb-3 sm:mb-4 text-gray-800 text-center">
               👥 Bienvenue aux membres des comités d'usagers
             </h2>
-            <div className="space-y-3 text-base md:text-lg text-gray-700 max-w-4xl mx-auto">
+            <div className="space-y-2 sm:space-y-3 text-sm sm:text-base md:text-lg text-gray-700 max-w-4xl mx-auto">
               <p className="leading-relaxed">
                 <strong>Cette démo interactive</strong> a été conçue pour sensibiliser vos jeunes en centre jeunesse à leurs droits, notamment en ce qui concerne <strong>les fouilles et saisies</strong> (Droit #9).
               </p>
@@ -911,12 +958,12 @@ export default function CentreJeunessePage() {
           </div>
 
           {/* Panneau de contexte néo-brutaliste */}
-          <div className="bg-yellow-300 border-8 border-black shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] p-12">
-            <h1 className="text-5xl md:text-6xl font-black mb-6 text-center">
+          <div className="bg-yellow-300 border-4 sm:border-6 md:border-8 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] sm:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] md:shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] p-4 sm:p-6 md:p-8 lg:p-12">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-4 sm:mb-5 md:mb-6 text-center">
               FOUILLES ET CAFOUILLAGE
             </h1>
             
-            <div className="space-y-6 text-xl font-bold leading-relaxed">
+            <div className="space-y-4 sm:space-y-5 md:space-y-6 text-base sm:text-lg md:text-xl font-bold leading-relaxed">
               <p className="text-center">
                 Tu es <span className="text-red-600 font-black">ALEX</span>, un jeune résident dans un centre jeunesse.
               </p>
@@ -925,9 +972,9 @@ export default function CentreJeunessePage() {
                 Aujourd'hui, <span className="text-red-600 font-black">JAY</span>, un des grands du centre, arrive avec une offre louche qui pourrait te causer des problèmes.
               </p>
 
-              <div className="bg-gray-900 text-white border-4 border-black p-6 mt-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                <h2 className="text-2xl font-black mb-4 text-center">💡 QUE VAIS-TU FAIRE ?</h2>
-                <ul className="space-y-3 font-bold text-lg">
+              <div className="bg-gray-900 text-white border-2 sm:border-4 border-black p-3 sm:p-4 md:p-6 mt-4 sm:mt-6 md:mt-8 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                <h2 className="text-lg sm:text-xl md:text-2xl font-black mb-3 sm:mb-4 text-center">💡 QUE VAIS-TU FAIRE ?</h2>
+                <ul className="space-y-2 sm:space-y-3 font-bold text-sm sm:text-base md:text-lg">
                   <li>• Accepter et le cacher?</li>
                   <li>• Refuser et demander de l'aide?</li>
                   <li>• Simplement dire non?</li>
@@ -937,19 +984,19 @@ export default function CentreJeunessePage() {
                 </p>
               </div>
 
-              <div className="bg-cyan-400 border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                <h3 className="text-xl font-black mb-2 text-center">🎓 CE QUE TU VAS APPRENDRE :</h3>
-                <p className="text-center font-bold">
+              <div className="bg-cyan-400 border-2 sm:border-4 border-black p-3 sm:p-4 md:p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                <h3 className="text-base sm:text-lg md:text-xl font-black mb-2 text-center">🎓 CE QUE TU VAS APPRENDRE :</h3>
+                <p className="text-center font-bold text-sm sm:text-base md:text-lg">
                   Tes <span className="text-red-600 font-black">DROITS</span> lors d'une fouille, d'une procédure disciplinaire, et comment te protéger dans ces situations.
                 </p>
               </div>
             </div>
 
             {/* Bouton pour commencer */}
-            <div className="flex justify-center mt-10">
+            <div className="flex justify-center mt-6 sm:mt-8 md:mt-10">
               <button
                 onClick={() => setShowIntroScreen(false)}
-                className="px-12 py-6 bg-lime-400 text-black border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] font-black text-2xl hover:translate-x-1 hover:translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
+                className="px-6 sm:px-8 md:px-12 py-3 sm:py-4 md:py-6 bg-lime-400 text-black border-2 sm:border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] font-black text-base sm:text-lg md:text-xl lg:text-2xl hover:translate-x-1 hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] md:hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
               >
                 COMMENCER L'HISTOIRE ▶
               </button>
@@ -969,20 +1016,20 @@ export default function CentreJeunessePage() {
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4" style={{ cursor: "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='48' style='font-size:32px'><text y='32'>👆</text></svg>\") 16 0, pointer" }}>
       {/* Header néo-brutaliste */}
-      <div className="w-full max-w-6xl mb-6 flex justify-between items-center gap-4">
+      <div className="w-full max-w-6xl mb-4 sm:mb-6 flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-4 px-2 sm:px-0">
         <Link 
           href="/"
-          className="px-6 py-3 bg-red-500 text-white border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] font-black hover:translate-x-1 hover:translate-y-1 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
+          className="px-3 sm:px-4 md:px-6 py-2 sm:py-3 bg-red-500 text-white border-2 sm:border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] font-black text-xs sm:text-sm md:text-base hover:translate-x-1 hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
         >
           ← RETOUR
         </Link>
         
-        <h1 className="text-2xl md:text-3xl font-black tracking-tight flex-1 text-center">
+        <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-black tracking-tight flex-1 text-center order-first sm:order-none">
           FOUILLES ET CAFOUILLAGE
         </h1>
         
         {/* Contrôles audio */}
-        <div className="flex items-center gap-3 bg-gray-900 border-4 border-black px-4 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+        <div className="flex items-center gap-2 sm:gap-3 bg-gray-900 border-2 sm:border-4 border-black px-2 sm:px-3 md:px-4 py-1 sm:py-2 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
           {/* Bouton Mute/Unmute */}
           <button
             onClick={() => setIsMuted(!isMuted)}
@@ -1006,39 +1053,149 @@ export default function CentreJeunessePage() {
                 setIsMuted(false)
               }
             }}
-            className="w-24 h-2 bg-white border-2 border-black rounded-none appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-lime-400 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-black [&::-webkit-slider-thumb]:cursor-pointer"
+            className="w-16 sm:w-20 md:w-24 h-2 bg-white border-2 border-black rounded-none appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 sm:[&::-webkit-slider-thumb]:w-4 sm:[&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-lime-400 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-black [&::-webkit-slider-thumb]:cursor-pointer"
           />
         </div>
       </div>
 
       {/* Zone principale avec image */}
-      <div className="relative w-full max-w-5xl aspect-video border-8 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] overflow-hidden bg-gray-200">
-        {/* Image de fond */}
-        <img
-          src={currentLine.image}
-          alt="Scène"
-          className="w-full h-full object-cover"
-          onError={(e) => {
-            e.currentTarget.src = '/images/cafeteria_triste.png'
-          }}
-        />
+      <div className="w-full max-w-5xl">
+        <div className="relative w-full aspect-video border-4 sm:border-6 md:border-8 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] md:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] overflow-hidden bg-gray-200 md:overflow-visible md:pb-12">
+          <div className="absolute inset-0 overflow-hidden">
+          {/* Image de fond */}
+          <AnimatePresence mode="wait">
+            <motion.img
+              key={`${currentScene}-${currentLineIndex}-image`}
+              src={currentLine.image}
+              alt="Scène"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.currentTarget.src = '/images/cafeteria_triste.png'
+              }}
+            />
+          </AnimatePresence>
 
-        {/* Overlay sombre pour meilleure lisibilité */}
-        <div className="absolute inset-0 bg-black/20" />
+          {/* Overlay sombre pour meilleure lisibilité */}
+          <div className="absolute inset-0 bg-black/20" />
 
-        {/* Bulle de dialogue néo-brutaliste */}
+          {/* Bulle de dialogue néo-brutaliste - Desktop seulement (position absolue) */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`${currentScene}-${currentLineIndex}`}
+              initial={{ opacity: 0, y: 15, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.95 }}
+              transition={{ 
+                type: "spring",
+                stiffness: 400,
+                damping: 30,
+                mass: 0.6,
+                duration: 0.4
+              }}
+              className={`hidden md:block absolute ${bubbleStyle.position} max-w-lg lg:max-w-xl z-20`}
+            >
+              <div className={`${bubbleStyle.bg} ${bubbleStyle.border} ${bubbleStyle.shadow} ${bubbleStyle.text} p-4 lg:p-5 ${getEmotionEffect()}`}>
+                {/* Label du speaker */}
+                <div className="text-xs font-black mb-3 tracking-widest">
+                  {getSpeakerLabel()}
+                </div>
+                
+                {/* Texte avec mots en évidence */}
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.2, delay: 0.1 }}
+                  className="text-base lg:text-lg font-bold leading-tight"
+                >
+                  {currentLine.text.split(' ').map((word, index) => {
+                    // Mettre en évidence les mots en MAJUSCULES pour le narrateur
+                    const isAllCaps = word.length > 2 && word === word.toUpperCase() && /[A-ZÀ-Ÿ]/.test(word)
+                    const isEmoji = /[\u{1F300}-\u{1F9FF}]/u.test(word)
+                    
+                    if (currentLine.speaker === 'narrateur' && (isAllCaps || isEmoji)) {
+                      return (
+                        <span 
+                          key={index}
+                          className={`${isEmoji ? 'text-xl lg:text-2xl' : 'text-red-600 font-black'}`}
+                        >
+                          {word}{' '}
+                        </span>
+                      )
+                    }
+                    return <span key={index}>{word} </span>
+                  })}
+                </motion.div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+          </div>
+
+          {/* Bouton continuer en bas - Desktop seulement (position absolue) */}
+          <AnimatePresence>
+            {!showChoices && textComplete && (
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                transition={{ 
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 25,
+                  mass: 0.8,
+                  delay: 0.1
+                }}
+                className="hidden md:block absolute bottom-4 left-1/2 -translate-x-1/2 z-30 pointer-events-auto"
+              >
+                <button
+                  onClick={handleContinue}
+                  className="px-8 py-4 bg-lime-400 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] font-black text-xl hover:translate-x-1 hover:translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
+                >
+                  {currentLine.choices ? 'CHOISIR ▼' : (
+                    <>
+                      CONTINUER{' '}
+                      <motion.span
+                        animate={{ x: [0, 5, 0] }}
+                        transition={{ 
+                          duration: 1, 
+                          repeat: Infinity, 
+                          ease: 'easeInOut',
+                          delay: 0.3
+                        }}
+                        className="inline-block"
+                      >
+                        ▶
+                      </motion.span>
+                    </>
+                  )}
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Bulle de dialogue néo-brutaliste - Mobile seulement (sous l'image) */}
         <AnimatePresence mode="wait">
           <motion.div
-            key={`${currentScene}-${currentLineIndex}`}
-            initial={{ scale: 0, rotate: -5 }}
-            animate={{ scale: 1, rotate: 0 }}
-            exit={{ scale: 0, rotate: 5 }}
-            transition={{ type: 'spring', duration: 0.5 }}
-            className={`absolute ${bubbleStyle.position} max-w-2xl z-20`}
+            key={`${currentScene}-${currentLineIndex}-mobile`}
+            initial={{ opacity: 0, y: 15, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+            transition={{ 
+              type: "spring",
+              stiffness: 400,
+              damping: 30,
+              mass: 0.6,
+              duration: 0.4
+            }}
+            className="md:hidden mt-4"
           >
-            <div className={`${bubbleStyle.bg} ${bubbleStyle.border} ${bubbleStyle.shadow} ${bubbleStyle.text} p-6 ${getEmotionEffect()}`}>
+            <div className={`${bubbleStyle.bg} ${bubbleStyle.border} ${bubbleStyle.shadow} ${bubbleStyle.text} p-3 sm:p-4 ${getEmotionEffect()}`}>
               {/* Label du speaker */}
-              <div className="text-xs font-black mb-3 tracking-widest">
+              <div className="text-xs font-black mb-2 tracking-widest">
                 {getSpeakerLabel()}
               </div>
               
@@ -1046,8 +1203,8 @@ export default function CentreJeunessePage() {
               <motion.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-                className="text-lg md:text-xl font-bold leading-tight"
+                transition={{ duration: 0.2, delay: 0.1 }}
+                className="text-sm sm:text-base font-bold leading-tight"
               >
                 {currentLine.text.split(' ').map((word, index) => {
                   // Mettre en évidence les mots en MAJUSCULES pour le narrateur
@@ -1058,7 +1215,7 @@ export default function CentreJeunessePage() {
                     return (
                       <span 
                         key={index}
-                        className={`${isEmoji ? 'text-2xl' : 'text-red-600 font-black'}`}
+                        className={`${isEmoji ? 'text-xl' : 'text-red-600 font-black'}`}
                       >
                         {word}{' '}
                       </span>
@@ -1067,42 +1224,67 @@ export default function CentreJeunessePage() {
                   return <span key={index}>{word} </span>
                 })}
               </motion.div>
-              
-              {/* Indicateur de continuation */}
-              {!showChoices && textComplete && !currentLine.choices && currentLineIndex < currentDialogue.length - 1 && (
-                <motion.div
-                  animate={{ x: [0, 10, 0] }}
-                  transition={{ duration: 1, repeat: Infinity }}
-                  className="flex justify-end mt-3"
-                >
-                  <span className="text-2xl font-black">▶</span>
-                </motion.div>
-              )}
             </div>
           </motion.div>
         </AnimatePresence>
 
-        {/* Bouton continuer en bas */}
-        {!showChoices && textComplete && (
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30">
-            <button
-              onClick={handleContinue}
-              className="px-8 py-4 bg-lime-400 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] font-black text-xl hover:translate-x-1 hover:translate-y-1 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
+        {/* Bouton continuer - Mobile seulement (sous la bulle) */}
+        <AnimatePresence>
+          {!showChoices && textComplete && isMobile && (
+            <motion.div
+              initial={{ opacity: 0, height: 0, y: 10, scale: 0.95 }}
+              animate={{ opacity: 1, height: 'auto', y: 0, scale: 1 }}
+              exit={{ opacity: 0, height: 0, y: -10, scale: 0.95 }}
+              transition={{ 
+                type: "spring",
+                stiffness: 300,
+                damping: 25,
+                mass: 0.8,
+                delay: 0.1
+              }}
+              className="flex mt-4 justify-center overflow-hidden"
             >
-              {currentLine.choices ? 'CHOISIR ▼' : 'CONTINUER ▶'}
-            </button>
-          </div>
-        )}
+              <button
+                onClick={handleContinue}
+                className="px-6 py-3 bg-lime-400 border-2 sm:border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] font-black text-sm sm:text-base hover:translate-x-1 hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
+              >
+                {currentLine.choices ? 'CHOISIR ▼' : (
+                  <>
+                    CONTINUER{' '}
+                    <motion.span
+                      animate={{ x: [0, 5, 0] }}
+                      transition={{ 
+                        duration: 1, 
+                        repeat: Infinity, 
+                        ease: 'easeInOut',
+                        delay: 0.3
+                      }}
+                      className="inline-block"
+                    >
+                      ▶
+                    </motion.span>
+                  </>
+                )}
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Choix de réponses - style néo-brutaliste */}
       <AnimatePresence>
         {showChoices && currentLine.choices && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="w-full max-w-5xl mt-6 space-y-4"
+            initial={{ opacity: 0, height: 0, y: 20 }}
+            animate={{ opacity: 1, height: 'auto', y: 0 }}
+            exit={{ opacity: 0, height: 0, y: -20 }}
+            transition={{ 
+              type: "spring",
+              stiffness: 300,
+              damping: 30,
+              duration: 0.4
+            }}
+            className="w-full max-w-5xl mt-4 sm:mt-6 space-y-3 sm:space-y-4 px-2 sm:px-0 overflow-hidden"
           >
             {currentLine.choices.map((choice, index) => {
               const colors = ['bg-cyan-400', 'bg-yellow-300', 'bg-pink-400', 'bg-lime-400']
@@ -1114,9 +1296,9 @@ export default function CentreJeunessePage() {
                   whileHover={{ scale: 1.02, x: 8 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => handleChoice(index)}
-                  className={`w-full ${bgColor} border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-6 text-left font-black text-lg hover:translate-x-1 hover:translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all`}
+                  className={`w-full ${bgColor} border-2 sm:border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-3 sm:p-4 md:p-6 text-left font-black text-sm sm:text-base md:text-lg hover:translate-x-1 hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all`}
                 >
-                  <span className="text-2xl mr-3">→</span> {choice}
+                  <span className="text-lg sm:text-xl md:text-2xl mr-2 sm:mr-3">→</span> {choice}
                 </motion.button>
               )
             })}
@@ -1125,10 +1307,19 @@ export default function CentreJeunessePage() {
       </AnimatePresence>
 
       {/* Info des droits en bas */}
-      <div className="w-full max-w-5xl mt-6 bg-gray-900 text-white border-4 border-black p-6">
-        <div className="flex justify-between items-center mb-3">
-          <h3 className="font-black text-xl">💡 DROITS LORS D'UNE FOUILLE</h3>
-          <span className="text-lime-400 font-bold text-sm">
+      <motion.div 
+        layout
+        transition={{ 
+          type: "spring",
+          stiffness: 300,
+          damping: 30,
+          duration: 0.3
+        }}
+        className="w-full max-w-5xl mt-4 sm:mt-6 bg-gray-900 text-white border-2 sm:border-4 border-black p-3 sm:p-4 md:p-6 mx-2 sm:mx-0"
+      >
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3 gap-2 sm:gap-0">
+          <h3 className="font-black text-sm sm:text-base md:text-xl">💡 DROITS LORS D'UNE FOUILLE</h3>
+          <span className="text-lime-400 font-bold text-xs sm:text-sm">
             {unlockedRights.size}/{rightsData.length} débloqués
           </span>
         </div>
@@ -1137,7 +1328,7 @@ export default function CentreJeunessePage() {
             <RightItem key={right.id} right={right} isUnlocked={unlockedRights.has(right.id)} />
           ))}
         </ul>
-      </div>
+      </motion.div>
     </div>
   )
 }
