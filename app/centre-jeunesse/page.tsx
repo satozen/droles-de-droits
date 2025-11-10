@@ -224,7 +224,8 @@ export default function CentreJeunessePage() {
   const [currentLineIndex, setCurrentLineIndex] = useState<number>(0)
   const [showChoices, setShowChoices] = useState<boolean>(false)
   const [textComplete, setTextComplete] = useState<boolean>(false)
-  const [isMuted, setIsMuted] = useState<boolean>(false)
+  const [musiqueMuted, setMusiqueMuted] = useState<boolean>(false) // Contrôle de la musique
+  const [voiceMuted, setVoiceMuted] = useState<boolean>(false) // Contrôle des voice-overs
   const [volume, setVolume] = useState<number>(0.5) // Volume pour voice-overs
   const [showEndScreen, setShowEndScreen] = useState<boolean>(false)
   const [showIntroScreen, setShowIntroScreen] = useState<boolean>(true)
@@ -302,12 +303,12 @@ export default function CentreJeunessePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Mise à jour du volume et mute (musique à 75% du volume des voice-overs)
+  // Mise à jour du volume et mute de la musique (musique à 75% du volume des voice-overs)
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.volume = isMuted ? 0 : (volume * 0.75)
+      audioRef.current.volume = musiqueMuted ? 0 : (volume * 0.75)
     }
-  }, [volume, isMuted])
+  }, [volume, musiqueMuted])
 
   // Fonction pour obtenir le nom du fichier audio de Jay
   const getJayAudioFile = (scene: string, lineIndex: number): string | null => {
@@ -356,7 +357,7 @@ export default function CentreJeunessePage() {
       let timer: NodeJS.Timeout | null = null
       
       // Jouer le voice-over de Jay si c'est lui qui parle (seulement après le clic pour commencer)
-      if (currentLine.speaker === 'jay' && !isMuted) {
+      if (currentLine.speaker === 'jay' && !voiceMuted) {
         const audioFile = getJayAudioFile(currentScene, currentLineIndex)
         if (audioFile) {
           hasAudio = true
@@ -385,7 +386,7 @@ export default function CentreJeunessePage() {
       }
 
       // Jouer le voice-over d'Alex si c'est lui qui parle (seulement après le clic pour commencer)
-      if (currentLine.speaker === 'alex' && !isMuted) {
+      if (currentLine.speaker === 'alex' && !voiceMuted) {
         const audioFile = getAlexAudioFile(currentScene, currentLineIndex)
         if (audioFile) {
           hasAudio = true
@@ -433,7 +434,7 @@ export default function CentreJeunessePage() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     // currentLine, getAlexAudioFile, getJayAudioFile sont dérivés de currentScene/currentLineIndex
-  }, [currentScene, currentLineIndex, isMuted, volume, showIntroScreen])
+  }, [currentScene, currentLineIndex, voiceMuted, volume, showIntroScreen])
 
   const handleContinue = () => {
     // Si la ligne a des choix, les afficher
@@ -651,22 +652,23 @@ export default function CentreJeunessePage() {
             {/* Contrôles audio */}
             <div className="flex items-center gap-2 sm:gap-3 bg-gray-900 border-2 sm:border-4 border-black px-2 sm:px-3 md:px-4 py-1 sm:py-2 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
               <button
-                onClick={() => setIsMuted(!isMuted)}
+                onClick={() => setMusiqueMuted(!musiqueMuted)}
                 className="text-xl sm:text-2xl hover:scale-110 transition-transform"
+                title={musiqueMuted ? "Activer la musique" : "Couper la musique"}
               >
-                {isMuted ? '🔇' : '🔊'}
+                {musiqueMuted ? '🔇' : '🔊'}
               </button>
               <input
                 type="range"
                 min="0"
                 max="1"
                 step="0.1"
-                value={isMuted ? 0 : volume}
+                value={musiqueMuted ? 0 : volume}
                 onChange={(e) => {
                   const newVolume = parseFloat(e.target.value)
                   setVolume(newVolume)
-                  if (newVolume > 0 && isMuted) {
-                    setIsMuted(false)
+                  if (newVolume > 0 && musiqueMuted) {
+                    setMusiqueMuted(false)
                   }
                 }}
                 className="w-16 sm:w-20 md:w-24 h-2 bg-white border-2 border-black rounded-none appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 sm:[&::-webkit-slider-thumb]:w-4 sm:[&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-lime-400 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-black [&::-webkit-slider-thumb]:cursor-pointer"
@@ -896,22 +898,23 @@ export default function CentreJeunessePage() {
             {/* Contrôles audio */}
             <div className="flex items-center gap-2 sm:gap-3 bg-gray-900 border-2 sm:border-4 border-black px-2 sm:px-3 md:px-4 py-1 sm:py-2 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
               <button
-                onClick={() => setIsMuted(!isMuted)}
+                onClick={() => setMusiqueMuted(!musiqueMuted)}
                 className="text-2xl hover:scale-110 transition-transform"
+                title={musiqueMuted ? "Activer la musique" : "Couper la musique"}
               >
-                {isMuted ? '🔇' : '🔊'}
+                {musiqueMuted ? '🔇' : '🔊'}
               </button>
               <input
                 type="range"
                 min="0"
                 max="1"
                 step="0.1"
-                value={isMuted ? 0 : volume}
+                value={musiqueMuted ? 0 : volume}
                 onChange={(e) => {
                   const newVolume = parseFloat(e.target.value)
                   setVolume(newVolume)
-                  if (newVolume > 0 && isMuted) {
-                    setIsMuted(false)
+                  if (newVolume > 0 && musiqueMuted) {
+                    setMusiqueMuted(false)
                   }
                 }}
                 className="w-16 sm:w-20 md:w-24 h-2 bg-white border-2 border-black rounded-none appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 sm:[&::-webkit-slider-thumb]:w-4 sm:[&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-lime-400 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-black [&::-webkit-slider-thumb]:cursor-pointer"
@@ -1030,13 +1033,13 @@ export default function CentreJeunessePage() {
         
         {/* Contrôles audio */}
         <div className="flex items-center gap-2 sm:gap-3 bg-gray-900 border-2 sm:border-4 border-black px-2 sm:px-3 md:px-4 py-1 sm:py-2 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-          {/* Bouton Mute/Unmute */}
+          {/* Bouton Mute/Unmute pour la musique */}
           <button
-            onClick={() => setIsMuted(!isMuted)}
+            onClick={() => setMusiqueMuted(!musiqueMuted)}
             className="text-2xl hover:scale-110 transition-transform"
-            title={isMuted ? "Activer le son" : "Couper le son"}
+            title={musiqueMuted ? "Activer la musique" : "Couper la musique"}
           >
-            {isMuted ? '🔇' : '🔊'}
+            {musiqueMuted ? '🔇' : '🔊'}
           </button>
           
           {/* Slider de volume */}
@@ -1045,12 +1048,12 @@ export default function CentreJeunessePage() {
             min="0"
             max="1"
             step="0.1"
-            value={isMuted ? 0 : volume}
+            value={musiqueMuted ? 0 : volume}
             onChange={(e) => {
               const newVolume = parseFloat(e.target.value)
               setVolume(newVolume)
-              if (newVolume > 0 && isMuted) {
-                setIsMuted(false)
+              if (newVolume > 0 && musiqueMuted) {
+                setMusiqueMuted(false)
               }
             }}
             className="w-16 sm:w-20 md:w-24 h-2 bg-white border-2 border-black rounded-none appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 sm:[&::-webkit-slider-thumb]:w-4 sm:[&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-lime-400 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-black [&::-webkit-slider-thumb]:cursor-pointer"
