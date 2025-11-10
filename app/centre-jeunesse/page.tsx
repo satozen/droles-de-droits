@@ -976,7 +976,7 @@ export default function CentreJeunessePage() {
               </p>
 
               <div className="bg-gray-900 text-white border-2 sm:border-4 border-black p-3 sm:p-4 md:p-6 mt-4 sm:mt-6 md:mt-8 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                <h2 className="text-lg sm:text-xl md:text-2xl font-black mb-3 sm:mb-4 text-center">💡 QUE VAIS-TU FAIRE ?</h2>
+                <h2 className="text-lg sm:text-xl md:text-2xl font-black mb-3 sm:mb-4 text-center">💡 QUE VAS-TU FAIRE ?</h2>
                 <ul className="space-y-2 sm:space-y-3 font-bold text-sm sm:text-base md:text-lg">
                   <li>• Accepter et le cacher?</li>
                   <li>• Refuser et demander de l'aide?</li>
