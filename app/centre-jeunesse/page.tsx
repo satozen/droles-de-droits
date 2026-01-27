@@ -226,7 +226,8 @@ export default function CentreJeunessePage() {
   const [textComplete, setTextComplete] = useState<boolean>(false)
   const [musiqueMuted, setMusiqueMuted] = useState<boolean>(false) // Contrôle de la musique
   const [voiceMuted, setVoiceMuted] = useState<boolean>(false) // Contrôle des voice-overs
-  const [volume, setVolume] = useState<number>(0.5) // Volume pour voice-overs
+  const [musiqueVolume, setMusiqueVolume] = useState<number>(0.5) // Volume pour la musique de fond
+  const VOICE_VOLUME = 0.8 // Volume fixe pour les voice-overs
   const [showEndScreen, setShowEndScreen] = useState<boolean>(false)
   const [showIntroScreen, setShowIntroScreen] = useState<boolean>(true)
   const audioRef = useRef<HTMLAudioElement | null>(null)
@@ -287,11 +288,11 @@ export default function CentreJeunessePage() {
   // Vérifier si l'histoire est terminée
   const isStoryEnded = !currentLine || (currentLineIndex >= currentDialogue.length - 1 && !currentLine.choices && currentScene !== 'intro')
 
-  // Gestion de la musique de fond (25% plus basse que les voice-overs)
+  // Gestion de la musique de fond
   useEffect(() => {
     const audio = new Audio('/audio/Droles de droits.mp3')
     audio.loop = true
-    audio.volume = volume * 0.75 // Musique à 75% du volume des voice-overs
+    audio.volume = musiqueVolume
     audioRef.current = audio
     audio.play().catch(e => console.log('Autoplay bloqué:', e))
     
@@ -303,12 +304,12 @@ export default function CentreJeunessePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Mise à jour du volume et mute de la musique (musique à 75% du volume des voice-overs)
+  // Mise à jour du volume de la musique (slider contrôle uniquement la musique)
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.volume = musiqueMuted ? 0 : (volume * 0.75)
+      audioRef.current.volume = musiqueMuted ? 0 : musiqueVolume
     }
-  }, [volume, musiqueMuted])
+  }, [musiqueVolume, musiqueMuted])
 
   // Fonction pour obtenir le nom du fichier audio de Jay
   const getJayAudioFile = (scene: string, lineIndex: number): string | null => {
@@ -367,9 +368,9 @@ export default function CentreJeunessePage() {
             voiceOverRef.current.currentTime = 0
           }
           
-          // Jouer le nouveau voice-over
+          // Jouer le nouveau voice-over (volume fixe, pas affecté par le slider)
           const audio = new Audio(audioFile)
-          audio.volume = volume
+          audio.volume = VOICE_VOLUME
           voiceOverRef.current = audio
           
           // Écouter la fin de l'audio pour mettre à jour textComplete
@@ -396,9 +397,9 @@ export default function CentreJeunessePage() {
             voiceOverRef.current.currentTime = 0
           }
           
-          // Jouer le nouveau voice-over
+          // Jouer le nouveau voice-over (volume fixe, pas affecté par le slider)
           const audio = new Audio(audioFile)
-          audio.volume = volume
+          audio.volume = VOICE_VOLUME
           voiceOverRef.current = audio
           
           // Écouter la fin de l'audio pour mettre à jour textComplete
@@ -434,7 +435,7 @@ export default function CentreJeunessePage() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     // currentLine, getAlexAudioFile, getJayAudioFile sont dérivés de currentScene/currentLineIndex
-  }, [currentScene, currentLineIndex, voiceMuted, volume, showIntroScreen])
+  }, [currentScene, currentLineIndex, voiceMuted, showIntroScreen])
 
   const handleContinue = () => {
     // Si la ligne a des choix, les afficher
@@ -663,10 +664,10 @@ export default function CentreJeunessePage() {
                 min="0"
                 max="1"
                 step="0.1"
-                value={musiqueMuted ? 0 : volume}
+                value={musiqueMuted ? 0 : musiqueVolume}
                 onChange={(e) => {
                   const newVolume = parseFloat(e.target.value)
-                  setVolume(newVolume)
+                  setMusiqueVolume(newVolume)
                   if (newVolume > 0 && musiqueMuted) {
                     setMusiqueMuted(false)
                   }
@@ -909,10 +910,10 @@ export default function CentreJeunessePage() {
                 min="0"
                 max="1"
                 step="0.1"
-                value={musiqueMuted ? 0 : volume}
+                value={musiqueMuted ? 0 : musiqueVolume}
                 onChange={(e) => {
                   const newVolume = parseFloat(e.target.value)
-                  setVolume(newVolume)
+                  setMusiqueVolume(newVolume)
                   if (newVolume > 0 && musiqueMuted) {
                     setMusiqueMuted(false)
                   }
@@ -1048,10 +1049,10 @@ export default function CentreJeunessePage() {
             min="0"
             max="1"
             step="0.1"
-            value={musiqueMuted ? 0 : volume}
+            value={musiqueMuted ? 0 : musiqueVolume}
             onChange={(e) => {
               const newVolume = parseFloat(e.target.value)
-              setVolume(newVolume)
+              setMusiqueVolume(newVolume)
               if (newVolume > 0 && musiqueMuted) {
                 setMusiqueMuted(false)
               }
