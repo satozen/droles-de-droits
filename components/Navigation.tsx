@@ -18,6 +18,7 @@ export default function Navigation() {
     { href: '/ressources', label: 'Ressources' },
     { href: '/guide', label: 'Guide' },
     { href: '/a-propos', label: 'À Propos' },
+    { href: '/admin', label: '⚙️ Admin', admin: true },
   ]
 
   const isActive = (href: string) => pathname === href

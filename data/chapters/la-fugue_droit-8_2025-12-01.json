@@ -1,0 +1,505 @@
+{
+  "dialogue": {
+    "intro": [
+      {
+        "speaker": "alex",
+        "text": "Ça fait six mois que je suis ici... Les règles, les horaires, toujours les mêmes murs. J'ai l'impression d'étouffer.",
+        "image": "/images/chapitres/la-fugue/scene_01.webp",
+        "emotion": "frustre"
+      },
+      {
+        "speaker": "marco",
+        "text": "Alex, j'te l'dis depuis des semaines... On peut partir ce soir. J'connais des places où on peut se cacher.",
+        "image": "/images/chapitres/la-fugue/scene_02.webp",
+        "emotion": "complice"
+      },
+      {
+        "speaker": "alex",
+        "text": "Marco, j'sais pas... La dernière fois que t'as fugué, ça s'est mal passé. Pis ils t'ont retrouvé pareil.",
+        "image": "/images/chapitres/la-fugue/scene_03.webp",
+        "emotion": "hesitant"
+      },
+      {
+        "speaker": "marco",
+        "text": "Ouais mais là j'ai appris! On va juste partir quelques jours, le temps qu'ils comprennent qu'on veut plus rester ici.",
+        "image": "/images/chapitres/la-fugue/scene_04.webp",
+        "emotion": "determine"
+      },
+      {
+        "speaker": "alex",
+        "text": "J'sais vraiment pas quoi faire... Partir avec toi, rester ici, ou peut-être... demander un transfert?",
+        "image": "/images/chapitres/la-fugue/scene_05.webp",
+        "emotion": "tension",
+        "choices": [
+          "Fuguer avec Marco ce soir",
+          "Rester au centre et endurer",
+          "Demander officiellement un transfert"
+        ]
+      }
+    ],
+    "branche_a": [
+      {
+        "speaker": "alex",
+        "text": "OK Marco, j'te suis. On part ce soir après le couvre-feu.",
+        "image": "/images/chapitres/la-fugue/scene_06.webp",
+        "emotion": "nerveux"
+      },
+      {
+        "speaker": "marco",
+        "text": "Yes! Tu vas voir, on va être libres! Prépare juste le minimum dans ton sac.",
+        "image": "/images/chapitres/la-fugue/scene_07.webp",
+        "emotion": "confiant"
+      },
+      {
+        "speaker": "alex",
+        "text": "Trois jours plus tard, on se cache dans un squat froid et sale. J'ai faim, j'ai froid, et j'commence à regretter.",
+        "image": "/images/chapitres/la-fugue/scene_08.webp",
+        "emotion": "triste"
+      },
+      {
+        "speaker": "marco",
+        "text": "Arrête de chialer Alex! C'est mieux qu'au centre, non?",
+        "image": "/images/chapitres/la-fugue/scene_09.webp",
+        "emotion": "en_colere"
+      },
+      {
+        "speaker": "alex",
+        "text": "Non Marco... Au centre, j'avais un lit chaud, des repas, de l'aide. Ici, on a rien. J'vais appeler pour qu'ils viennent me chercher.",
+        "image": "/images/chapitres/la-fugue/scene_10.webp",
+        "emotion": "lecon",
+        "choices": [
+          "Continuer la fugue malgré tout",
+          "Appeler le centre pour revenir"
+        ]
+      }
+    ],
+    "branche_b": [
+      {
+        "speaker": "alex",
+        "text": "Non Marco, j'reste ici. C'est pas parfait, mais au moins j'ai un toit pis des repas.",
+        "image": "/images/chapitres/la-fugue/scene_11.webp",
+        "emotion": "determine"
+      },
+      {
+        "speaker": "marco",
+        "text": "T'es ben pissou Alex! Tu vas rester prisonnier toute ta vie?",
+        "image": "/images/chapitres/la-fugue/scene_12.webp",
+        "emotion": "en_colere"
+      },
+      {
+        "speaker": "alex",
+        "text": "C'est pas être prisonnier, Marco. Le centre, c'est mon droit à un hébergement adapté. Même si c'est pas parfait.",
+        "image": "/images/chapitres/la-fugue/scene_13.webp",
+        "emotion": "confiant"
+      },
+      {
+        "speaker": "alex",
+        "text": "Quelques semaines plus tard, Marco revient au centre après sa fugue ratée. Il a l'air épuisé.",
+        "image": "/images/chapitres/la-fugue/scene_14.webp",
+        "emotion": "grave"
+      },
+      {
+        "speaker": "marco",
+        "text": "Alex... t'avais raison. Dehors, j'avais rien. Ici, au moins, ils s'occupent de nous.",
+        "image": "/images/chapitres/la-fugue/scene_15.webp",
+        "emotion": "lecon",
+        "choices": [
+          "Expliquer à Marco ses droits d'hébergement",
+          "Juste l'écouter sans rien dire"
+        ]
+      }
+    ],
+    "branche_c": [
+      {
+        "speaker": "alex",
+        "text": "Marco, j'vais plutôt demander un transfert. Peut-être qu'il y a un centre qui me conviendrait mieux.",
+        "image": "/images/chapitres/la-fugue/scene_16.webp",
+        "emotion": "determine"
+      },
+      {
+        "speaker": "marco",
+        "text": "Un transfert? Tu penses vraiment qu'ils vont t'écouter?",
+        "image": "/images/chapitres/la-fugue/scene_17.webp",
+        "emotion": "choque"
+      },
+      {
+        "speaker": "alex",
+        "text": "J'ai le droit à un hébergement adapté à mes besoins. Si ce centre me convient pas, ils doivent considérer ma demande.",
+        "image": "/images/chapitres/la-fugue/scene_18.webp",
+        "emotion": "confiant"
+      },
+      {
+        "speaker": "alex",
+        "text": "J'vais parler à mon intervenant demain. Expliquer pourquoi j'me sens pas à ma place ici.",
+        "image": "/images/chapitres/la-fugue/scene_19.webp",
+        "emotion": "resolution"
+      },
+      {
+        "speaker": "alex",
+        "text": "Un mois plus tard, j'suis dans un centre plus petit, avec moins de règles strictes. C'était la bonne solution.",
+        "image": "/images/chapitres/la-fugue/scene_20.webp",
+        "emotion": "victoire",
+        "choices": [
+          "Expliquer à Marco comment demander un transfert",
+          "Garder l'information pour soi"
+        ]
+      }
+    ],
+    "fin_negative": [
+      {
+        "speaker": "alex",
+        "text": "J'continue avec Marco, mais après une semaine dehors, on se fait arrêter par la police.",
+        "image": "/images/chapitres/la-fugue/scene_21.webp",
+        "emotion": "choque"
+      },
+      {
+        "speaker": "alex",
+        "text": "De retour au centre, j'réalise que fuguer, c'était pas la solution. J'avais déjà le droit à un hébergement.",
+        "image": "/images/chapitres/la-fugue/scene_22.webp",
+        "emotion": "lecon"
+      },
+      {
+        "speaker": "alex",
+        "text": "Si j'étais pas bien ici, j'aurais dû demander un transfert au lieu de fuguer. C'était mon droit.",
+        "image": "/images/chapitres/la-fugue/scene_23.webp",
+        "emotion": "decouverte"
+      }
+    ],
+    "fin_positive": [
+      {
+        "speaker": "alex",
+        "text": "J'appelle le centre. Mon intervenant vient me chercher sans me chicaner. Il comprend que j'avais besoin d'aide.",
+        "image": "/images/chapitres/la-fugue/scene_24.webp",
+        "emotion": "soulage"
+      },
+      {
+        "speaker": "alex",
+        "text": "De retour au centre, on discute de mes besoins. Mon intervenant m'explique mes droits d'hébergement.",
+        "image": "/images/chapitres/la-fugue/scene_25.webp",
+        "emotion": "info"
+      },
+      {
+        "speaker": "alex",
+        "text": "J'ai le droit à un hébergement adapté. Si ce centre me convient pas, je peux demander un transfert légalement.",
+        "image": "/images/chapitres/la-fugue/scene_26.webp",
+        "emotion": "decouverte"
+      },
+      {
+        "speaker": "alex",
+        "text": "Fuguer, c'était pas la solution. Connaître mes droits et les utiliser, c'est ça qui m'aide vraiment.",
+        "image": "/images/chapitres/la-fugue/scene_27.webp",
+        "emotion": "victoire"
+      }
+    ]
+  },
+  "choiceMappings": [
+    {
+      "sceneKey": "intro",
+      "choiceIndex": 0,
+      "targetScene": "branche_a"
+    },
+    {
+      "sceneKey": "intro",
+      "choiceIndex": 1,
+      "targetScene": "branche_b"
+    },
+    {
+      "sceneKey": "intro",
+      "choiceIndex": 2,
+      "targetScene": "branche_c"
+    },
+    {
+      "sceneKey": "branche_a",
+      "choiceIndex": 0,
+      "targetScene": "fin_negative"
+    },
+    {
+      "sceneKey": "branche_a",
+      "choiceIndex": 1,
+      "targetScene": "fin_positive"
+    },
+    {
+      "sceneKey": "branche_b",
+      "choiceIndex": 0,
+      "targetScene": "fin_positive"
+    },
+    {
+      "sceneKey": "branche_b",
+      "choiceIndex": 1,
+      "targetScene": "fin_positive"
+    },
+    {
+      "sceneKey": "branche_c",
+      "choiceIndex": 0,
+      "targetScene": "fin_positive"
+    },
+    {
+      "sceneKey": "branche_c",
+      "choiceIndex": 1,
+      "targetScene": "fin_positive"
+    }
+  ],
+  "unlockableRights": [
+    {
+      "id": 8,
+      "text": "Si ton état le requiert, tu as le droit d'être hébergé dans un établissement qui offre des services adaptés à tes besoins.",
+      "unlockCondition": {
+        "scene": "fin_positive",
+        "lineIndex": 2
+      }
+    }
+  ],
+  "config": {
+    "startScene": "intro",
+    "endScreens": {
+      "positive": {
+        "title": "✅ BON CHOIX!",
+        "message": "Tu as découvert ton droit à un hébergement adapté! Fuguer n'est jamais la solution - tu as le droit de demander un transfert si tes besoins ne sont pas comblés.",
+        "color": "bg-lime-400"
+      },
+      "negative": {
+        "title": "⚠️ À RETENIR",
+        "message": "Fuguer peut sembler être une solution, mais tu as des droits légaux à faire valoir. Le droit à un hébergement adapté te protège et t'offre de vraies alternatives.",
+        "color": "bg-yellow-300"
+      }
+    }
+  },
+  "metadata": {
+    "id": "la-fugue",
+    "slug": "la-fugue",
+    "title": "La Fugue",
+    "description": "Alex vit depuis 6 mois au centre jeunesse. Il se sent étouffé par les règles strictes. Son ami Marco, qui a déjà fugué, lui propose de partir ce soir. Alex hésite entre fuguer, rester, ou demander officiellement un transfert d'hébergement. À travers cette histoire, on découvre le droit à un hébergement adapté.",
+    "right": {
+      "id": 8,
+      "title": "Droit à l'hébergement",
+      "description": "Si ton état le requiert, tu as le droit d'être hébergé dans un établissement qui offre des services adaptés à tes besoins.",
+      "icon": "🏠"
+    },
+    "characters": [
+      {
+        "id": "alex",
+        "name": "Alex",
+        "displayName": "💪 ALEX",
+        "color": {
+          "bg": "bg-cyan-400",
+          "text": "text-black",
+          "border": "border-black"
+        }
+      },
+      {
+        "id": "marco",
+        "name": "Marco",
+        "displayName": "👤 MARCO",
+        "color": {
+          "bg": "bg-red-500",
+          "text": "text-white",
+          "border": "border-black"
+        }
+      }
+    ],
+    "estimatedDuration": 10,
+    "difficulty": "moyen",
+    "tags": [
+      "droits",
+      "droit-8"
+    ],
+    "createdAt": "2025-12-01T04:43:45.207Z",
+    "updatedAt": "2025-12-01T04:43:45.207Z",
+    "isGenerated": true,
+    "status": "draft"
+  },
+  "images": [
+    {
+      "sceneKey": "intro",
+      "lineIndex": 0,
+      "prompt": "Scène: intro, alex parle avec émotion frustre",
+      "imagePath": "/images/chapitres/la-fugue/scene_01.webp",
+      "isPlaceholder": true
+    },
+    {
+      "sceneKey": "intro",
+      "lineIndex": 1,
+      "prompt": "Scène: intro, marco parle avec émotion complice",
+      "imagePath": "/images/chapitres/la-fugue/scene_02.webp",
+      "isPlaceholder": true
+    },
+    {
+      "sceneKey": "intro",
+      "lineIndex": 2,
+      "prompt": "Scène: intro, alex parle avec émotion hesitant",
+      "imagePath": "/images/chapitres/la-fugue/scene_03.webp",
+      "isPlaceholder": true
+    },
+    {
+      "sceneKey": "intro",
+      "lineIndex": 3,
+      "prompt": "Scène: intro, marco parle avec émotion determine",
+      "imagePath": "/images/chapitres/la-fugue/scene_04.webp",
+      "isPlaceholder": true
+    },
+    {
+      "sceneKey": "intro",
+      "lineIndex": 4,
+      "prompt": "Scène: intro, alex parle avec émotion tension",
+      "imagePath": "/images/chapitres/la-fugue/scene_05.webp",
+      "isPlaceholder": true
+    },
+    {
+      "sceneKey": "branche_a",
+      "lineIndex": 0,
+      "prompt": "Scène: branche_a, alex parle avec émotion nerveux",
+      "imagePath": "/images/chapitres/la-fugue/scene_06.webp",
+      "isPlaceholder": true
+    },
+    {
+      "sceneKey": "branche_a",
+      "lineIndex": 1,
+      "prompt": "Scène: branche_a, marco parle avec émotion confiant",
+      "imagePath": "/images/chapitres/la-fugue/scene_07.webp",
+      "isPlaceholder": true
+    },
+    {
+      "sceneKey": "branche_a",
+      "lineIndex": 2,
+      "prompt": "Scène: branche_a, alex parle avec émotion triste",
+      "imagePath": "/images/chapitres/la-fugue/scene_08.webp",
+      "isPlaceholder": true
+    },
+    {
+      "sceneKey": "branche_a",
+      "lineIndex": 3,
+      "prompt": "Scène: branche_a, marco parle avec émotion en_colere",
+      "imagePath": "/images/chapitres/la-fugue/scene_09.webp",
+      "isPlaceholder": true
+    },
+    {
+      "sceneKey": "branche_a",
+      "lineIndex": 4,
+      "prompt": "Scène: branche_a, alex parle avec émotion lecon",
+      "imagePath": "/images/chapitres/la-fugue/scene_10.webp",
+      "isPlaceholder": true
+    },
+    {
+      "sceneKey": "branche_b",
+      "lineIndex": 0,
+      "prompt": "Scène: branche_b, alex parle avec émotion determine",
+      "imagePath": "/images/chapitres/la-fugue/scene_11.webp",
+      "isPlaceholder": true
+    },
+    {
+      "sceneKey": "branche_b",
+      "lineIndex": 1,
+      "prompt": "Scène: branche_b, marco parle avec émotion en_colere",
+      "imagePath": "/images/chapitres/la-fugue/scene_12.webp",
+      "isPlaceholder": true
+    },
+    {
+      "sceneKey": "branche_b",
+      "lineIndex": 2,
+      "prompt": "Scène: branche_b, alex parle avec émotion confiant",
+      "imagePath": "/images/chapitres/la-fugue/scene_13.webp",
+      "isPlaceholder": true
+    },
+    {
+      "sceneKey": "branche_b",
+      "lineIndex": 3,
+      "prompt": "Scène: branche_b, alex parle avec émotion grave",
+      "imagePath": "/images/chapitres/la-fugue/scene_14.webp",
+      "isPlaceholder": true
+    },
+    {
+      "sceneKey": "branche_b",
+      "lineIndex": 4,
+      "prompt": "Scène: branche_b, marco parle avec émotion lecon",
+      "imagePath": "/images/chapitres/la-fugue/scene_15.webp",
+      "isPlaceholder": true
+    },
+    {
+      "sceneKey": "branche_c",
+      "lineIndex": 0,
+      "prompt": "Scène: branche_c, alex parle avec émotion determine",
+      "imagePath": "/images/chapitres/la-fugue/scene_16.webp",
+      "isPlaceholder": true
+    },
+    {
+      "sceneKey": "branche_c",
+      "lineIndex": 1,
+      "prompt": "Scène: branche_c, marco parle avec émotion choque",
+      "imagePath": "/images/chapitres/la-fugue/scene_17.webp",
+      "isPlaceholder": true
+    },
+    {
+      "sceneKey": "branche_c",
+      "lineIndex": 2,
+      "prompt": "Scène: branche_c, alex parle avec émotion confiant",
+      "imagePath": "/images/chapitres/la-fugue/scene_18.webp",
+      "isPlaceholder": true
+    },
+    {
+      "sceneKey": "branche_c",
+      "lineIndex": 3,
+      "prompt": "Scène: branche_c, alex parle avec émotion resolution",
+      "imagePath": "/images/chapitres/la-fugue/scene_19.webp",
+      "isPlaceholder": true
+    },
+    {
+      "sceneKey": "branche_c",
+      "lineIndex": 4,
+      "prompt": "Scène: branche_c, alex parle avec émotion victoire",
+      "imagePath": "/images/chapitres/la-fugue/scene_20.webp",
+      "isPlaceholder": true
+    },
+    {
+      "sceneKey": "fin_negative",
+      "lineIndex": 0,
+      "prompt": "Scène: fin_negative, alex parle avec émotion choque",
+      "imagePath": "/images/chapitres/la-fugue/scene_21.webp",
+      "isPlaceholder": true
+    },
+    {
+      "sceneKey": "fin_negative",
+      "lineIndex": 1,
+      "prompt": "Scène: fin_negative, alex parle avec émotion lecon",
+      "imagePath": "/images/chapitres/la-fugue/scene_22.webp",
+      "isPlaceholder": true
+    },
+    {
+      "sceneKey": "fin_negative",
+      "lineIndex": 2,
+      "prompt": "Scène: fin_negative, alex parle avec émotion decouverte",
+      "imagePath": "/images/chapitres/la-fugue/scene_23.webp",
+      "isPlaceholder": true
+    },
+    {
+      "sceneKey": "fin_positive",
+      "lineIndex": 0,
+      "prompt": "Scène: fin_positive, alex parle avec émotion soulage",
+      "imagePath": "/images/chapitres/la-fugue/scene_24.webp",
+      "isPlaceholder": true
+    },
+    {
+      "sceneKey": "fin_positive",
+      "lineIndex": 1,
+      "prompt": "Scène: fin_positive, alex parle avec émotion info",
+      "imagePath": "/images/chapitres/la-fugue/scene_25.webp",
+      "isPlaceholder": true
+    },
+    {
+      "sceneKey": "fin_positive",
+      "lineIndex": 2,
+      "prompt": "Scène: fin_positive, alex parle avec émotion decouverte",
+      "imagePath": "/images/chapitres/la-fugue/scene_26.webp",
+      "isPlaceholder": true
+    },
+    {
+      "sceneKey": "fin_positive",
+      "lineIndex": 3,
+      "prompt": "Scène: fin_positive, alex parle avec émotion victoire",
+      "imagePath": "/images/chapitres/la-fugue/scene_27.webp",
+      "isPlaceholder": true
+    }
+  ],
+  "_savedAt": "2025-12-01T04:43:56.585Z",
+  "_filename": "la-fugue_droit-8_2025-12-01.json",
+  "_version": "1.0"
+}

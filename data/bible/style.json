@@ -1,0 +1,140 @@
+{
+  "nom": "Drôles de Droits - Bible Visuelle",
+  "version": "1.0",
+  "description": "Guide de style visuel pour le jeu éducatif interactif sur les droits des jeunes en centre jeunesse au Québec",
+  
+  "influences": {
+    "jeux": ["Life is Strange", "Telltale Games (Walking Dead)", "Oxenfree", "Night in the Woods"],
+    "animation": ["Into the Spider-Verse", "Arcane", "The Owl House"],
+    "bandes_dessinees": ["BD québécoise moderne", "Webtoons émotionnels"]
+  },
+
+  "rendu": {
+    "type": "Semi-réaliste stylisé / Graphic Novel",
+    "traits": "Lignes nettes et définies, légèrement épaisses pour les contours",
+    "ombrage": "Cellshading doux avec gradients subtils",
+    "textures": "Légères textures papier/grain pour chaleur",
+    "details": "Visages expressifs avec détails, fonds plus simplifiés"
+  },
+
+  "palette": {
+    "primaires": {
+      "bleu_centre": "#4A90D9",
+      "orange_mur": "#E67E22", 
+      "gris_institutionnel": "#5D6D7E"
+    },
+    "secondaires": {
+      "beige_chaleureux": "#F5E6D3",
+      "vert_espoir": "#27AE60",
+      "rouge_tension": "#C0392B"
+    },
+    "neutres": {
+      "blanc_casse": "#FAFAFA",
+      "noir_doux": "#2C3E50",
+      "gris_moyen": "#95A5A6"
+    },
+    "emotions": {
+      "peur": "#8E44AD",
+      "tristesse": "#3498DB",
+      "colere": "#E74C3C",
+      "espoir": "#2ECC71",
+      "tension": "#F39C12"
+    }
+  },
+
+  "eclairage": {
+    "interieur_jour": {
+      "description": "Mélange de lumière fluorescente et naturelle",
+      "temperature": "Neutre à légèrement chaud",
+      "ombres": "Douces, pas trop contrastées"
+    },
+    "interieur_soir": {
+      "description": "Éclairage artificiel dominant",
+      "temperature": "Chaud (orange/jaune)",
+      "ombres": "Plus marquées, dramatiques"
+    },
+    "exterieur_jour": {
+      "description": "Lumière naturelle québécoise",
+      "temperature": "Variable selon saison",
+      "ombres": "Nettes, réalistes"
+    },
+    "scenes_tension": {
+      "description": "Contraste accentué",
+      "temperature": "Froide ou très chaude selon émotion",
+      "ombres": "Dramatiques, expressionnistes"
+    }
+  },
+
+  "composition": {
+    "aspect_ratio": "16:9",
+    "resolution": "1920x1080",
+    "regles": {
+      "tiers": "Utiliser la règle des tiers pour les personnages",
+      "profondeur": "Toujours 3 plans: premier plan, sujet, arrière-plan",
+      "espace_negatif": "Laisser respirer, pas surcharger"
+    },
+    "plans_types": {
+      "establishing": "Plan large montrant le lieu, personnages petits",
+      "medium": "De la taille aux épaules, expression visible",
+      "closeup": "Visage ou objet en gros plan, émotion intense",
+      "two_shot": "Deux personnages en conversation, équilibrés"
+    }
+  },
+
+  "personnages": {
+    "proportions": "Réalistes, adolescents avec proportions d'ado (pas d'anime)",
+    "expressions": "Très expressives, lisibles, émotions claires",
+    "poses": "Naturelles, body language important",
+    "vetements": "Réalistes, mode québécoise jeune actuelle",
+    "diversite": "Refléter la diversité du Québec (multiethnique)"
+  },
+
+  "decors": {
+    "niveau_detail": "Moins détaillés que les personnages mais reconnaissables",
+    "authenticite": "Québécois authentique (affiches en français, architecture locale)",
+    "atmosphere": "Traduire l'émotion de la scène par les couleurs/lumière",
+    "elements_recurrents": [
+      "Affiches en français",
+      "Babillards avec informations",
+      "Couleurs institutionnelles (bleu/orange)",
+      "Fenêtres avec vue sur le Québec"
+    ]
+  },
+
+  "texte_dans_images": {
+    "regles": [
+      "JAMAIS de dialogue en texte dans l'image",
+      "Affiches/panneaux peuvent avoir du texte FRANÇAIS lisible",
+      "Pas de watermarks ou signatures"
+    ],
+    "police_affiches": "Sans-serif moderne, style institutionnel québécois"
+  },
+
+  "ambiances_par_droit": {
+    "droit_information": "Lumière claire, tons bleus apaisants",
+    "droit_hebergement": "Contrastes chaud/froid, tension visible",
+    "droit_confidentialite": "Ombres, intimité, tons feutrés",
+    "droit_plainte": "Rouge/orange, tension, énergie"
+  },
+
+  "a_eviter": [
+    "Stéréotypes visuels négatifs",
+    "Images trop sombres ou effrayantes pour les jeunes",
+    "Représentation graphique de violence ou drogue",
+    "Texte en anglais",
+    "Style anime/manga japonais",
+    "Proportions irréalistes",
+    "Clichés visuels (larmes qui coulent en cascade, etc.)"
+  ],
+
+  "references_existantes": {
+    "images_approuvees": [
+      "/images/jeune_reflechi.webp",
+      "/images/cafeteria_dialogue.webp",
+      "/images/establishing_centre jeunesse.webp",
+      "/images/fugue_course.webp"
+    ],
+    "style_reference": "Ces images définissent le style cible"
+  }
+}
+

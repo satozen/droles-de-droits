@@ -1,0 +1,290 @@
+{
+  "alex": {
+    "id": "alex",
+    "nom": "Alex",
+    "role": "Protagoniste principal",
+    "age": "16 ans",
+    "genre": "masculin",
+    "description": "Jeune résident du centre jeunesse depuis 6 mois. Curieux et réfléchi, mais anxieux face aux décisions importantes. Il cherche à comprendre ses droits et à naviguer dans un système qu'il ne maîtrise pas encore.",
+    "apparence": {
+      "cheveux": "Bruns, mi-longs, légèrement en désordre, mèche sur le front",
+      "yeux": "Bleus, expressifs",
+      "peau": "Claire avec taches de rousseur sur le nez et les joues",
+      "taille": "Moyenne pour son âge (1m70)",
+      "corpulence": "Mince, un peu dégingandé",
+      "vetements_defaut": "Veste bleue claire style denim, t-shirt blanc, jeans bleus, sneakers usées",
+      "accessoires": "Parfois un sac à dos beige/kaki"
+    },
+    "personnalite": ["anxieux", "réfléchi", "empathique", "curieux", "hésitant", "loyal"],
+    "backstory": "Parents avec problèmes de consommation. Placé en centre jeunesse suite à une signalement de l'école. N'a pas de contacts réguliers avec sa famille.",
+    "voix": "Douce, parfois hésitante, québécois standard avec quelques expressions jeunes",
+    "references": ["/images/jeune_reflechi.webp"],
+    "emotions": {
+      "neutre": null,
+      "frustre": null,
+      "hesitant": null,
+      "nerveux": null,
+      "confiant": null,
+      "triste": null,
+      "soulage": null,
+      "determine": null
+    },
+    "chapitres": ["fouilles-et-cafouillage", "la-fugue"]
+  },
+
+  "marco": {
+    "id": "marco",
+    "nom": "Marco",
+    "role": "Ami tentateur / Antagoniste amical",
+    "age": "17 ans",
+    "genre": "masculin",
+    "description": "Résident du centre depuis plus longtemps qu'Alex. Rebelle et impulsif, il a fugué plusieurs fois. Il pousse Alex à prendre des risques mais n'est pas méchant - juste désabusé par le système.",
+    "apparence": {
+      "cheveux": "Noirs, bouclés, courts sur les côtés",
+      "yeux": "Bruns foncés, regard intense",
+      "peau": "Métissée, teint olive",
+      "taille": "Plus grand qu'Alex (1m75)",
+      "corpulence": "Athlétique, épaules larges",
+      "vetements_defaut": "Hoodie gris foncé ou noir, jeans slim, tuque/bonnet, chaîne au cou",
+      "accessoires": "Écouteurs autour du cou, bracelet tissé"
+    },
+    "personnalite": ["rebelle", "impulsif", "charismatique", "désabusé", "protecteur", "loyal envers ses amis"],
+    "backstory": "Au centre depuis 2 ans. Parents absents. A développé une méfiance envers les adultes et le système.",
+    "voix": "Assurée, parfois provocante, utilise du slang québécois",
+    "references": [],
+    "emotions": {
+      "neutre": null,
+      "complice": null,
+      "determine": null,
+      "en_colere": null,
+      "triste": null
+    },
+    "chapitres": ["la-fugue"]
+  },
+
+  "sophie": {
+    "id": "sophie",
+    "nom": "Sophie Lavoie",
+    "role": "Intervenante / Éducatrice bienveillante",
+    "age": "32 ans",
+    "genre": "feminin",
+    "description": "Éducatrice spécialisée au centre jeunesse. Bienveillante mais professionnelle, elle croit vraiment en la capacité des jeunes à s'en sortir. C'est la personne de confiance d'Alex.",
+    "apparence": {
+      "cheveux": "Noirs, mi-longs, souvent attachés en queue de cheval ou chignon décontracté",
+      "yeux": "Bruns chaleureux",
+      "peau": "Claire",
+      "taille": "Moyenne (1m65)",
+      "corpulence": "Normale",
+      "vetements_defaut": "Blazer beige ou cardigan, blouse sobre, pantalon de travail, chaussures confortables",
+      "accessoires": "Badge du centre, parfois lunettes de lecture, carnet de notes"
+    },
+    "personnalite": ["bienveillante", "patiente", "professionnelle", "empathique", "ferme mais juste"],
+    "backstory": "Travaille au centre depuis 5 ans. A choisi ce métier après avoir été bénévole dans un organisme communautaire.",
+    "voix": "Calme, rassurante, articule bien, jamais condescendante",
+    "references": ["/images/intervenante_arrive_lieu_echange_drogues.webp"],
+    "emotions": {
+      "neutre": null,
+      "inquiete": null,
+      "encourageante": null,
+      "serieuse": null
+    },
+    "chapitres": ["fouilles-et-cafouillage", "la-fugue"]
+  },
+
+  "jay": {
+    "id": "jay",
+    "nom": "Jay",
+    "role": "Dealer / Mauvaise influence",
+    "age": "18 ans",
+    "genre": "masculin",
+    "description": "Ancien résident du centre, maintenant dealer qui traîne encore autour. Il profite de la vulnérabilité des jeunes pour leur vendre de la drogue. Charismatique mais manipulateur.",
+    "apparence": {
+      "cheveux": "Blonds décolorés, coupe stylisée",
+      "yeux": "Verts, regard calculateur",
+      "peau": "Claire",
+      "taille": "Grand (1m80)",
+      "corpulence": "Mince mais musclé",
+      "vetements_defaut": "Veste bomber noire, t-shirt de marque, jeans déchirés, sneakers flashy",
+      "accessoires": "Chaîne en or, téléphone dernier cri toujours en main"
+    },
+    "personnalite": ["manipulateur", "charismatique", "opportuniste", "faux ami", "pressant"],
+    "backstory": "A quitté le centre à 18 ans sans soutien. S'est tourné vers la vente de drogue pour survivre.",
+    "voix": "Mielleuse, persuasive, change de ton selon la situation",
+    "references": ["/images/jeune_offre_drogue.webp"],
+    "emotions": {
+      "charmeur": null,
+      "pressant": null,
+      "menacant": null
+    },
+    "chapitres": ["fouilles-et-cafouillage"]
+  },
+
+  "karim": {
+    "id": "karim",
+    "nom": "Karim",
+    "role": "Ami fidèle d'Alex",
+    "age": "16 ans",
+    "genre": "masculin",
+    "description": "Meilleur ami d'Alex au centre. Plus posé et réfléchi, il est souvent la voix de la raison. Il connaît ses droits et essaie de les partager avec Alex.",
+    "apparence": {
+      "cheveux": "Noirs, courts, bien coiffés",
+      "yeux": "Bruns",
+      "peau": "Brune (origine maghrébine)",
+      "taille": "Moyenne (1m68)",
+      "corpulence": "Normale",
+      "vetements_defaut": "Polo ou chemise casual, jeans propres, veste légère",
+      "accessoires": "Montre, parfois des lunettes"
+    },
+    "personnalite": ["sage", "loyal", "réfléchi", "discret", "bon conseiller"],
+    "backstory": "Au centre depuis 1 an. Famille immigrante avec difficultés financières. Garde contact avec sa mère.",
+    "voix": "Posée, réfléchie, utilise un vocabulaire plus soutenu",
+    "references": [],
+    "emotions": {
+      "neutre": null,
+      "inquiet": null,
+      "encourageant": null
+    },
+    "chapitres": ["fouilles-et-cafouillage"]
+  },
+
+  "mme_tremblay": {
+    "id": "mme_tremblay",
+    "nom": "Diane Tremblay",
+    "role": "Directrice du centre",
+    "age": "52 ans",
+    "genre": "feminin",
+    "description": "Directrice du centre jeunesse. Stricte mais juste, elle fait respecter les règles tout en ayant le bien-être des jeunes à cœur. Représente l'autorité institutionnelle.",
+    "apparence": {
+      "cheveux": "Gris-blanc, coupe courte professionnelle",
+      "yeux": "Gris-bleu, regard perçant",
+      "peau": "Claire, quelques rides",
+      "taille": "Moyenne (1m62)",
+      "corpulence": "Normale à forte",
+      "vetements_defaut": "Tailleur sobre (bleu marine ou gris), blouse, talons bas",
+      "accessoires": "Lunettes, badge de direction, parfois un dossier sous le bras"
+    },
+    "personnalite": ["stricte", "juste", "professionnelle", "respectée", "parfois intimidante"],
+    "backstory": "30 ans de carrière dans les services sociaux. A vu beaucoup de jeunes passer.",
+    "voix": "Autoritaire mais pas méchante, articule clairement",
+    "references": [],
+    "emotions": {
+      "serieuse": null,
+      "severe": null,
+      "compatissante": null
+    },
+    "chapitres": []
+  },
+
+  "agent_richard": {
+    "id": "agent_richard",
+    "nom": "Agent Richard Côté",
+    "role": "Policier",
+    "age": "38 ans",
+    "genre": "masculin",
+    "description": "Policier qui intervient au centre. Professionnel et correct, il représente l'autorité légale. Peut être intimidant mais respecte la loi et les droits des jeunes.",
+    "apparence": {
+      "cheveux": "Châtains, courts, coupe militaire",
+      "yeux": "Bruns",
+      "peau": "Claire, légèrement bronzée",
+      "taille": "Grand (1m82)",
+      "corpulence": "Athlétique, imposant",
+      "vetements_defaut": "Uniforme de police du Québec complet",
+      "accessoires": "Badge, ceinture d'équipement, radio"
+    },
+    "personnalite": ["professionnel", "calme", "méthodique", "respectueux de la loi"],
+    "backstory": "15 ans dans la police. Spécialisé dans les interventions jeunesse.",
+    "voix": "Grave, calme, autoritaire sans être agressive",
+    "references": ["/images/police_parle_au_jeune.webp"],
+    "emotions": {
+      "neutre": null,
+      "serieux": null,
+      "comprehensif": null
+    },
+    "chapitres": ["fouilles-et-cafouillage"]
+  },
+
+  "maitre_beaumont": {
+    "id": "maitre_beaumont",
+    "nom": "Maître Claire Beaumont",
+    "role": "Avocate des droits des jeunes",
+    "age": "40 ans",
+    "genre": "feminin",
+    "description": "Avocate spécialisée dans les droits des jeunes en protection. Elle aide Alex à comprendre ses droits légaux et le défend si nécessaire.",
+    "apparence": {
+      "cheveux": "Roux foncé, longs, souvent en chignon élégant",
+      "yeux": "Verts",
+      "peau": "Claire avec quelques taches de rousseur",
+      "taille": "Grande (1m72)",
+      "corpulence": "Mince, élégante",
+      "vetements_defaut": "Tailleur chic (noir, bordeaux ou vert foncé), talons hauts, bijoux discrets",
+      "accessoires": "Mallette en cuir, lunettes de lecture élégantes, stylo de qualité"
+    },
+    "personnalite": ["intelligente", "combative", "protectrice", "éloquente", "rassurante"],
+    "backstory": "Ancienne enfant du système, devenue avocate pour aider d'autres jeunes.",
+    "voix": "Claire, assurée, utilise un langage accessible malgré sa profession",
+    "references": [],
+    "emotions": {
+      "professionnelle": null,
+      "encourageante": null,
+      "combative": null
+    },
+    "chapitres": []
+  },
+
+  "maman_alex": {
+    "id": "maman_alex",
+    "nom": "Nathalie",
+    "role": "Mère d'Alex",
+    "age": "42 ans",
+    "genre": "feminin",
+    "description": "Mère d'Alex, aux prises avec des problèmes de consommation. Elle aime son fils mais n'est pas capable de s'en occuper. Apparaît dans les flashbacks ou les visites supervisées.",
+    "apparence": {
+      "cheveux": "Châtains comme Alex, souvent négligés",
+      "yeux": "Bleus comme Alex",
+      "peau": "Claire, fatiguée, cernes",
+      "taille": "Moyenne",
+      "corpulence": "Mince, fragile",
+      "vetements_defaut": "Vêtements simples, parfois froissés, veste usée",
+      "accessoires": "Sac à main usé"
+    },
+    "personnalite": ["aimante mais absente", "fragile", "culpabilisée", "désorganisée"],
+    "backstory": "A eu Alex jeune. Problèmes de dépendance depuis des années.",
+    "voix": "Douce mais parfois confuse, ton apologétique",
+    "references": [],
+    "emotions": {
+      "triste": null,
+      "coupable": null,
+      "aimante": null
+    },
+    "chapitres": []
+  },
+
+  "dr_chen": {
+    "id": "dr_chen",
+    "nom": "Dr. Michelle Chen",
+    "role": "Psychiatre / Médecin",
+    "age": "45 ans",
+    "genre": "feminin",
+    "description": "Psychiatre qui suit Alex au centre. Professionnelle et attentive, elle représente le droit aux soins de santé mentale.",
+    "apparence": {
+      "cheveux": "Noirs, lisses, mi-longs",
+      "yeux": "Bruns foncés",
+      "peau": "Asiatique",
+      "taille": "Petite (1m58)",
+      "corpulence": "Mince",
+      "vetements_defaut": "Sarrau blanc sur vêtements professionnels, ou tenue casual-chic en consultation",
+      "accessoires": "Stéthoscope, badge médical, tablette ou carnet"
+    },
+    "personnalite": ["calme", "attentive", "professionnelle", "empathique", "patiente"],
+    "backstory": "Spécialisée en psychiatrie de l'enfant et l'adolescent depuis 15 ans.",
+    "voix": "Douce, posée, choisit ses mots avec soin",
+    "references": [],
+    "emotions": {
+      "neutre": null,
+      "attentive": null,
+      "rassurante": null
+    },
+    "chapitres": []
+  }
+}
+

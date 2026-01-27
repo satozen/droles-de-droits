@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import { Fredoka } from 'next/font/google'
 import Navigation from '@/components/Navigation'
+import Footer from '@/components/Footer'
 
 const fredoka = Fredoka({ 
   subsets: ['latin'], 
@@ -72,9 +73,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr">
-      <body className={`antialiased ${fredoka.className} bg-white dark:bg-gray-900 transition-colors`}>
+      <body className={`antialiased ${fredoka.className} bg-white dark:bg-gray-900 transition-colors flex flex-col min-h-screen`}>
         <Navigation />
-        {children}
+        <main className="flex-1">
+          {children}
+        </main>
+        <Footer />
       </body>
     </html>
   )

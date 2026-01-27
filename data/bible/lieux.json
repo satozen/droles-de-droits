@@ -1,0 +1,220 @@
+{
+  "couloir_principal": {
+    "id": "couloir_principal",
+    "nom": "Couloir Principal du Centre",
+    "type": "interieur",
+    "description": "Long couloir institutionnel qui relie les différentes ailes du centre. Point de passage central où les jeunes se croisent.",
+    "ambiance": "Institutionnel mais chaleureux, tentative de rendre l'espace accueillant",
+    "details": {
+      "murs": "Bicolores: bleu pâle en haut, orange brûlé en bas (ligne à hauteur de hanche)",
+      "sol": "Linoléum gris-beige, propre mais usé",
+      "eclairage": "Néons fluorescents au plafond, quelques fenêtres apportant lumière naturelle",
+      "decoration": "Babillards avec affiches colorées (activités, droits, règlements), dessins de jeunes, photos d'événements",
+      "mobilier": "Quelques chaises en plastique contre les murs, poubelles, fontaine d'eau",
+      "portes": "Portes de bureaux et de chambres, certaines avec vitres"
+    },
+    "variations_temps": {
+      "jour": "Lumière naturelle par les fenêtres, ambiance active",
+      "soir": "Éclairage artificiel, plus calme",
+      "nuit": "Éclairage de sécurité réduit, silencieux"
+    },
+    "references": ["/images/establishing_centre jeunesse.webp"],
+    "sons": "Échos de voix, portes qui s'ouvrent/ferment, parfois musique lointaine",
+    "chapitres": ["fouilles-et-cafouillage", "la-fugue"]
+  },
+
+  "cafeteria": {
+    "id": "cafeteria",
+    "nom": "Cafétéria du Centre",
+    "type": "interieur",
+    "description": "Grande salle commune où les jeunes mangent et socialisent. C'est souvent ici que les conversations importantes ont lieu.",
+    "ambiance": "Bruyante aux heures de repas, lieu de socialisation",
+    "details": {
+      "murs": "Beige/crème avec quelques fresques murales colorées faites par des jeunes",
+      "sol": "Carrelage facile à nettoyer, beige",
+      "eclairage": "Grands néons, grandes fenêtres sur un mur",
+      "decoration": "Menu du jour sur tableau, affiches de nutrition, dessins",
+      "mobilier": "Tables rectangulaires avec chaises en plastique coloré (rouge, bleu, vert, jaune), comptoir de service avec vitrine"
+    },
+    "variations_temps": {
+      "repas": "Bondée, bruyante, odeurs de nourriture",
+      "entre_repas": "Vide, quelques jeunes qui étudient ou discutent",
+      "ferme": "Chaises sur les tables, lumières tamisées"
+    },
+    "references": ["/images/cafeteria_dialogue.webp", "/images/cafeteria_triste.webp"],
+    "sons": "Brouhaha de conversations, couverts, bruit de plateau",
+    "chapitres": ["fouilles-et-cafouillage"]
+  },
+
+  "chambre_alex": {
+    "id": "chambre_alex",
+    "nom": "Chambre d'Alex",
+    "type": "interieur",
+    "description": "Petite chambre individuelle d'Alex au centre. Son espace personnel, à la fois refuge et prison selon son humeur.",
+    "ambiance": "Intime, personnalisée dans les limites permises",
+    "details": {
+      "murs": "Blancs/beige, quelques posters autorisés, photos",
+      "sol": "Linoléum ou moquette courte",
+      "eclairage": "Lampe de chevet, néon principal, fenêtre avec barreaux discrets",
+      "decoration": "Posters de musique/sport, photos de souvenirs, dessins, quelques objets personnels",
+      "mobilier": "Lit simple avec couverture colorée, bureau avec chaise, petite armoire/commode, étagère"
+    },
+    "variations_temps": {
+      "jour": "Lumière par la fenêtre, ordinaire",
+      "soir": "Lampe de chevet, ambiance cozy",
+      "insomnie": "Obscurité partielle, lumière de téléphone"
+    },
+    "references": [],
+    "sons": "Calme, parfois bruits du couloir étouffés",
+    "chapitres": ["la-fugue"]
+  },
+
+  "bureau_sophie": {
+    "id": "bureau_sophie",
+    "nom": "Bureau de l'Intervenante",
+    "type": "interieur",
+    "description": "Bureau de Sophie où elle rencontre les jeunes en privé. Espace professionnel mais accueillant.",
+    "ambiance": "Professionnel mais chaleureux, sécurisant",
+    "details": {
+      "murs": "Couleur chaude (beige/pêche), diplômes et certifications encadrés",
+      "sol": "Moquette ou tapis confortable",
+      "eclairage": "Lampe de bureau, lumière naturelle, éclairage doux",
+      "decoration": "Plantes, photos inspirantes, petits objets déco, boîte de mouchoirs visible",
+      "mobilier": "Bureau avec ordinateur, deux chaises confortables pour les visiteurs, bibliothèque avec livres et dossiers, fauteuil confortable"
+    },
+    "variations_temps": {
+      "consultation": "Porte fermée, intimité, ton confidentiel",
+      "vide": "Rangé, prêt pour le prochain jeune"
+    },
+    "references": [],
+    "sons": "Calme, conversation feutrée, parfois pleurs",
+    "chapitres": ["la-fugue"]
+  },
+
+  "exterieur_centre": {
+    "id": "exterieur_centre",
+    "nom": "Extérieur du Centre Jeunesse",
+    "type": "exterieur",
+    "description": "Vue extérieure du bâtiment du centre. Bâtiment institutionnel typique du Québec, avec entrée principale et stationnement.",
+    "ambiance": "Institutionnel, peut sembler froid ou accueillant selon la météo/lumière",
+    "details": {
+      "architecture": "Bâtiment en briques rouges/beiges, 2-3 étages, style années 70-80 rénové",
+      "entree": "Portes vitrées, rampe d'accès, auvent",
+      "terrain": "Petit stationnement, quelques arbres, bancs extérieurs, aire fumeur à l'écart",
+      "signaletique": "Panneau 'Centre Jeunesse' avec logo, numéro civique"
+    },
+    "variations_temps": {
+      "ete": "Verdure, jeunes dehors, lumineux",
+      "hiver": "Neige, arbres nus, entrée déneigée",
+      "nuit": "Éclairage sécuritaire, parking vide, ambiance isolée"
+    },
+    "meteo": {
+      "soleil": "Accueillant, jeunes dehors",
+      "pluie": "Mélancolique, reflets sur l'asphalte",
+      "neige": "Québec typique, froid visible"
+    },
+    "references": ["/images/establishing_centre jeunesse.webp"],
+    "sons": "Circulation au loin, oiseaux, portes, conversations",
+    "chapitres": ["la-fugue"]
+  },
+
+  "salle_commune": {
+    "id": "salle_commune",
+    "nom": "Salle Commune / Salon",
+    "type": "interieur",
+    "description": "Espace de détente pour les jeunes avec TV, jeux, et sofas. Lieu de socialisation informelle.",
+    "ambiance": "Détendue, parfois bruyante, lieu de vie",
+    "details": {
+      "murs": "Colorés, fresques ou peintures murales",
+      "sol": "Tapis ou linoléum confortable",
+      "eclairage": "Éclairage mixte, fenêtres, lampes d'ambiance",
+      "decoration": "Posters de films, règles de la salle, art des jeunes",
+      "mobilier": "Sofas usés mais confortables, TV grand écran, table de baby-foot, étagère avec jeux de société, quelques poufs"
+    },
+    "variations_temps": {
+      "actif": "Jeunes qui jouent, regardent la TV, discutent",
+      "calme": "Quelques jeunes qui lisent ou écoutent de la musique",
+      "ferme": "Lumières éteintes, chaises rangées"
+    },
+    "references": [],
+    "sons": "TV, conversations, rires, jeux vidéo",
+    "chapitres": []
+  },
+
+  "ruelle_squat": {
+    "id": "ruelle_squat",
+    "nom": "Ruelle / Squat Abandonné",
+    "type": "exterieur_urbain",
+    "description": "Ruelle sombre de Montréal où Marco et Alex se cachent pendant leur fugue. Représente les dangers de la rue.",
+    "ambiance": "Dangereuse, froide, inhospitalière - contraste avec le centre",
+    "details": {
+      "environnement": "Ruelle entre bâtiments industriels/commerciaux, bennes à ordures, graffitis",
+      "sol": "Asphalte craquelé, flaques d'eau, déchets",
+      "eclairage": "Faible, un lampadaire au loin, lumières des fenêtres",
+      "elements": "Cartons, matelas sale, feu de camp improvisé, squat dans bâtiment abandonné",
+      "meteo": "Froid, possiblement neige ou pluie"
+    },
+    "dangers": {
+      "physiques": "Froid, faim, insalubrité",
+      "sociaux": "Autres sans-abris, dealers, criminalité"
+    },
+    "references": ["/images/fugue_course.webp"],
+    "sons": "Circulation lointaine, sirènes, vent, rats",
+    "chapitres": ["la-fugue"]
+  },
+
+  "tribunal": {
+    "id": "tribunal",
+    "nom": "Tribunal de la Jeunesse",
+    "type": "interieur_officiel",
+    "description": "Salle d'audience du tribunal de la jeunesse. Lieu solennel où les décisions importantes sont prises.",
+    "ambiance": "Solennelle, intimidante, officielle",
+    "details": {
+      "architecture": "Salle d'audience classique, boiseries, sceau du Québec",
+      "eclairage": "Formel, lumière naturelle haute",
+      "decoration": "Drapeau du Québec, du Canada, armoiries, horloge",
+      "mobilier": "Banc du juge surélevé, tables pour avocats, banc des accusés, sièges pour public"
+    },
+    "personnages_typiques": ["juge", "avocat", "greffier", "agent de sécurité"],
+    "references": ["/images/jeune_tribunal.webp"],
+    "sons": "Silence respectueux, voix formelles, portes lourdes",
+    "chapitres": []
+  },
+
+  "infirmerie": {
+    "id": "infirmerie",
+    "nom": "Infirmerie du Centre",
+    "type": "interieur_medical",
+    "description": "Petit local médical du centre pour les soins de base et la distribution des médicaments.",
+    "ambiance": "Clinique, propre, odeur de désinfectant",
+    "details": {
+      "murs": "Blancs/vert pâle, affiches de santé",
+      "sol": "Linoléum facile à nettoyer",
+      "eclairage": "Vif, néons blancs",
+      "decoration": "Affiches de prévention, schémas anatomiques",
+      "mobilier": "Lit d'examen, armoire à pharmacie vitrée, bureau de l'infirmière, chaise, balance"
+    },
+    "references": [],
+    "sons": "Calme, bruits d'emballages, conversation médicale",
+    "chapitres": []
+  },
+
+  "ecole_centre": {
+    "id": "ecole_centre",
+    "nom": "Classe / École du Centre",
+    "type": "interieur_educatif",
+    "description": "Salle de classe au sein du centre où les jeunes poursuivent leur scolarité.",
+    "ambiance": "Scolaire, plus petite qu'une classe normale, plus personnalisée",
+    "details": {
+      "murs": "Travaux d'élèves, alphabet, cartes, règles de classe",
+      "sol": "Linoléum ou tapis",
+      "eclairage": "Néons, fenêtres",
+      "decoration": "Tableaux pédagogiques, calendrier, travaux affichés",
+      "mobilier": "Pupitres individuels (6-8 max), bureau du prof, tableau blanc/intelligent, ordinateurs"
+    },
+    "references": [],
+    "sons": "Crayons, pages qui tournent, voix du professeur",
+    "chapitres": []
+  }
+}
+
