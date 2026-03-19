@@ -1,6 +1,6 @@
 /**
  * Dashboard Admin - Gestion des chapitres et suivi de création
- * Permet de voir, éditer et publier les chapitres générés
+ * Utilise Claude Opus 4.6 (scénarios) et Nano Banana 2 (images)
  */
 'use client'
 
@@ -36,8 +36,22 @@ const DEMO_CHAPTERS: ChapterSummary[] = [
     rightIcon: '🏠',
     thumbnail: '/images/fugue_course.webp',
     estimatedDuration: 12,
-    status: 'coming_soon',
-    progress: 0
+    status: 'available',
+    progress: 100
+  },
+  {
+    id: 'le-secret-dalex',
+    slug: 'le-secret-dalex',
+    title: 'Le Secret d\'Alex',
+    subtitle: 'Quand ta vie privée est exposée...',
+    description: 'Alex découvre que des informations confidentielles de son dossier ont été partagées sans son consentement.',
+    rightId: 11,
+    rightTitle: 'Droit à la confidentialité',
+    rightIcon: '🔒',
+    thumbnail: '/images/droit_confidentialite_top_confidentiel.webp',
+    estimatedDuration: 12,
+    status: 'available',
+    progress: 100
   }
 ]
 
@@ -72,7 +86,7 @@ export default function AdminDashboard() {
           },
           image: { 
             configured: imageData.apiConfigured, 
-            model: imageData.model || 'Nano Banana Pro' 
+            model: imageData.model || 'Nano Banana 2' 
           }
         })
       } catch (err) {
@@ -178,7 +192,7 @@ export default function AdminDashboard() {
                   <div className="flex items-center gap-3">
                     <span className={`w-3 h-3 rounded-full ${apiStatus?.scenario.configured ? 'bg-green-500' : 'bg-red-500'}`} />
                     <div>
-                      <div className="text-white font-semibold">Claude Sonnet 4.5</div>
+                      <div className="text-white font-semibold">Claude Opus 4.6</div>
                       <div className="text-sm text-gray-400">Génération de scénarios</div>
                     </div>
                   </div>
@@ -191,7 +205,7 @@ export default function AdminDashboard() {
                   <div className="flex items-center gap-3">
                     <span className={`w-3 h-3 rounded-full ${apiStatus?.image.configured ? 'bg-green-500' : 'bg-yellow-500'}`} />
                     <div>
-                      <div className="text-white font-semibold">Nano Banana Pro</div>
+                      <div className="text-white font-semibold">Nano Banana 2</div>
                       <div className="text-sm text-gray-400">Génération d'images</div>
                     </div>
                   </div>
@@ -233,11 +247,18 @@ export default function AdminDashboard() {
             </div>
 
             {/* Actions rapides */}
-            <div className="grid md:grid-cols-3 gap-4">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Link href="/admin/personnages" className="block">
+                <div className="bg-gradient-to-br from-rose-600 to-pink-700 rounded-xl p-6 hover:shadow-lg hover:shadow-rose-500/20 transition-all">
+                  <h3 className="text-xl font-bold text-white mb-2">👥 Personnages</h3>
+                  <p className="text-white/70">Character sheets & bible visuelle</p>
+                </div>
+              </Link>
+
               <Link href="/admin/studio" className="block">
                 <div className="bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl p-6 hover:shadow-lg hover:shadow-amber-500/20 transition-all">
                   <h3 className="text-xl font-bold text-white mb-2">🎨 Studio d'images</h3>
-                  <p className="text-white/70">Créer des images avec Nano Banana Pro</p>
+                  <p className="text-white/70">Créer des images avec Nano Banana 2</p>
                 </div>
               </Link>
               
@@ -397,7 +418,7 @@ export default function AdminDashboard() {
                 <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
                   <div>
                     <div className="text-white font-medium">ANTHROPIC_API_KEY</div>
-                    <div className="text-gray-500 text-xs">Pour Claude Sonnet 4.5</div>
+                    <div className="text-gray-500 text-xs">Pour Claude Opus 4.6</div>
                   </div>
                   <span className={`px-2 py-1 rounded text-xs font-semibold ${
                     apiStatus?.scenario.configured ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
@@ -409,7 +430,7 @@ export default function AdminDashboard() {
                 <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
                   <div>
                     <div className="text-white font-medium">GEMINI_API_KEY</div>
-                    <div className="text-gray-500 text-xs">Pour Nano Banana Pro (images)</div>
+                    <div className="text-gray-500 text-xs">Pour Nano Banana 2 (images)</div>
                   </div>
                   <span className={`px-2 py-1 rounded text-xs font-semibold ${
                     apiStatus?.image.configured ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'

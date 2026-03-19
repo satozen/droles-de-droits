@@ -1,7 +1,7 @@
 /**
  * ChapterPlayer - Composant réutilisable pour jouer les chapitres narratifs
  * Style néo-brutaliste avec bulles de dialogue, choix et système de progression
- * Supporte les chapitres générés automatiquement ou manuels
+ * Supporte choix/branches, indicateur de typing, et célébration lors du déblocage de droits
  */
 'use client'
 
@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import type { Chapter, DialogueLine, UnlockableRight } from '@/types/chapter'
+import { useGlobalProgress } from '@/hooks/useGlobalProgress'
 
 // Hook pour détecter si on est sur mobile
 function useIsMobile() {
@@ -34,12 +35,14 @@ interface ChapterPlayerProps {
 export default function ChapterPlayer({ chapter, onComplete, onExit }: ChapterPlayerProps) {
   const router = useRouter()
   const isMobile = useIsMobile()
+  const { addRightsDiscovered, saveChapterProgress } = useGlobalProgress()
   
   // États du jeu
   const [currentScene, setCurrentScene] = useState<string>(chapter.config?.startScene || 'intro')
   const [currentLineIndex, setCurrentLineIndex] = useState<number>(0)
   const [showChoices, setShowChoices] = useState<boolean>(false)
   const [textComplete, setTextComplete] = useState<boolean>(false)
+  const [isTyping, setIsTyping] = useState<boolean>(false)
   const [showEndScreen, setShowEndScreen] = useState<boolean>(false)
   const [showIntroScreen, setShowIntroScreen] = useState<boolean>(true)
   const [endType, setEndType] = useState<string>('positive')
@@ -49,9 +52,15 @@ export default function ChapterPlayer({ chapter, onComplete, onExit }: ChapterPl
   const [volume, setVolume] = useState<number>(0.5)
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const voiceOverRef = useRef<HTMLAudioElement | null>(null)
+  const typingTimerRef = useRef<number | null>(null)
+  const revealTimerRef = useRef<number | null>(null)
   
   // Progression
   const [unlockedRights, setUnlockedRights] = useState<Set<number>>(new Set())
+  const [celebratingRight, setCelebratingRight] = useState<UnlockableRight | null>(null)
+  const [celebrationParticles, setCelebrationParticles] = useState<Array<{ x: number; y: number; color: string; size: number }>>([])
+  const [visitedScenes, setVisitedScenes] = useState<Set<string>>(new Set([chapter.config?.startScene || 'intro']))
+  const [choicesMade, setChoicesMade] = useState<Array<{ scene: string; choiceIndex: number; timestamp: string }>>([])
   
   // Données actuelles
   const currentDialogue = chapter.dialogue[currentScene]
@@ -62,18 +71,36 @@ export default function ChapterPlayer({ chapter, onComplete, onExit }: ChapterPl
     if (!chapter.unlockableRights) return
     
     const newUnlocked = new Set(unlockedRights)
+    let justUnlocked: UnlockableRight | null = null
     
     for (const right of chapter.unlockableRights) {
       if (
         right.unlockCondition.scene === currentScene &&
-        currentLineIndex >= right.unlockCondition.lineIndex
+        currentLineIndex >= right.unlockCondition.lineIndex &&
+        !unlockedRights.has(right.id)
       ) {
         newUnlocked.add(right.id)
+        justUnlocked = right
       }
     }
     
     if (newUnlocked.size !== unlockedRights.size) {
       setUnlockedRights(newUnlocked)
+      addRightsDiscovered(Array.from(newUnlocked))
+
+      if (justUnlocked) {
+        setCelebratingRight(justUnlocked)
+        const colors = ['#22d3ee', '#a3e635', '#facc15', '#f472b6', '#818cf8']
+        const particles = Array.from({ length: 22 }).map((_, i) => ({
+          x: (Math.random() - 0.5) * 700,
+          y: (Math.random() - 0.5) * 520,
+          color: colors[i % colors.length],
+          size: 8 + (i % 6),
+        }))
+        setCelebrationParticles(particles)
+
+        window.setTimeout(() => setCelebratingRight(null), 2600)
+      }
     }
   }, [currentScene, currentLineIndex, chapter.unlockableRights, unlockedRights])
   
@@ -104,25 +131,39 @@ export default function ChapterPlayer({ chapter, onComplete, onExit }: ChapterPl
     if (currentLine && !showIntroScreen) {
       setShowChoices(false)
       setTextComplete(false)
+      setIsTyping(true)
+
+      if (typingTimerRef.current) window.clearTimeout(typingTimerRef.current)
+      if (revealTimerRef.current) window.clearTimeout(revealTimerRef.current)
+
+      // Stopper le voice-over précédent
+      if (voiceOverRef.current) {
+        voiceOverRef.current.pause()
+        voiceOverRef.current = null
+      }
       
-      // Jouer le voice-over si disponible
-      if (currentLine.audioFile && !musiqueMuted) {
-        if (voiceOverRef.current) {
-          voiceOverRef.current.pause()
+      typingTimerRef.current = window.setTimeout(() => {
+        setIsTyping(false)
+
+        // Jouer le voice-over si disponible
+        if (currentLine.audioFile && !musiqueMuted) {
+          const audio = new Audio(currentLine.audioFile)
+          audio.volume = volume
+          voiceOverRef.current = audio
+
+          audio.addEventListener('ended', () => setTextComplete(true))
+          audio.play().catch(() => {
+            revealTimerRef.current = window.setTimeout(() => setTextComplete(true), 900)
+          })
+        } else {
+          // Pas de voice-over, simuler un petit délai de lecture
+          revealTimerRef.current = window.setTimeout(() => setTextComplete(true), 700)
         }
-        
-        const audio = new Audio(currentLine.audioFile)
-        audio.volume = volume
-        voiceOverRef.current = audio
-        
-        audio.addEventListener('ended', () => setTextComplete(true))
-        audio.play().catch(() => {
-          setTimeout(() => setTextComplete(true), 1000)
-        })
-      } else {
-        // Pas de voice-over, simuler l'apparition du texte
-        const timer = setTimeout(() => setTextComplete(true), 1000)
-        return () => clearTimeout(timer)
+      }, 650)
+
+      return () => {
+        if (typingTimerRef.current) window.clearTimeout(typingTimerRef.current)
+        if (revealTimerRef.current) window.clearTimeout(revealTimerRef.current)
       }
     }
   }, [currentScene, currentLineIndex, showIntroScreen, musiqueMuted, volume])
@@ -140,9 +181,17 @@ export default function ChapterPlayer({ chapter, onComplete, onExit }: ChapterPl
     } else {
       // Vérifier si c'est une fin
       if (currentScene.startsWith('fin_')) {
-        setEndType(currentScene.replace('fin_', ''))
+        const computedEndType = currentScene.replace('fin_', '')
+        setEndType(computedEndType)
         setShowEndScreen(true)
-        onComplete?.(chapter.metadata.id, Array.from(unlockedRights))
+        const unlocked = Array.from(unlockedRights)
+        saveChapterProgress(chapter.metadata.id, {
+          endType: computedEndType,
+          unlockedRights: unlocked,
+          choicesMade,
+          completedAt: new Date().toISOString(),
+        })
+        onComplete?.(chapter.metadata.id, unlocked)
       }
     }
   }
@@ -154,6 +203,12 @@ export default function ChapterPlayer({ chapter, onComplete, onExit }: ChapterPl
     )
     
     if (mapping) {
+      const nextChoices = [
+        ...choicesMade,
+        { scene: currentScene, choiceIndex, timestamp: new Date().toISOString() }
+      ]
+      setChoicesMade(nextChoices)
+
       if (mapping.action === 'redirect' && mapping.actionTarget) {
         router.push(mapping.actionTarget)
         return
@@ -162,10 +217,17 @@ export default function ChapterPlayer({ chapter, onComplete, onExit }: ChapterPl
       if (mapping.action === 'end') {
         setEndType('positive')
         setShowEndScreen(true)
+        saveChapterProgress(chapter.metadata.id, {
+          endType: 'positive',
+          unlockedRights: Array.from(unlockedRights),
+          choicesMade: nextChoices,
+          completedAt: new Date().toISOString(),
+        })
         return
       }
       
       setCurrentScene(mapping.targetScene)
+      setVisitedScenes(prev => new Set([...Array.from(prev), mapping.targetScene]))
       setCurrentLineIndex(0)
       setShowChoices(false)
     }
@@ -178,7 +240,12 @@ export default function ChapterPlayer({ chapter, onComplete, onExit }: ChapterPl
     setCurrentLineIndex(0)
     setShowChoices(false)
     setTextComplete(false)
+    setIsTyping(false)
     setUnlockedRights(new Set())
+    setCelebratingRight(null)
+    setCelebrationParticles([])
+    setVisitedScenes(new Set([chapter.config?.startScene || 'intro']))
+    setChoicesMade([])
   }
   
   // Styles selon le speaker
@@ -231,6 +298,64 @@ export default function ChapterPlayer({ chapter, onComplete, onExit }: ChapterPl
     if (currentLine.speaker === 'narrateur') return '📖 NARRATEUR'
     return currentLine.speaker.toUpperCase()
   }
+
+  const TypingIndicator = () => (
+    <div className="flex items-center gap-1.5 py-1">
+      {[0, 1, 2].map(i => (
+        <motion.div
+          key={i}
+          className="w-2.5 h-2.5 rounded-full opacity-70"
+          style={{ backgroundColor: 'currentColor' }}
+          animate={{ y: [0, -7, 0] }}
+          transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.15 }}
+        />
+      ))}
+    </div>
+  )
+
+  const RightUnlockedCelebration = ({ right }: { right: UnlockableRight }) => (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
+    >
+      <motion.div
+        className="absolute inset-0 bg-black/50"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: [0, 0.55, 0.45] }}
+        transition={{ duration: 0.8 }}
+      />
+
+      {celebrationParticles.map((p, i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full"
+          style={{ width: p.size, height: p.size, backgroundColor: p.color }}
+          initial={{ x: 0, y: 0, scale: 0, opacity: 0 }}
+          animate={{ x: p.x, y: p.y, scale: [0, 1.4, 0.4], opacity: [0, 1, 0] }}
+          transition={{ duration: 1.8, ease: 'easeOut' }}
+        />
+      ))}
+
+      <motion.div
+        className="relative bg-lime-400 border-4 border-black shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] p-6 md:p-8 max-w-xl text-center"
+        initial={{ scale: 0, rotate: -10, y: 20 }}
+        animate={{ scale: [0, 1.12, 1], rotate: [-10, 5, 0], y: [20, -10, 0] }}
+        transition={{ type: 'spring', stiffness: 280, damping: 18 }}
+      >
+        <motion.div
+          className="text-5xl md:text-6xl mb-3"
+          animate={{ scale: [1, 1.25, 1] }}
+          transition={{ duration: 0.55, repeat: 2 }}
+        >
+          ✨
+        </motion.div>
+        <h3 className="text-xl md:text-2xl font-black mb-2">DROIT DÉBLOQUÉ !</h3>
+        <p className="text-base md:text-lg font-bold">{right.text}</p>
+      </motion.div>
+    </motion.div>
+  )
   
   // Composant pour afficher un droit
   const RightItem = ({ right, isUnlocked }: { right: UnlockableRight, isUnlocked: boolean }) => {
@@ -343,6 +468,9 @@ export default function ChapterPlayer({ chapter, onComplete, onExit }: ChapterPl
       message: 'Tu as terminé ce chapitre!',
       color: 'bg-cyan-400'
     }
+
+    const possibleTargets = Array.from(new Set(chapter.choiceMappings.map(m => m.targetScene)))
+    const unexplored = possibleTargets.filter(s => !visitedScenes.has(s))
     
     return (
       <div className="min-h-screen bg-white flex items-center justify-center p-2 sm:p-4">
@@ -370,6 +498,25 @@ export default function ChapterPlayer({ chapter, onComplete, onExit }: ChapterPl
                 <p className="text-center mt-4 text-lime-400 font-bold text-sm">
                   {unlockedRights.size}/{chapter.unlockableRights.length} droits débloqués
                 </p>
+              </div>
+            )}
+
+            {/* Branches non explorées */}
+            {unexplored.length > 0 && (
+              <div className="bg-purple-950 text-white border-2 sm:border-4 border-black p-3 sm:p-4 md:p-6 mb-6">
+                <h2 className="text-lg sm:text-xl md:text-2xl font-black mb-2 text-center">
+                  🔀 BRANCHES NON EXPLORÉES ({unexplored.length})
+                </h2>
+                <p className="text-center text-sm sm:text-base font-bold text-purple-200 mb-3">
+                  Rejoue pour découvrir d'autres chemins et d'autres fins.
+                </p>
+                <div className="grid sm:grid-cols-2 gap-2">
+                  {unexplored.slice(0, 4).map((sceneKey) => (
+                    <div key={sceneKey} className="bg-purple-900/60 border-2 border-purple-300 p-3 font-black">
+                      <span className="text-purple-200">???</span> <span className="blur-[2px]">Branche mystère</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
 
@@ -466,7 +613,7 @@ export default function ChapterPlayer({ chapter, onComplete, onExit }: ChapterPl
                   {getSpeakerLabel()}
                 </div>
                 <div className="text-base lg:text-lg font-bold leading-tight">
-                  {currentLine.text}
+                  {isTyping ? <TypingIndicator /> : currentLine.text}
                 </div>
               </div>
             </motion.div>
@@ -504,7 +651,7 @@ export default function ChapterPlayer({ chapter, onComplete, onExit }: ChapterPl
               {getSpeakerLabel()}
             </div>
             <div className="text-sm sm:text-base font-bold leading-tight">
-              {currentLine.text}
+              {isTyping ? <TypingIndicator /> : currentLine.text}
             </div>
           </div>
         </motion.div>
@@ -575,6 +722,10 @@ export default function ChapterPlayer({ chapter, onComplete, onExit }: ChapterPl
           </ul>
         </motion.div>
       )}
+
+      <AnimatePresence>
+        {celebratingRight && <RightUnlockedCelebration right={celebratingRight} />}
+      </AnimatePresence>
     </div>
   )
 }

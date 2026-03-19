@@ -1,6 +1,6 @@
 /**
  * Interface Admin pour générer de nouveaux chapitres
- * Utilise Claude Sonnet 4.5 pour les scénarios et Nano Banana Pro pour les images
+ * Utilise Claude Opus 4.6 pour les scénarios et Nano Banana 2 pour les images
  */
 'use client'
 
@@ -44,7 +44,7 @@ export default function GeneratePage() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [generatedChapter, setGeneratedChapter] = useState<Partial<Chapter> | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [step, setStep] = useState<'form' | 'preview' | 'images'>('form')
+  const [step, setStep] = useState<'form' | 'preview' | 'images' | 'audio'>('form')
   const [imageProgress, setImageProgress] = useState<{current: number, total: number, status: string}>({ current: 0, total: 0, status: '' })
   
   // Ajouter un personnage
@@ -404,7 +404,7 @@ export default function GeneratePage() {
                   >
                     ⏳
                   </motion.span>
-                  Génération en cours avec Claude Sonnet 4.5...
+                  Génération en cours avec Claude Opus 4.6...
                 </span>
               ) : (
                 '🚀 Générer le scénario'
@@ -505,12 +505,23 @@ export default function GeneratePage() {
             onBack={() => setStep('preview')}
             onUpdateChapter={(updated) => setGeneratedChapter(updated)}
             onSave={saveChapter}
+            onNextStep={() => setStep('audio')}
+          />
+        )}
+
+        {/* Étape 4: Génération des audios - ElevenLabs TTS */}
+        {step === 'audio' && generatedChapter && (
+          <AudioGeneratorStep
+            chapter={generatedChapter}
+            onBack={() => setStep('images')}
+            onUpdateChapter={(updated) => setGeneratedChapter(updated)}
+            onSave={saveChapter}
           />
         )}
         
         {/* Instructions */}
         <div className="mt-8 text-white/40 text-sm text-center">
-          <p>Utilise Claude Sonnet 4.5 pour les scénarios et Nano Banana Pro pour les images.</p>
+          <p>Utilise Claude Opus 4.6 pour les scénarios et Nano Banana 2 pour les images.</p>
           <p>Les chapitres générés sont sauvegardés dans <code className="text-purple-400">data/chapters/</code></p>
         </div>
       </div>
@@ -544,12 +555,14 @@ function ImageGeneratorStep({
   chapter, 
   onBack, 
   onUpdateChapter,
-  onSave 
+  onSave,
+  onNextStep
 }: { 
   chapter: Partial<Chapter>
   onBack: () => void
   onUpdateChapter: (chapter: Partial<Chapter>) => void
   onSave: () => void
+  onNextStep?: () => void
 }) {
   // Extraire toutes les images à générer
   const [imageList, setImageList] = useState<Array<{
@@ -756,7 +769,7 @@ Teenager 15-17 years old, diverse Quebec youth.`
           {/* Prompt (éditable) */}
           <div className="mb-4">
             <label className="block text-white/60 text-sm mb-2">
-              Prompt pour Nano Banana Pro:
+              Prompt pour Nano Banana 2:
             </label>
             <textarea
               value={editingPrompt ?? currentImage.prompt}
@@ -952,6 +965,269 @@ Teenager 15-17 years old, diverse Quebec youth.`
           className="flex-1 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl font-bold hover:shadow-lg"
         >
           💾 Sauvegarder le chapitre ({doneCount}/{imageList.length} images)
+        </button>
+      </div>
+    </motion.div>
+  )
+}
+
+// Composant pour générer les audios (ElevenLabs) une ligne à la fois
+function AudioGeneratorStep({
+  chapter,
+  onBack,
+  onUpdateChapter,
+  onSave,
+}: {
+  chapter: Partial<Chapter>
+  onBack: () => void
+  onUpdateChapter: (chapter: Partial<Chapter>) => void
+  onSave: () => void
+}) {
+  const chapterSlug = chapter.metadata?.slug || chapter.metadata?.id || 'chapter'
+
+  const [audioList, setAudioList] = useState<Array<{
+    sceneKey: string
+    lineIndex: number
+    speaker: string
+    text: string
+    emotion?: string
+    status: 'pending' | 'generating' | 'done' | 'error'
+    audioFile?: string | null
+  }>>(() => {
+    const list: any[] = []
+    if (chapter.dialogue) {
+      Object.entries(chapter.dialogue).forEach(([sceneKey, lines]) => {
+        ;(lines as any[]).forEach((line, lineIndex) => {
+          list.push({
+            sceneKey,
+            lineIndex,
+            speaker: line.speaker,
+            text: line.text,
+            emotion: line.emotion,
+            status: line.audioFile ? 'done' : 'pending',
+            audioFile: line.audioFile ?? null,
+          })
+        })
+      })
+    }
+    return list
+  })
+
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [isGenerating, setIsGenerating] = useState(false)
+  const currentAudio = audioList[currentIndex]
+  const doneCount = audioList.filter(a => a.status === 'done').length
+
+  const generateSingleAudio = async () => {
+    if (!currentAudio || isGenerating) return
+    setIsGenerating(true)
+
+    const nextList = [...audioList]
+    nextList[currentIndex].status = 'generating'
+    setAudioList(nextList)
+
+    try {
+      const response = await fetch('/api/generate/audio', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text: currentAudio.text,
+          speaker: currentAudio.speaker,
+          emotion: currentAudio.emotion,
+          chapterSlug,
+          sceneKey: currentAudio.sceneKey,
+          lineIndex: currentAudio.lineIndex,
+        }),
+      })
+
+      const data = await response.json()
+      const updated = [...audioList]
+
+      if (data.success && data.audioPath) {
+        updated[currentIndex].status = 'done'
+        updated[currentIndex].audioFile = data.audioPath
+
+        if (chapter.dialogue) {
+          const updatedDialogue = { ...chapter.dialogue }
+          const scene = updatedDialogue[currentAudio.sceneKey] as any[]
+          if (scene && scene[currentAudio.lineIndex]) {
+            scene[currentAudio.lineIndex].audioFile = data.audioPath
+          }
+          onUpdateChapter({ ...chapter, dialogue: updatedDialogue })
+        }
+      } else {
+        updated[currentIndex].status = 'error'
+      }
+
+      setAudioList(updated)
+    } catch {
+      const updated = [...audioList]
+      updated[currentIndex].status = 'error'
+      setAudioList(updated)
+    } finally {
+      setIsGenerating(false)
+    }
+  }
+
+  const goNext = () => {
+    if (currentIndex < audioList.length - 1) setCurrentIndex(currentIndex + 1)
+  }
+
+  const goPrev = () => {
+    if (currentIndex > 0) setCurrentIndex(currentIndex - 1)
+  }
+
+  const skipAudio = () => {
+    const updated = [...audioList]
+    updated[currentIndex].status = 'done'
+    updated[currentIndex].audioFile = null
+    setAudioList(updated)
+    goNext()
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="space-y-6"
+    >
+      <div className="bg-white/10 backdrop-blur-lg rounded-xl p-4 border border-white/20">
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-xl font-bold text-white">🎤 Génération des audios</h2>
+          <span className="text-white/60">
+            {currentIndex + 1} / {audioList.length} ({doneCount} générés)
+          </span>
+        </div>
+        <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 transition-all"
+            style={{ width: `${audioList.length > 0 ? (doneCount / audioList.length) * 100 : 0}%` }}
+          />
+        </div>
+      </div>
+
+      {currentAudio && (
+        <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
+          <div className="flex items-center gap-2 mb-4 flex-wrap">
+            <span className="px-2 py-1 bg-blue-500/30 rounded text-blue-300 text-sm font-semibold">
+              {currentAudio.sceneKey}
+            </span>
+            <span className="px-2 py-1 bg-yellow-500/30 rounded text-yellow-300 text-sm">
+              {currentAudio.speaker}
+            </span>
+            {currentAudio.emotion && (
+              <span className="px-2 py-1 bg-purple-500/30 rounded text-purple-300 text-sm">
+                {currentAudio.emotion}
+              </span>
+            )}
+            <span
+              className={`ml-auto px-2 py-1 rounded text-sm font-semibold ${
+                currentAudio.status === 'done'
+                  ? 'bg-green-500/30 text-green-300'
+                  : currentAudio.status === 'generating'
+                    ? 'bg-yellow-500/30 text-yellow-300'
+                    : currentAudio.status === 'error'
+                      ? 'bg-red-500/30 text-red-300'
+                      : 'bg-white/10 text-white/60'
+              }`}
+            >
+              {currentAudio.status === 'done'
+                ? '✅ Fait'
+                : currentAudio.status === 'generating'
+                  ? '⏳ En cours...'
+                  : currentAudio.status === 'error'
+                    ? '❌ Erreur'
+                    : '⏸️ En attente'}
+            </span>
+          </div>
+
+          <div className="bg-white/5 rounded-lg p-4 mb-4">
+            <p className="text-white/80 italic">"{currentAudio.text}"</p>
+          </div>
+
+          {currentAudio.audioFile && (
+            <div className="mb-4">
+              <label className="block text-white/60 text-sm mb-2">Audio généré:</label>
+              <audio controls className="w-full">
+                <source src={currentAudio.audioFile} type="audio/mpeg" />
+              </audio>
+            </div>
+          )}
+
+          <div className="flex flex-wrap gap-3">
+            <button
+              onClick={goPrev}
+              disabled={currentIndex === 0}
+              className="px-4 py-2 bg-white/10 text-white rounded-lg disabled:opacity-30"
+            >
+              ← Précédent
+            </button>
+
+            <button
+              onClick={skipAudio}
+              className="px-4 py-2 bg-yellow-500/20 text-yellow-300 rounded-lg hover:bg-yellow-500/30"
+            >
+              ⏭️ Passer (sans audio)
+            </button>
+
+            <button
+              onClick={generateSingleAudio}
+              disabled={isGenerating || currentAudio.status === 'done'}
+              className="flex-1 px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg font-semibold disabled:opacity-50"
+            >
+              {isGenerating
+                ? '⏳ Génération...'
+                : currentAudio.status === 'done'
+                  ? '✅ Déjà généré'
+                  : '🎤 Générer cet audio'}
+            </button>
+
+            <button
+              onClick={goNext}
+              disabled={currentIndex === audioList.length - 1}
+              className="px-4 py-2 bg-white/10 text-white rounded-lg disabled:opacity-30"
+            >
+              Suivant →
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div className="bg-white/10 backdrop-blur-lg rounded-xl p-4 border border-white/20">
+        <h3 className="text-white font-semibold mb-3">📋 Tous les audios ({audioList.length})</h3>
+        <div className="grid grid-cols-6 md:grid-cols-10 gap-2 max-h-32 overflow-y-auto">
+          {audioList.map((a, idx) => (
+            <button
+              key={`${a.sceneKey}-${a.lineIndex}`}
+              onClick={() => setCurrentIndex(idx)}
+              className={`aspect-square rounded-lg flex items-center justify-center text-xs font-bold transition-all ${
+                idx === currentIndex ? 'ring-2 ring-cyan-400' : ''
+              } ${
+                a.status === 'done'
+                  ? 'bg-green-500/30 text-green-300'
+                  : a.status === 'error'
+                    ? 'bg-red-500/30 text-red-300'
+                    : 'bg-white/10 text-white/60'
+              }`}
+            >
+              {idx + 1}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex gap-4">
+        <button
+          onClick={onBack}
+          className="flex-1 py-3 bg-white/10 text-white rounded-xl font-semibold hover:bg-white/20"
+        >
+          ← Retour aux images
+        </button>
+        <button
+          onClick={onSave}
+          className="flex-1 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl font-bold hover:shadow-lg"
+        >
+          💾 Sauvegarder le chapitre ({doneCount}/{audioList.length} audios)
         </button>
       </div>
     </motion.div>

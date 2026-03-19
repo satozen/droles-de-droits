@@ -1,7 +1,10 @@
 /**
- * API Route pour générer des images avec Nano Banana Pro (Gemini 3 Pro Image Preview)
+ * API Route pour générer des images avec Nano Banana 2 (Gemini 3.1 Flash Image Preview)
  * Utilise le SDK officiel @google/genai
- * Documentation: https://ai.google.dev/gemini-api/docs/image-generation
+ *
+ * Charge automatiquement la bible visuelle (personnages + lieux) pour injecter
+ * les bonnes images de référence et descriptions d'apparence dans chaque prompt.
+ * Nano Banana 2 supporte jusqu'à 5 personnages + 14 objets par requête.
  */
 
 import { NextResponse } from 'next/server'
@@ -10,320 +13,281 @@ import { writeFile, mkdir, readFile } from 'fs/promises'
 import path from 'path'
 import type { GenerateImageRequest, GenerateImageResponse } from '@/types/chapter'
 
-// Gemini 3 Pro Image Preview (Nano Banana Pro)
-// - High-resolution: 1K, 2K, 4K
-// - Up to 14 reference images (6 objects + 5 humans for character consistency)
-// - Advanced text rendering
-// - Thinking mode for complex prompts
-const MODEL = 'gemini-3-pro-image-preview'
+const MODEL = 'gemini-3.1-flash-image-preview'
 
-// Images de référence pour les personnages (cohérence visuelle)
-// TOUJOURS envoyer l'image d'Alex pour maintenir sa cohérence
-const CHARACTER_REFERENCES: { [key: string]: string } = {
-  'alex': '/images/jeune_reflechi.webp',
-  'alex_confiant': '/images/refus_drogue_non.webp',
-  'alex_triste': '/images/cafeteria_triste.webp',
-  'centre_jeunesse': '/images/establishing_centre jeunesse.webp',
-  'educateur': '/images/intervenante_arrive_lieu_echange_drogues.webp',
-  'police': '/images/police_centre_jeunesse.webp',
-  'fugue': '/images/fugue_course.webp',
-  'tribunal': '/images/jeune_tribunal.webp',
-  'famille': '/images/jeune_entoure_famille_avocats.webp',
+// ---------------------------------------------------------------------------
+// Bible loading (cached in-process)
+// ---------------------------------------------------------------------------
+
+let cachedPersonnages: Record<string, any> | null = null
+let cachedLieux: Record<string, any> | null = null
+
+async function loadBible() {
+  if (!cachedPersonnages) {
+    try {
+      const raw = await readFile(path.join(process.cwd(), 'data', 'bible', 'personnages.json'), 'utf-8')
+      cachedPersonnages = JSON.parse(raw)
+    } catch { cachedPersonnages = {} }
+  }
+  if (!cachedLieux) {
+    try {
+      const raw = await readFile(path.join(process.cwd(), 'data', 'bible', 'lieux.json'), 'utf-8')
+      cachedLieux = JSON.parse(raw)
+    } catch { cachedLieux = {} }
+  }
+  return { personnages: cachedPersonnages!, lieux: cachedLieux! }
 }
 
-// Image par défaut d'Alex - TOUJOURS incluse pour cohérence
-const DEFAULT_ALEX_REFERENCE = '/images/jeune_reflechi.webp'
+// ---------------------------------------------------------------------------
+// Image loading helper
+// ---------------------------------------------------------------------------
 
-// Types de plans pour varier les compositions
-type ShotType = 'establishing' | 'medium' | 'closeup_character' | 'closeup_object' | 'two_shot' | 'over_shoulder' | 'pov'
-
-const SHOT_DESCRIPTIONS: { [key in ShotType]: string } = {
-  'establishing': 'Wide establishing shot showing the full environment and setting, characters small in frame, emphasizing location and atmosphere',
-  'medium': 'Medium shot from waist up, character centered, showing body language and facial expression clearly',
-  'closeup_character': 'Close-up shot of character face, filling most of frame, intense focus on emotion and expression',
-  'closeup_object': 'Extreme close-up on a specific object or detail, shallow depth of field, dramatic emphasis',
-  'two_shot': 'Two-shot framing both characters in conversation, balanced composition, showing their interaction',
-  'over_shoulder': 'Over-the-shoulder shot, one character in foreground (back visible), other character facing camera',
-  'pov': 'Point-of-view shot, showing what the character sees, first-person perspective'
-}
-
-// Charger une image locale en base64
-async function loadImageAsBase64(imagePath: string): Promise<{ data: string, mimeType: string } | null> {
+async function loadImageAsBase64(imagePath: string): Promise<{ data: string; mimeType: string } | null> {
   try {
     const fullPath = path.join(process.cwd(), 'public', imagePath)
     const imageBuffer = await readFile(fullPath)
     const ext = path.extname(imagePath).toLowerCase()
-    const mimeTypes: { [key: string]: string } = {
-      '.webp': 'image/webp',
-      '.jpg': 'image/jpeg',
-      '.jpeg': 'image/jpeg',
-      '.png': 'image/png',
-      '.gif': 'image/gif'
+    const mimeTypes: Record<string, string> = {
+      '.webp': 'image/webp', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg',
+      '.png': 'image/png', '.gif': 'image/gif',
     }
-    return {
-      data: imageBuffer.toString('base64'),
-      mimeType: mimeTypes[ext] || 'image/webp'
-    }
-  } catch (error) {
-    console.error(`Erreur chargement image ${imagePath}:`, error)
+    return { data: imageBuffer.toString('base64'), mimeType: mimeTypes[ext] || 'image/webp' }
+  } catch {
     return null
   }
 }
 
-export async function POST(request: Request) {
-  try {
-    const body: GenerateImageRequest = await request.json()
-
-    // Validation
-    if (!body.prompt) {
-      return NextResponse.json(
-        { success: false, error: 'Prompt requis' },
-        { status: 400 }
-      )
-    }
-
-    // Vérifier la clé API Gemini
-    const apiKey = process.env.GEMINI_API_KEY
-    if (!apiKey) {
-      console.warn('Clé API Gemini non configurée, utilisation de placeholder')
-      return NextResponse.json({
-        success: true,
-        imagePath: getPlaceholderImage(body.style),
-        isPlaceholder: true,
-        error: 'GEMINI_API_KEY non configurée'
-      })
-    }
-
-    // Initialiser le client Google GenAI
-    const ai = new GoogleGenAI({ apiKey })
-
-    // Construire le prompt enrichi
-    const enhancedPrompt = buildImagePrompt(body)
-    console.log('🎨 Generating image with prompt:', enhancedPrompt.slice(0, 150) + '...')
-
-    // Préparer les contenus (texte + images de référence)
-    const contents: any[] = []
-    
-    // TOUJOURS ajouter l'image de référence d'Alex pour cohérence
-    // Sauf si c'est explicitement un plan sans personnage
-    const shotType = detectShotType(body.prompt, body.shotType)
-    const needsAlexReference = shotType !== 'closeup_object' && shotType !== 'establishing'
-    
-    if (needsAlexReference) {
-      const alexRef = await loadImageAsBase64(DEFAULT_ALEX_REFERENCE)
-      if (alexRef) {
-        contents.push({
-          inlineData: {
-            mimeType: alexRef.mimeType,
-            data: alexRef.data
-          }
-        })
-        contents.push({
-          text: "CRITICAL: This is Alex, the main character. ALWAYS maintain his exact appearance: brown hair, blue eyes, light blue jacket, freckles. He must look identical in every scene."
-        })
-        console.log('📷 Added Alex reference image for character consistency')
-      }
-    }
-    
-    // Ajouter les images de référence supplémentaires si fournies
-    if (body.referenceImages && body.referenceImages.length > 0) {
-      for (const refImage of body.referenceImages) {
-        // Éviter de dupliquer la référence d'Alex
-        if (refImage === DEFAULT_ALEX_REFERENCE) continue
-        
-        const imageData = await loadImageAsBase64(refImage)
-        if (imageData) {
-          contents.push({
-            inlineData: {
-              mimeType: imageData.mimeType,
-              data: imageData.data
-            }
-          })
-          contents.push({
-            text: "Use this additional reference for style, setting, or secondary character appearance."
-          })
-        }
-      }
-    }
-    
-    // Ajouter le prompt principal avec le type de plan
-    const promptWithShot = addShotTypeToPrompt(enhancedPrompt, shotType)
-    contents.push({ text: promptWithShot })
-    console.log('🎬 Shot type:', shotType)
-
-    // Appeler Gemini pour générer l'image
-    const response = await ai.models.generateContent({
-      model: MODEL,
-      contents: [{ parts: contents }],
-      config: {
-        responseModalities: ['IMAGE', 'TEXT'],
-      }
-    })
-
-    console.log('📡 Gemini response received')
-
-    // Extraire l'image de la réponse
-    let imageData: string | null = null
-    let textResponse: string | null = null
-
-    if (response.candidates?.[0]?.content?.parts) {
-      for (const part of response.candidates[0].content.parts) {
-        if (part.inlineData?.data) {
-          imageData = part.inlineData.data
-          console.log('✅ Image data received from Gemini')
-        } else if (part.text) {
-          textResponse = part.text
-        }
-      }
-    }
-
-    if (!imageData) {
-      console.warn('⚠️ Pas d\'image dans la réponse Gemini')
-      console.log('Response:', JSON.stringify(response, null, 2).slice(0, 500))
-      return NextResponse.json({
-        success: true,
-        imagePath: getPlaceholderImage(body.style),
-        isPlaceholder: true,
-        error: 'Gemini n\'a pas retourné d\'image',
-        textResponse
-      })
-    }
-
-    // Sauvegarder l'image générée
-    const imagePath = await saveImage(imageData, body.prompt)
-    console.log('💾 Image saved to:', imagePath)
-
-    return NextResponse.json({
-      success: true,
-      imagePath,
-      imageData: `data:image/png;base64,${imageData}`,
-      isPlaceholder: false,
-      textResponse
-    } as GenerateImageResponse)
-
-  } catch (error: any) {
-    console.error('❌ Erreur génération image:', error.message || error)
-    
-    // Vérifier si c'est une erreur d'API
-    if (error.message?.includes('API key') || error.message?.includes('authentication')) {
-      return NextResponse.json({
-        success: true,
-        imagePath: getPlaceholderImage(),
-        isPlaceholder: true,
-        error: 'Problème d\'authentification API Gemini'
-      })
-    }
-    
-    return NextResponse.json({
-      success: true,
-      imagePath: getPlaceholderImage(),
-      isPlaceholder: true,
-      error: error.message || 'Erreur lors de la génération'
-    })
+// Inject an image + description into the content array
+async function injectReference(contents: any[], imagePath: string, instruction: string) {
+  const img = await loadImageAsBase64(imagePath)
+  if (img) {
+    contents.push({ inlineData: { mimeType: img.mimeType, data: img.data } })
+    contents.push({ text: instruction })
+    return true
   }
+  return false
 }
 
-// Types de plans cinématographiques pour varier les images
-type ShotType = 'establishing' | 'two_shot' | 'closeup_speaker' | 'closeup_listener' | 'object' | 'over_shoulder' | 'wide' | 'medium'
+// ---------------------------------------------------------------------------
+// Intelligent reference selection
+// ---------------------------------------------------------------------------
 
-// Déterminer automatiquement le type de plan selon le contexte
-function determineShotType(prompt: string, speaker: string, emotion?: string): ShotType {
-  const promptLower = prompt.toLowerCase()
-  
-  // Mots-clés pour gros plan sur objet
-  const objectKeywords = ['regarde', 'tient', 'prend', 'donne', 'montre', 'pilule', 'drogue', 'papier', 'lettre', 'téléphone', 'clé', 'sac', 'argent']
-  if (objectKeywords.some(k => promptLower.includes(k))) {
-    return 'object'
+// Two existing style-reference images we always try to attach so Gemini
+// stays visually consistent with the project's graphic-novel look.
+const STYLE_REFS = [
+  '/images/jeune_reflechi.webp',
+  '/images/cafeteria_dialogue.webp',
+]
+
+async function buildReferenceContents(
+  body: GenerateImageRequest,
+  bible: { personnages: Record<string, any>; lieux: Record<string, any> },
+  shotType: string,
+) {
+  const contents: any[] = []
+  const loaded = new Set<string>()
+
+  // 1) STYLE REFERENCES — attach 1-2 approved images so Gemini knows the look
+  for (const ref of STYLE_REFS) {
+    if (loaded.size >= 2) break
+    const ok = await injectReference(contents, ref, 
+      'STYLE REFERENCE: Match the semi-realistic graphic novel style, color palette, and rendering quality of this image exactly.')
+    if (ok) loaded.add(ref)
   }
-  
-  // Mots-clés pour plan d'établissement
-  const establishingKeywords = ['arrive', 'entre', 'sort', 'plus tard', 'le lendemain', 'quelques jours', 'semaines plus tard', 'mois plus tard']
-  if (establishingKeywords.some(k => promptLower.includes(k))) {
-    return 'establishing'
+
+  // 2) CHARACTER REFERENCES — everyone mentioned in the scene
+  const speakerList = (body.characters || []).map(c => c.toLowerCase())
+  // Also scan prompt for character names
+  const promptLower = (body.prompt + ' ' + (body.sceneContext || '')).toLowerCase()
+  for (const [id, char] of Object.entries(bible.personnages)) {
+    const nameLC = (char.nom || id).toLowerCase()
+    const mentioned = speakerList.includes(id) || promptLower.includes(nameLC) || promptLower.includes(id)
+    if (!mentioned) continue
+
+    const refs: string[] = char.references || []
+    if (refs.length === 0) continue
+
+    for (const refPath of refs) {
+      if (loaded.has(refPath) || loaded.size >= 6) continue
+      const apparence = char.apparence
+        ? `${char.apparence.cheveux || ''}, ${char.apparence.yeux || ''}, ${char.apparence.peau || ''}, wearing ${char.apparence.vetements_defaut || ''}`
+        : ''
+      const ok = await injectReference(contents, refPath,
+        `CHARACTER REFERENCE — ${char.nom} (${char.role}, ${char.age}): ALWAYS maintain this exact appearance: ${apparence}. This character must look identical in every scene.`)
+      if (ok) loaded.add(refPath)
+    }
   }
-  
-  // Si c'est une émotion forte, gros plan sur le speaker
-  const intenseEmotions = ['peur', 'en_colere', 'triste', 'choque', 'determine']
-  if (emotion && intenseEmotions.includes(emotion)) {
-    return 'closeup_speaker'
+
+  // 3) LOCATION REFERENCES — detect which lieu matches the scene
+  const locationKeywords: Record<string, string[]> = {
+    cafeteria:         ['cafétéria', 'cafeteria', 'caf', 'mange', 'repas', 'table'],
+    couloir_principal: ['couloir', 'corridor', 'hallway'],
+    chambre_alex:      ['chambre', 'lit', 'sa chambre', 'room'],
+    bureau_sophie:     ['bureau', 'office', 'intervenante', 'intervenant', 'consultation'],
+    exterieur_centre:  ['extérieur', 'dehors', 'parking', 'entrée du centre', 'outside'],
+    ruelle_squat:      ['ruelle', 'squat', 'rue', 'fugue', 'nuit urbaine', 'alley'],
+    tribunal:          ['tribunal', 'juge', 'audience', 'cour'],
+    salle_commune:     ['salon', 'salle commune', 'sofa', 'tv', 'common room'],
+    infirmerie:        ['infirmerie', 'médical', 'nurse', 'infirmière'],
+    ecole_centre:      ['classe', 'école', 'cours', 'school'],
   }
-  
-  // Si c'est une question ou un dialogue, alterner
-  if (promptLower.includes('?') || promptLower.includes('demande')) {
-    return 'two_shot'
+
+  // Also use the explicit style field from the request
+  const styleToLieu: Record<string, string> = {
+    cafeteria: 'cafeteria',
+    bureau: 'bureau_sophie',
+    chambre: 'chambre_alex',
+    centre_jeunesse: 'couloir_principal',
+    exterieur: 'exterieur_centre',
+    urbain: 'ruelle_squat',
+    fugue: 'ruelle_squat',
   }
-  
-  // Si narrateur, plan large
-  if (speaker === 'narrateur') {
-    return 'wide'
+
+  const matchedLieu = styleToLieu[body.style || '']
+  let lieuId: string | null = matchedLieu || null
+
+  if (!lieuId) {
+    for (const [id, keywords] of Object.entries(locationKeywords)) {
+      if (keywords.some(kw => promptLower.includes(kw))) {
+        lieuId = id
+        break
+      }
+    }
   }
-  
-  // Varier aléatoirement entre les autres types
-  const randomTypes: ShotType[] = ['medium', 'two_shot', 'over_shoulder', 'closeup_speaker']
-  return randomTypes[Math.floor(Math.random() * randomTypes.length)]
+
+  if (lieuId && bible.lieux[lieuId]) {
+    const lieu = bible.lieux[lieuId]
+    const lieuRefs: string[] = lieu.references || []
+    for (const refPath of lieuRefs) {
+      if (loaded.has(refPath) || loaded.size >= 8) continue
+      const desc = lieu.details
+        ? Object.values(lieu.details).join(', ')
+        : lieu.description
+      const ok = await injectReference(contents, refPath,
+        `LOCATION REFERENCE — ${lieu.nom}: Match this setting's architecture, colors, furniture, and atmosphere. Details: ${desc}`)
+      if (ok) loaded.add(refPath)
+    }
+  }
+
+  // 4) EXTRA REFERENCES from the request (manually selected in Studio)
+  if (body.referenceImages) {
+    for (const refPath of body.referenceImages) {
+      if (loaded.has(refPath) || loaded.size >= 10) continue
+      const ok = await injectReference(contents, refPath,
+        'Additional reference for style, setting, or character appearance.')
+      if (ok) loaded.add(refPath)
+    }
+  }
+
+  console.log(`📷 Loaded ${loaded.size} reference images: ${[...loaded].map(p => path.basename(p)).join(', ')}`)
+  return contents
 }
 
-// Descriptions des types de plans
-function getShotDescription(shotType: ShotType, speaker: string, characters?: string[]): string {
-  const otherCharacter = characters?.find(c => c.toLowerCase() !== speaker.toLowerCase()) || 'another person'
-  
-  const shotDescriptions: Record<ShotType, string> = {
-    'establishing': `ESTABLISHING SHOT: Wide angle showing the entire location, setting the scene. Characters small in frame if visible. Focus on atmosphere and environment.`,
-    'two_shot': `TWO SHOT: Both ${speaker} and ${otherCharacter} visible in frame, facing each other. Medium distance, showing body language and interaction between them.`,
-    'closeup_speaker': `CLOSE-UP on ${speaker}: Tight framing on face and shoulders only. Intense focus on facial expression and emotion. Blurred background.`,
-    'closeup_listener': `CLOSE-UP on ${otherCharacter}: Reaction shot. Tight framing showing their response to what ${speaker} is saying. Emotional focus.`,
-    'object': `OBJECT CLOSE-UP: Dramatic close-up on the important object or action mentioned. Hands visible if holding something. Shallow depth of field.`,
-    'over_shoulder': `OVER THE SHOULDER: Camera behind ${otherCharacter}, looking at ${speaker} who is speaking. Creates intimacy and perspective.`,
-    'wide': `WIDE SHOT: Full scene visible, characters in context of their environment. Shows spatial relationships and setting.`,
-    'medium': `MEDIUM SHOT: ${speaker} from waist up, some environment visible. Balanced composition showing both character and setting.`
-  }
-  
-  return shotDescriptions[shotType]
+// ---------------------------------------------------------------------------
+// Shot type detection
+// ---------------------------------------------------------------------------
+
+type ShotType = 'establishing' | 'medium' | 'closeup_character' | 'closeup_object' | 'two_shot' | 'over_shoulder' | 'pov'
+
+const SHOT_DESCRIPTIONS: Record<ShotType, string> = {
+  establishing: 'Wide establishing shot showing the full environment and setting, characters small in frame, emphasizing location and atmosphere',
+  medium: 'Medium shot from waist up, character centered, showing body language and facial expression clearly',
+  closeup_character: 'Close-up shot of character face, filling most of frame, intense focus on emotion and expression',
+  closeup_object: 'Extreme close-up on a specific object or detail, shallow depth of field, dramatic emphasis',
+  two_shot: 'Two-shot framing both characters in conversation, balanced composition, showing their interaction',
+  over_shoulder: 'Over-the-shoulder shot, one character in foreground (back visible), other character facing camera',
+  pov: 'Point-of-view shot, showing what the character sees, first-person perspective',
 }
 
-// Construire un prompt enrichi pour le style du jeu "Drôles de Droits"
-function buildImagePrompt(body: GenerateImageRequest): string {
-  const styleDescriptions: { [key: string]: string } = {
-    'centre_jeunesse': 'Quebec youth center (Centre Jeunesse) interior: institutional hallways with blue/orange walls, fluorescent lighting, bulletin boards with French posters, common rooms with plastic chairs',
-    'cafeteria': 'Youth center cafeteria: serving counter, colorful plastic chairs, tables, food trays, French signs on walls, other teenagers in background',
-    'chambre': 'Youth center bedroom: small room, single bed, desk, window with bars, personal items, institutional furniture',
-    'bureau': 'Social worker office: desk with papers, filing cabinets, two chairs, window, diplomas on wall, warm but professional',
-    'exterieur': 'Outside youth center: brick building entrance, parking lot, Quebec suburban environment, cloudy sky',
-    'urbain': 'Montreal or Quebec City street: brick buildings, French signs, bus stop, diverse young people',
-    'fugue': 'Urban night scene: dark alley, abandoned building, cold atmosphere, danger implied'
+function detectShotType(prompt: string, explicitType?: string): ShotType {
+  if (explicitType && SHOT_DESCRIPTIONS[explicitType as ShotType]) return explicitType as ShotType
+
+  const p = prompt.toLowerCase()
+
+  if (/alex et \w|discutent|conversation|parle à|dit à/.test(p)) return 'two_shot'
+  if (/gros plan|close-up|pilule|drogue|lettre|téléphone|document|objet/.test(p)) return 'closeup_object'
+  if (/visage|larmes|yeux|expression|pleure|crie/.test(p)) return 'closeup_character'
+  if (/derrière|dos|épaule|over shoulder/.test(p)) return 'over_shoulder'
+  if (/regarde|voit|aperçoit|observe|pov|point de vue/.test(p)) return 'pov'
+
+  const hasChar = /alex|marco|karim|sophie|david|diane|il |elle /.test(p)
+  if (!hasChar && /établissement|bâtiment|extérieur|ruelle|squat|nuit/.test(p)) return 'establishing'
+  if (/trois jours plus tard|un mois plus tard|quelques semaines|le lendemain/.test(p)) {
+    return hasChar ? 'medium' : 'establishing'
   }
 
-  const emotionDescriptions: { [key: string]: string } = {
-    'frustre': 'frustrated expression, clenched jaw, tension in shoulders, looking away',
-    'nerveux': 'anxious expression, fidgeting, biting lip, avoiding eye contact',
-    'confiant': 'confident stance, shoulders back, slight smile, direct gaze',
-    'triste': 'downcast eyes, slumped posture, tears or wet eyes, withdrawn',
-    'en_colere': 'angry expression, furrowed brows, clenched fists, aggressive stance',
-    'peur': 'wide fearful eyes, hunched shoulders, stepping back, pale face',
-    'determine': 'resolute expression, firm jaw, focused eyes, standing tall',
-    'hesitant': 'uncertain expression, looking between options, biting nail, conflicted',
-    'soulage': 'relaxed shoulders, soft smile, exhaling, peaceful expression',
-    'complice': 'conspiratorial smile, leaning in, mischievous eyes, secretive',
-    'tension': 'stiff body language, serious faces, charged atmosphere, dramatic lighting'
+  return 'medium'
+}
+
+// ---------------------------------------------------------------------------
+// Prompt building — now injects bible appearance descriptions
+// ---------------------------------------------------------------------------
+
+function buildImagePrompt(
+  body: GenerateImageRequest,
+  bible: { personnages: Record<string, any>; lieux: Record<string, any> },
+  shotType: ShotType,
+) {
+  const emotionDescriptions: Record<string, string> = {
+    frustre: 'frustrated expression, clenched jaw, tension in shoulders, looking away',
+    nerveux: 'anxious expression, fidgeting, biting lip, avoiding eye contact',
+    confiant: 'confident stance, shoulders back, slight smile, direct gaze',
+    triste: 'downcast eyes, slumped posture, tears or wet eyes, withdrawn',
+    en_colere: 'angry expression, furrowed brows, clenched fists, aggressive stance',
+    peur: 'wide fearful eyes, hunched shoulders, stepping back, pale face',
+    determine: 'resolute expression, firm jaw, focused eyes, standing tall',
+    hesitant: 'uncertain expression, looking between options, biting nail, conflicted',
+    soulage: 'relaxed shoulders, soft smile, exhaling, peaceful expression',
+    complice: 'conspiratorial smile, leaning in, mischievous eyes, secretive',
+    tension: 'stiff body language, serious faces, charged atmosphere, dramatic lighting',
+    choque: 'eyes wide, mouth slightly open, stunned body language, frozen',
+    grave: 'serious expression, furrowed brow, heavy atmosphere, muted tones',
+    victoire: 'proud stance, bright eyes, slight smile, shoulders back, warm light',
+    decouverte: 'eyes wide with realization, leaning forward, moment of clarity',
+    info: 'neutral but engaged, explaining gesture, informational tone',
+    conseil: 'warm expression, leaning forward slightly, supportive body language',
+    action: 'dynamic pose, movement implied, purposeful stride',
+    resolution: 'calm determination, settled posture, composed expression',
+    lecon: 'reflective expression, looking slightly down, thoughtful',
   }
 
-  const baseStyle = styleDescriptions[body.style || 'centre_jeunesse']
-  const emotionStyle = body.emotion ? emotionDescriptions[body.emotion] || body.emotion : 'neutral expression'
+  const emotionStyle = body.emotion ? (emotionDescriptions[body.emotion] || body.emotion) : 'neutral expression'
 
-  // Déterminer le type de plan cinématographique
-  const speaker = body.characters?.[0] || 'alex'
-  const shotType = determineShotType(body.prompt, speaker, body.emotion)
-  const shotDescription = getShotDescription(shotType, speaker, body.characters)
-  
-  console.log(`🎬 Shot type: ${shotType} for speaker: ${speaker}`)
+  // Build per-character appearance descriptions from the bible
+  const charDescriptions: string[] = []
+  const speakers = (body.characters || []).map(c => c.toLowerCase())
+  const promptLower = (body.prompt + ' ' + (body.sceneContext || '')).toLowerCase()
 
-  // Prompt très descriptif pour "Drôles de Droits"
+  for (const [id, char] of Object.entries(bible.personnages)) {
+    const nameLC = (char.nom || id).toLowerCase()
+    if (!speakers.includes(id) && !promptLower.includes(nameLC) && !promptLower.includes(id)) continue
+    const a = char.apparence
+    if (!a) continue
+    charDescriptions.push(
+      `${char.nom} (${char.age}, ${char.genre}): ${a.cheveux}, ${a.yeux} eyes, ${a.peau} skin, ${a.corpulence}. Default outfit: ${a.vetements_defaut}. ${a.accessoires ? 'Accessories: ' + a.accessoires : ''}`
+    )
+  }
+
+  // Detect location from bible for setting description
+  let settingDesc = ''
+  const styleToLieu: Record<string, string> = {
+    cafeteria: 'cafeteria', bureau: 'bureau_sophie', chambre: 'chambre_alex',
+    centre_jeunesse: 'couloir_principal', exterieur: 'exterieur_centre',
+    urbain: 'ruelle_squat', fugue: 'ruelle_squat',
+  }
+  const lieuId = styleToLieu[body.style || '']
+  if (lieuId && bible.lieux[lieuId]) {
+    const lieu = bible.lieux[lieuId]
+    const d = lieu.details || {}
+    settingDesc = `${lieu.nom}: ${lieu.description}. ${Object.entries(d).map(([k, v]) => `${k}: ${v}`).join('. ')}`
+  }
+
   return `Create a high-quality digital illustration for the interactive educational game "Drôles de Droits" about youth rights in Quebec youth centers.
 
 SCENE DESCRIPTION: ${body.prompt}
 
 CAMERA/FRAMING:
-${shotDescription}
+${SHOT_DESCRIPTIONS[shotType]}
 
 VISUAL STYLE (MANDATORY):
 - Semi-realistic graphic novel art style, similar to Life is Strange or Telltale Games
@@ -332,15 +296,12 @@ VISUAL STYLE (MANDATORY):
 - Clean bold linework with soft shading
 - Professional quality, suitable for educational game
 
-SETTING: ${baseStyle}
+${settingDesc ? `SETTING (from bible): ${settingDesc}` : ''}
 
-CHARACTER REQUIREMENTS:
-- Quebec teenager aged 15-17 years old
-- Diverse representation (mixed ethnicities common in Quebec)  
-- Casual clothing: hoodies, jeans, sneakers, backpacks
-- ${emotionStyle}
-- Realistic proportions, expressive faces
-- MAINTAIN CONSISTENT APPEARANCE from reference images provided
+${charDescriptions.length > 0 ? `CHARACTER APPEARANCE (from bible — MUST match reference images exactly):
+${charDescriptions.map(d => '- ' + d).join('\n')}` : ''}
+
+EMOTION: ${emotionStyle}
 
 TECHNICAL SPECS:
 - Resolution: 1920x1080 pixels (16:9 widescreen)
@@ -352,134 +313,124 @@ ${body.sceneContext ? `NARRATIVE CONTEXT: ${body.sceneContext}` : ''}
 ${body.characters?.length ? `CHARACTERS IN SCENE: ${body.characters.join(', ')}` : ''}`
 }
 
-// Détecter automatiquement le type de plan basé sur le contenu du prompt
-function detectShotType(prompt: string, explicitType?: string): ShotType {
-  // Si explicitement spécifié, utiliser ce type
-  if (explicitType && SHOT_DESCRIPTIONS[explicitType as ShotType]) {
-    return explicitType as ShotType
-  }
-  
-  const promptLower = prompt.toLowerCase()
-  
-  // ORDRE IMPORTANT: Les conditions plus spécifiques EN PREMIER
-  
-  // 1. Two-shot (deux personnages en conversation) - priorité haute
-  if (promptLower.includes('alex et marco') || promptLower.includes('marco et alex') ||
-      promptLower.includes('discutent') || promptLower.includes('conversation') ||
-      promptLower.includes('parle à') || promptLower.includes('dit à')) {
-    return 'two_shot'
-  }
-  
-  // 2. Close-up sur un objet spécifique
-  if (promptLower.includes('gros plan') || promptLower.includes('close-up') ||
-      promptLower.includes('pilule') || promptLower.includes('drogue') || 
-      promptLower.includes('lettre') || promptLower.includes('téléphone') || 
-      promptLower.includes('document') || promptLower.includes('objet')) {
-    return 'closeup_object'
-  }
-  
-  // 3. Close-up sur un visage/émotion
-  if (promptLower.includes('visage') || promptLower.includes('larmes') || 
-      promptLower.includes('yeux') || promptLower.includes('expression') ||
-      promptLower.includes('pleure') || promptLower.includes('crie')) {
-    return 'closeup_character'
-  }
-  
-  // 4. Over-the-shoulder
-  if (promptLower.includes('derrière') || promptLower.includes('dos') || 
-      promptLower.includes('épaule') || promptLower.includes('over shoulder')) {
-    return 'over_shoulder'
-  }
-  
-  // 5. POV (point de vue)
-  if (promptLower.includes('regarde') || promptLower.includes('voit') || 
-      promptLower.includes('aperçoit') || promptLower.includes('observe') ||
-      promptLower.includes('pov') || promptLower.includes('point de vue')) {
-    return 'pov'
-  }
-  
-  // 6. Establishing shot (décor sans focus sur personnage) - seulement si pas de personnage mentionné
-  const hasCharacter = promptLower.includes('alex') || promptLower.includes('marco') || 
-                       promptLower.includes('il ') || promptLower.includes('elle ')
-  
-  if (!hasCharacter && (
-      promptLower.includes('établissement') || promptLower.includes('bâtiment') ||
-      promptLower.includes('extérieur') || promptLower.includes('ruelle') ||
-      promptLower.includes('squat') || promptLower.includes('nuit'))) {
-    return 'establishing'
-  }
-  
-  // Transitions temporelles = establishing si pas de personnage au premier plan
-  if (promptLower.includes('trois jours plus tard') || promptLower.includes('un mois plus tard') ||
-      promptLower.includes('quelques semaines') || promptLower.includes('le lendemain')) {
-    // Mais s'il y a un dialogue ou une action, c'est un medium shot
-    if (hasCharacter) {
-      return 'medium'
+// ---------------------------------------------------------------------------
+// POST handler
+// ---------------------------------------------------------------------------
+
+export async function POST(request: Request) {
+  try {
+    const body: GenerateImageRequest = await request.json()
+
+    if (!body.prompt) {
+      return NextResponse.json({ success: false, error: 'Prompt requis' }, { status: 400 })
     }
-    return 'establishing'
+
+    const apiKey = process.env.GEMINI_API_KEY
+    if (!apiKey) {
+      return NextResponse.json({
+        success: true, imagePath: getPlaceholderImage(body.style),
+        isPlaceholder: true, error: 'GEMINI_API_KEY non configurée',
+      })
+    }
+
+    const bible = await loadBible()
+    const ai = new GoogleGenAI({ apiKey })
+    const shotType = detectShotType(body.prompt, body.shotType)
+
+    // Build reference images from bible
+    const contents = await buildReferenceContents(body, bible, shotType)
+
+    // Build and append the text prompt (enriched with bible data)
+    const enhancedPrompt = buildImagePrompt(body, bible, shotType)
+    contents.push({ text: enhancedPrompt })
+
+    console.log(`🎨 Generating image | shot: ${shotType} | prompt: ${enhancedPrompt.slice(0, 120)}...`)
+
+    const response = await ai.models.generateContent({
+      model: MODEL,
+      contents: [{ parts: contents }],
+      config: { responseModalities: ['IMAGE', 'TEXT'] },
+    })
+
+    let imageData: string | null = null
+    let textResponse: string | null = null
+
+    if (response.candidates?.[0]?.content?.parts) {
+      for (const part of response.candidates[0].content.parts) {
+        if (part.inlineData?.data) imageData = part.inlineData.data
+        else if (part.text) textResponse = part.text
+      }
+    }
+
+    if (!imageData) {
+      console.warn('⚠️ No image in Gemini response')
+      return NextResponse.json({
+        success: true, imagePath: getPlaceholderImage(body.style),
+        isPlaceholder: true, error: 'Gemini n\'a pas retourné d\'image', textResponse,
+      })
+    }
+
+    const imagePath = await saveImage(imageData, body.prompt)
+    console.log('💾 Image saved to:', imagePath)
+
+    return NextResponse.json({
+      success: true, imagePath,
+      imageData: `data:image/png;base64,${imageData}`,
+      isPlaceholder: false, textResponse,
+    } as GenerateImageResponse)
+
+  } catch (error: any) {
+    console.error('❌ Erreur génération image:', error.message || error)
+    return NextResponse.json({
+      success: true, imagePath: getPlaceholderImage(),
+      isPlaceholder: true, error: error.message || 'Erreur lors de la génération',
+    })
   }
-  
-  // 7. Par défaut: plan medium (le plus courant)
-  return 'medium'
 }
 
-// Ajouter les instructions de cadrage au prompt
-function addShotTypeToPrompt(prompt: string, shotType: ShotType): string {
-  const shotDescription = SHOT_DESCRIPTIONS[shotType]
-  
-  return `${prompt}
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
 
-CAMERA/FRAMING (IMPORTANT):
-${shotDescription}
-
-COMPOSITION NOTES:
-- Use cinematic framing techniques
-- Consider rule of thirds for character placement
-- Ensure proper depth and layering
-- Match the emotional tone with lighting and color`
-}
-
-// Sauvegarder l'image générée
 async function saveImage(base64Data: string, prompt: string): Promise<string> {
   try {
     const chaptersDir = path.join(process.cwd(), 'public', 'images', 'chapitres', 'generated')
     await mkdir(chaptersDir, { recursive: true })
-
     const timestamp = Date.now()
     const slug = prompt.slice(0, 30).toLowerCase().replace(/[^a-z0-9]+/g, '_')
     const filename = `${slug}_${timestamp}.png`
-    const filepath = path.join(chaptersDir, filename)
-
-    const buffer = Buffer.from(base64Data, 'base64')
-    await writeFile(filepath, buffer)
-
+    await writeFile(path.join(chaptersDir, filename), Buffer.from(base64Data, 'base64'))
     return `/images/chapitres/generated/${filename}`
-  } catch (error) {
-    console.error('Erreur sauvegarde image:', error)
+  } catch {
     return '/images/jeune_reflechi.webp'
   }
 }
 
-// Obtenir une image placeholder selon le style
 function getPlaceholderImage(style?: string): string {
-  const placeholders: { [key: string]: string } = {
-    'centre_jeunesse': '/images/establishing_centre jeunesse.webp',
-    'urbain': '/images/adolescent_bus_stress.webp',
-    'interieur': '/images/cafeteria_dialogue.webp',
-    'exterieur': '/images/fugue_course.webp'
+  const placeholders: Record<string, string> = {
+    centre_jeunesse: '/images/establishing_centre jeunesse.webp',
+    urbain: '/images/adolescent_bus_stress.webp',
+    interieur: '/images/cafeteria_dialogue.webp',
+    exterieur: '/images/fugue_course.webp',
   }
   return placeholders[style || 'centre_jeunesse'] || '/images/jeune_reflechi.webp'
 }
 
-// Endpoint GET pour vérifier le status
 export async function GET() {
   const apiKey = process.env.GEMINI_API_KEY
   return NextResponse.json({
     status: 'ok',
-    message: 'API Génération Images',
+    message: 'API Génération Images - Nano Banana 2',
     model: MODEL,
+    modelName: 'Nano Banana 2 (Gemini 3.1 Flash Image)',
     sdkVersion: '@google/genai',
     apiConfigured: !!apiKey,
-    fallbackAvailable: true
+    features: [
+      'Auto-loads bible (personnages.json + lieux.json)',
+      'Injects character appearance descriptions in prompts',
+      'Attaches character + location reference images automatically',
+      'Up to 5 characters + 14 objects per request',
+    ],
+    fallbackAvailable: true,
   })
 }

@@ -1,7 +1,7 @@
 /**
  * Types pour le système de chapitres modulaires
  * Permet de créer des chapitres de jeu narratif de façon standardisée
- * Compatible avec le générateur automatique (Claude + Nano Banana Pro)
+ * Compatible avec le générateur automatique (Claude Opus 4.6 + Nano Banana 2)
  */
 
 // Personnages disponibles dans un chapitre

@@ -306,200 +306,200 @@
     "createdAt": "2025-12-01T04:43:45.207Z",
     "updatedAt": "2025-12-01T04:43:45.207Z",
     "isGenerated": true,
-    "status": "draft"
+    "status": "ready"
   },
   "images": [
     {
       "sceneKey": "intro",
       "lineIndex": 0,
-      "prompt": "Scène: intro, alex parle avec émotion frustre",
+      "prompt": "Alex frustré dans le corridor du centre jeunesse, capuchon sur la tête, regard sombre",
       "imagePath": "/images/chapitres/la-fugue/scene_01.webp",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "sceneKey": "intro",
       "lineIndex": 1,
-      "prompt": "Scène: intro, marco parle avec émotion complice",
+      "prompt": "Marco parle à Alex dans le corridor, air complice et conspirateur, propose de fuguer",
       "imagePath": "/images/chapitres/la-fugue/scene_02.webp",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "sceneKey": "intro",
       "lineIndex": 2,
-      "prompt": "Scène: intro, alex parle avec émotion hesitant",
+      "prompt": "Alex et Marco face à face à la cafétéria, Alex hésitant, incertain",
       "imagePath": "/images/chapitres/la-fugue/scene_03.webp",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "sceneKey": "intro",
       "lineIndex": 3,
-      "prompt": "Scène: intro, marco parle avec émotion determine",
+      "prompt": "Marco déterminé dans le corridor du centre, fin de soirée, atmosphère tendue",
       "imagePath": "/images/chapitres/la-fugue/scene_04.webp",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "sceneKey": "intro",
       "lineIndex": 4,
-      "prompt": "Scène: intro, alex parle avec émotion tension",
+      "prompt": "Alex face au choix crucial, tension palpable, moment décisif au centre jeunesse",
       "imagePath": "/images/chapitres/la-fugue/scene_05.webp",
       "isPlaceholder": true
     },
     {
       "sceneKey": "branche_a",
       "lineIndex": 0,
-      "prompt": "Scène: branche_a, alex parle avec émotion nerveux",
+      "prompt": "Alex court sous la pluie la nuit dans les rues de Montréal avec son sac à dos, nerveux",
       "imagePath": "/images/chapitres/la-fugue/scene_06.webp",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "sceneKey": "branche_a",
       "lineIndex": 1,
-      "prompt": "Scène: branche_a, marco parle avec émotion confiant",
+      "prompt": "Marco confiant, excité de partir, prépare son sac, attitude bravache",
       "imagePath": "/images/chapitres/la-fugue/scene_07.webp",
       "isPlaceholder": true
     },
     {
       "sceneKey": "branche_a",
       "lineIndex": 2,
-      "prompt": "Scène: branche_a, alex parle avec émotion triste",
+      "prompt": "Alex dans un squat froid et sale, graffitis, meubles cassés, nuit, atmosphère désolée",
       "imagePath": "/images/chapitres/la-fugue/scene_08.webp",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "sceneKey": "branche_a",
       "lineIndex": 3,
-      "prompt": "Scène: branche_a, marco parle avec émotion en_colere",
+      "prompt": "Marco en colère dans une ruelle sombre de Montréal, neige, squat, tension",
       "imagePath": "/images/chapitres/la-fugue/scene_09.webp",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "sceneKey": "branche_a",
       "lineIndex": 4,
-      "prompt": "Scène: branche_a, alex parle avec émotion lecon",
+      "prompt": "Alex horrifié dans la ruelle, réalise que la fugue est une erreur, veut revenir",
       "imagePath": "/images/chapitres/la-fugue/scene_10.webp",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "sceneKey": "branche_b",
       "lineIndex": 0,
-      "prompt": "Scène: branche_b, alex parle avec émotion determine",
+      "prompt": "Alex déterminé au centre jeunesse, décide de rester, posture assurée",
       "imagePath": "/images/chapitres/la-fugue/scene_11.webp",
       "isPlaceholder": true
     },
     {
       "sceneKey": "branche_b",
       "lineIndex": 1,
-      "prompt": "Scène: branche_b, marco parle avec émotion en_colere",
+      "prompt": "Marco en colère, traite Alex de pissou, agressif, ruelle urbaine",
       "imagePath": "/images/chapitres/la-fugue/scene_12.webp",
       "isPlaceholder": true
     },
     {
       "sceneKey": "branche_b",
       "lineIndex": 2,
-      "prompt": "Scène: branche_b, alex parle avec émotion confiant",
+      "prompt": "Alex confiant explique à Marco ses droits d'hébergement, posture assurée",
       "imagePath": "/images/chapitres/la-fugue/scene_13.webp",
       "isPlaceholder": true
     },
     {
       "sceneKey": "branche_b",
       "lineIndex": 3,
-      "prompt": "Scène: branche_b, alex parle avec émotion grave",
+      "prompt": "Marco revient au centre après sa fugue ratée, épuisé, pluie, devant le centre jeunesse",
       "imagePath": "/images/chapitres/la-fugue/scene_14.webp",
       "isPlaceholder": true
     },
     {
       "sceneKey": "branche_b",
       "lineIndex": 4,
-      "prompt": "Scène: branche_b, marco parle avec émotion lecon",
+      "prompt": "Marco admet qu'Alex avait raison, corridor du centre, leçon apprise",
       "imagePath": "/images/chapitres/la-fugue/scene_15.webp",
       "isPlaceholder": true
     },
     {
       "sceneKey": "branche_c",
       "lineIndex": 0,
-      "prompt": "Scène: branche_c, alex parle avec émotion determine",
+      "prompt": "Alex déterminé annonce qu'il va demander un transfert, posture confiante",
       "imagePath": "/images/chapitres/la-fugue/scene_16.webp",
       "isPlaceholder": true
     },
     {
       "sceneKey": "branche_c",
       "lineIndex": 1,
-      "prompt": "Scène: branche_c, marco parle avec émotion choque",
+      "prompt": "Marco choqué par la décision d'Alex de demander un transfert, bouche ouverte",
       "imagePath": "/images/chapitres/la-fugue/scene_17.webp",
       "isPlaceholder": true
     },
     {
       "sceneKey": "branche_c",
       "lineIndex": 2,
-      "prompt": "Scène: branche_c, alex parle avec émotion confiant",
+      "prompt": "Alex confiant parle de ses droits d'hébergement avec son intervenante",
       "imagePath": "/images/chapitres/la-fugue/scene_18.webp",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "sceneKey": "branche_c",
       "lineIndex": 3,
-      "prompt": "Scène: branche_c, alex parle avec émotion resolution",
+      "prompt": "Alex résolu va parler à son intervenant, démarche positive, couloir du centre",
       "imagePath": "/images/chapitres/la-fugue/scene_19.webp",
       "isPlaceholder": true
     },
     {
       "sceneKey": "branche_c",
       "lineIndex": 4,
-      "prompt": "Scène: branche_c, alex parle avec émotion victoire",
+      "prompt": "Alex dans un nouveau centre plus petit, souriant, victoire, atmosphère chaleureuse",
       "imagePath": "/images/chapitres/la-fugue/scene_20.webp",
       "isPlaceholder": true
     },
     {
       "sceneKey": "fin_negative",
       "lineIndex": 0,
-      "prompt": "Scène: fin_negative, alex parle avec émotion choque",
+      "prompt": "Alex sous la pluie devant le centre jeunesse, arrêté après la fugue, choqué",
       "imagePath": "/images/chapitres/la-fugue/scene_21.webp",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "sceneKey": "fin_negative",
       "lineIndex": 1,
-      "prompt": "Scène: fin_negative, alex parle avec émotion lecon",
+      "prompt": "Alex de retour au centre, réalise que fuguer n'était pas la solution, réflexif",
       "imagePath": "/images/chapitres/la-fugue/scene_22.webp",
       "isPlaceholder": true
     },
     {
       "sceneKey": "fin_negative",
       "lineIndex": 2,
-      "prompt": "Scène: fin_negative, alex parle avec émotion decouverte",
+      "prompt": "Alex découvre qu'il aurait pu demander un transfert, moment de réalisation",
       "imagePath": "/images/chapitres/la-fugue/scene_23.webp",
       "isPlaceholder": true
     },
     {
       "sceneKey": "fin_positive",
       "lineIndex": 0,
-      "prompt": "Scène: fin_positive, alex parle avec émotion soulage",
+      "prompt": "L'intervenant vient chercher Alex, moment de soulagement, accueil chaleureux",
       "imagePath": "/images/chapitres/la-fugue/scene_24.webp",
       "isPlaceholder": true
     },
     {
       "sceneKey": "fin_positive",
       "lineIndex": 1,
-      "prompt": "Scène: fin_positive, alex parle avec émotion info",
+      "prompt": "Alex discute avec son intervenante de ses droits d'hébergement au centre",
       "imagePath": "/images/chapitres/la-fugue/scene_25.webp",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "sceneKey": "fin_positive",
       "lineIndex": 2,
-      "prompt": "Scène: fin_positive, alex parle avec émotion decouverte",
+      "prompt": "Alex découvre son droit à un hébergement adapté, moment de compréhension",
       "imagePath": "/images/chapitres/la-fugue/scene_26.webp",
       "isPlaceholder": true
     },
     {
       "sceneKey": "fin_positive",
       "lineIndex": 3,
-      "prompt": "Scène: fin_positive, alex parle avec émotion victoire",
+      "prompt": "Alex confiant et fier, a appris à utiliser ses droits au lieu de fuguer, victoire",
       "imagePath": "/images/chapitres/la-fugue/scene_27.webp",
       "isPlaceholder": true
     }
   ],
-  "_savedAt": "2025-12-01T04:43:56.585Z",
+  "_savedAt": "2026-03-19T04:42:00.000Z",
   "_filename": "la-fugue_droit-8_2025-12-01.json",
   "_version": "1.0"
 }

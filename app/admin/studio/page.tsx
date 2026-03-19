@@ -1,12 +1,13 @@
 /**
- * 🎨 Studio de Création d'Images - Nano Banana Pro
+ * 🎨 Studio de Création d'Images - Nano Banana 2
  * 
- * Interface de type "node-based" pour générer et éditer des images avec Nano Banana Pro.
+ * Interface de type "node-based" pour générer et éditer des images avec Nano Banana 2
+ * (Gemini 3.1 Flash Image Preview). Pro-level fidelity avec Flash speed.
  * 
  * FONCTIONNALITÉS:
  * - Bibliothèque de références: Personnages, lieux et objets pour maintenir la cohérence
  * - Workflows multiples: Text2Image, Style Transfer, Combine, Multi-références
- * - Support de 4-6 images de référence simultanées
+ * - Support de 5 personnages + 14 objets de référence simultanés
  * - Prompts JSON structurés pour des résultats optimaux
  * 
  * WORKFLOWS:
@@ -21,7 +22,7 @@ import { useState, useCallback, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 
-// Types pour les workflows Nano Banana Pro
+// Types pour les workflows Nano Banana 2
 type WorkflowType = 'text2image' | 'style_transfer' | 'combine_images' | 'multi_style'
 
 // Types pour la bibliothèque de références
@@ -355,7 +356,7 @@ export default function StudioPage() {
     setImageSlots(newSlots)
   }
   
-  // Construire le prompt JSON pour Nano Banana Pro
+  // Construire le prompt JSON pour Nano Banana 2
   const buildJsonPrompt = useCallback(() => {
     // Format JSON structuré pour des résultats optimaux
     const jsonPrompt = {
@@ -504,7 +505,7 @@ export default function StudioPage() {
             <div className="h-6 w-px bg-white/10" />
             <h1 className="text-lg font-semibold tracking-tight">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
-                Nano Banana Pro
+                Nano Banana 2
               </span>
               <span className="text-white/40 ml-2 font-normal">Studio</span>
             </h1>
@@ -619,7 +620,7 @@ export default function StudioPage() {
                   
                   {selectedReferences.length > 0 && (
                     <p className="text-xs text-white/30 mt-2">
-                      💡 Ces images seront envoyées à Nano Banana Pro pour maintenir la cohérence visuelle
+                      💡 Ces images seront envoyées à Nano Banana 2 pour maintenir la cohérence visuelle
                     </p>
                   )}
                 </section>
@@ -936,7 +937,7 @@ export default function StudioPage() {
                   >
                     <div className="p-4 rounded-xl bg-white/5 border border-white/10">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs text-white/40">Ce prompt sera envoyé à Nano Banana Pro:</span>
+                        <span className="text-xs text-white/40">Ce prompt sera envoyé à Nano Banana 2:</span>
                         <button
                           onClick={() => {
                             if (finalPromptOverride) {
@@ -1038,7 +1039,7 @@ export default function StudioPage() {
 
             {/* Footer Info */}
             <div className="text-center text-xs text-white/30 space-y-1">
-              <p>Nano Banana Pro • Gemini 3 Pro Image</p>
+              <p>Nano Banana 2 • Gemini 3.1 Flash Image</p>
               <p>Temps estimé: {currentWorkflow.estimatedTime}</p>
             </div>
             
@@ -1156,7 +1157,7 @@ export default function StudioPage() {
                       </div>
                       
                       <div className="text-center">
-                        <p className="text-white/60 text-sm">Nano Banana Pro génère ton image...</p>
+                        <p className="text-white/60 text-sm">Nano Banana 2 génère ton image...</p>
                         <p className="text-white/30 text-xs mt-1">Ça peut prendre jusqu'à {currentWorkflow.estimatedTime}</p>
                       </div>
                     </motion.div>

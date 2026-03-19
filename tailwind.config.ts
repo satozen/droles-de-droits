@@ -6,6 +6,12 @@ const config: Config = {
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './data/**/*.json',
+  ],
+  safelist: [
+    { pattern: /^bg-(cyan|emerald|amber|violet|slate|gray|pink|lime|yellow|red|blue|orange|teal|rose|indigo|fuchsia|sky|purple)-[345]00$/ },
+    { pattern: /^text-(black|white)$/ },
+    { pattern: /^border-(black|white)$/ },
   ],
   theme: {
     extend: {

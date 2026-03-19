@@ -1,20 +1,30 @@
 /**
  * Page dynamique pour les chapitres du jeu
- * Charge un chapitre depuis data/chapters/[slug].json et l'affiche avec ChapterPlayer
+ * Charge un chapitre depuis data/chapters/ (par slug ou slug_droit-X_date) et l'affiche avec ChapterPlayer
  * Inclut la navigation entre chapitres
  */
 import { notFound } from 'next/navigation'
+import { readdir } from 'fs/promises'
+import path from 'path'
 import ChapterPlayer from '@/components/ChapterPlayer'
 import ChapterNavigation from '@/components/ChapterNavigation'
 import type { Chapter } from '@/types/chapter'
 
-// Importer les chapitres disponibles
 async function getChapter(slug: string): Promise<Chapter | null> {
   try {
-    // Essayer de charger le chapitre depuis le fichier JSON
     const chapter = await import(`@/data/chapters/${slug}.json`)
     return chapter.default as Chapter
   } catch {
+    // Fallback: chercher un fichier qui commence par le slug (ex: la-fugue_droit-8_2025-12-01.json)
+    try {
+      const chaptersDir = path.join(process.cwd(), 'data', 'chapters')
+      const files = await readdir(chaptersDir)
+      const match = files.find(f => f.startsWith(slug) && f.endsWith('.json'))
+      if (match) {
+        const chapter = await import(`@/data/chapters/${match}`)
+        return chapter.default as Chapter
+      }
+    } catch {}
     return null
   }
 }
@@ -55,13 +65,8 @@ export default async function ChapterPage({ params }: { params: Promise<{ slug: 
   )
 }
 
-// Générer les routes statiques pour les chapitres connus
 export async function generateStaticParams() {
-  // Liste des chapitres disponibles
-  const chapters = ['la-fugue', 'fouilles-cafouillage']
-  
-  return chapters.map((slug) => ({
-    slug,
-  }))
+  const chapters = ['la-fugue', 'fouilles-cafouillage', 'le-secret-dalex']
+  return chapters.map((slug) => ({ slug }))
 }
 

@@ -15,10 +15,19 @@
       "vetements_defaut": "Veste bleue claire style denim, t-shirt blanc, jeans bleus, sneakers usées",
       "accessoires": "Parfois un sac à dos beige/kaki"
     },
-    "personnalite": ["anxieux", "réfléchi", "empathique", "curieux", "hésitant", "loyal"],
+    "personnalite": [
+      "anxieux",
+      "réfléchi",
+      "empathique",
+      "curieux",
+      "hésitant",
+      "loyal"
+    ],
     "backstory": "Parents avec problèmes de consommation. Placé en centre jeunesse suite à une signalement de l'école. N'a pas de contacts réguliers avec sa famille.",
     "voix": "Douce, parfois hésitante, québécois standard avec quelques expressions jeunes",
-    "references": ["/images/jeune_reflechi.webp"],
+    "references": [
+      "/images/jeune_reflechi.webp"
+    ],
     "emotions": {
       "neutre": null,
       "frustre": null,
@@ -29,9 +38,11 @@
       "soulage": null,
       "determine": null
     },
-    "chapitres": ["fouilles-et-cafouillage", "la-fugue"]
+    "chapitres": [
+      "fouilles-et-cafouillage",
+      "la-fugue"
+    ]
   },
-
   "marco": {
     "id": "marco",
     "nom": "Marco",
@@ -48,10 +59,19 @@
       "vetements_defaut": "Hoodie gris foncé ou noir, jeans slim, tuque/bonnet, chaîne au cou",
       "accessoires": "Écouteurs autour du cou, bracelet tissé"
     },
-    "personnalite": ["rebelle", "impulsif", "charismatique", "désabusé", "protecteur", "loyal envers ses amis"],
+    "personnalite": [
+      "rebelle",
+      "impulsif",
+      "charismatique",
+      "désabusé",
+      "protecteur",
+      "loyal envers ses amis"
+    ],
     "backstory": "Au centre depuis 2 ans. Parents absents. A développé une méfiance envers les adultes et le système.",
     "voix": "Assurée, parfois provocante, utilise du slang québécois",
-    "references": [],
+    "references": [
+      "/images/character-sheets/marco_sheet.png"
+    ],
     "emotions": {
       "neutre": null,
       "complice": null,
@@ -59,9 +79,10 @@
       "en_colere": null,
       "triste": null
     },
-    "chapitres": ["la-fugue"]
+    "chapitres": [
+      "la-fugue"
+    ]
   },
-
   "sophie": {
     "id": "sophie",
     "nom": "Sophie Lavoie",
@@ -78,19 +99,29 @@
       "vetements_defaut": "Blazer beige ou cardigan, blouse sobre, pantalon de travail, chaussures confortables",
       "accessoires": "Badge du centre, parfois lunettes de lecture, carnet de notes"
     },
-    "personnalite": ["bienveillante", "patiente", "professionnelle", "empathique", "ferme mais juste"],
+    "personnalite": [
+      "bienveillante",
+      "patiente",
+      "professionnelle",
+      "empathique",
+      "ferme mais juste"
+    ],
     "backstory": "Travaille au centre depuis 5 ans. A choisi ce métier après avoir été bénévole dans un organisme communautaire.",
     "voix": "Calme, rassurante, articule bien, jamais condescendante",
-    "references": ["/images/intervenante_arrive_lieu_echange_drogues.webp"],
+    "references": [
+      "/images/intervenante_arrive_lieu_echange_drogues.webp"
+    ],
     "emotions": {
       "neutre": null,
       "inquiete": null,
       "encourageante": null,
       "serieuse": null
     },
-    "chapitres": ["fouilles-et-cafouillage", "la-fugue"]
+    "chapitres": [
+      "fouilles-et-cafouillage",
+      "la-fugue"
+    ]
   },
-
   "jay": {
     "id": "jay",
     "nom": "Jay",
@@ -107,18 +138,27 @@
       "vetements_defaut": "Veste bomber noire, t-shirt de marque, jeans déchirés, sneakers flashy",
       "accessoires": "Chaîne en or, téléphone dernier cri toujours en main"
     },
-    "personnalite": ["manipulateur", "charismatique", "opportuniste", "faux ami", "pressant"],
+    "personnalite": [
+      "manipulateur",
+      "charismatique",
+      "opportuniste",
+      "faux ami",
+      "pressant"
+    ],
     "backstory": "A quitté le centre à 18 ans sans soutien. S'est tourné vers la vente de drogue pour survivre.",
     "voix": "Mielleuse, persuasive, change de ton selon la situation",
-    "references": ["/images/jeune_offre_drogue.webp"],
+    "references": [
+      "/images/jeune_offre_drogue.webp"
+    ],
     "emotions": {
       "charmeur": null,
       "pressant": null,
       "menacant": null
     },
-    "chapitres": ["fouilles-et-cafouillage"]
+    "chapitres": [
+      "fouilles-et-cafouillage"
+    ]
   },
-
   "karim": {
     "id": "karim",
     "nom": "Karim",
@@ -135,18 +175,27 @@
       "vetements_defaut": "Polo ou chemise casual, jeans propres, veste légère",
       "accessoires": "Montre, parfois des lunettes"
     },
-    "personnalite": ["sage", "loyal", "réfléchi", "discret", "bon conseiller"],
+    "personnalite": [
+      "sage",
+      "loyal",
+      "réfléchi",
+      "discret",
+      "bon conseiller"
+    ],
     "backstory": "Au centre depuis 1 an. Famille immigrante avec difficultés financières. Garde contact avec sa mère.",
     "voix": "Posée, réfléchie, utilise un vocabulaire plus soutenu",
-    "references": [],
+    "references": [
+      "/images/character-sheets/karim_sheet.png"
+    ],
     "emotions": {
       "neutre": null,
       "inquiet": null,
       "encourageant": null
     },
-    "chapitres": ["fouilles-et-cafouillage"]
+    "chapitres": [
+      "fouilles-et-cafouillage"
+    ]
   },
-
   "mme_tremblay": {
     "id": "mme_tremblay",
     "nom": "Diane Tremblay",
@@ -163,10 +212,18 @@
       "vetements_defaut": "Tailleur sobre (bleu marine ou gris), blouse, talons bas",
       "accessoires": "Lunettes, badge de direction, parfois un dossier sous le bras"
     },
-    "personnalite": ["stricte", "juste", "professionnelle", "respectée", "parfois intimidante"],
+    "personnalite": [
+      "stricte",
+      "juste",
+      "professionnelle",
+      "respectée",
+      "parfois intimidante"
+    ],
     "backstory": "30 ans de carrière dans les services sociaux. A vu beaucoup de jeunes passer.",
     "voix": "Autoritaire mais pas méchante, articule clairement",
-    "references": [],
+    "references": [
+      "/images/character-sheets/mme_tremblay_sheet.png"
+    ],
     "emotions": {
       "serieuse": null,
       "severe": null,
@@ -174,7 +231,6 @@
     },
     "chapitres": []
   },
-
   "agent_richard": {
     "id": "agent_richard",
     "nom": "Agent Richard Côté",
@@ -191,18 +247,26 @@
       "vetements_defaut": "Uniforme de police du Québec complet",
       "accessoires": "Badge, ceinture d'équipement, radio"
     },
-    "personnalite": ["professionnel", "calme", "méthodique", "respectueux de la loi"],
+    "personnalite": [
+      "professionnel",
+      "calme",
+      "méthodique",
+      "respectueux de la loi"
+    ],
     "backstory": "15 ans dans la police. Spécialisé dans les interventions jeunesse.",
     "voix": "Grave, calme, autoritaire sans être agressive",
-    "references": ["/images/police_parle_au_jeune.webp"],
+    "references": [
+      "/images/police_parle_au_jeune.webp"
+    ],
     "emotions": {
       "neutre": null,
       "serieux": null,
       "comprehensif": null
     },
-    "chapitres": ["fouilles-et-cafouillage"]
+    "chapitres": [
+      "fouilles-et-cafouillage"
+    ]
   },
-
   "maitre_beaumont": {
     "id": "maitre_beaumont",
     "nom": "Maître Claire Beaumont",
@@ -219,10 +283,18 @@
       "vetements_defaut": "Tailleur chic (noir, bordeaux ou vert foncé), talons hauts, bijoux discrets",
       "accessoires": "Mallette en cuir, lunettes de lecture élégantes, stylo de qualité"
     },
-    "personnalite": ["intelligente", "combative", "protectrice", "éloquente", "rassurante"],
+    "personnalite": [
+      "intelligente",
+      "combative",
+      "protectrice",
+      "éloquente",
+      "rassurante"
+    ],
     "backstory": "Ancienne enfant du système, devenue avocate pour aider d'autres jeunes.",
     "voix": "Claire, assurée, utilise un langage accessible malgré sa profession",
-    "references": [],
+    "references": [
+      "/images/character-sheets/maitre_beaumont_sheet.png"
+    ],
     "emotions": {
       "professionnelle": null,
       "encourageante": null,
@@ -230,7 +302,6 @@
     },
     "chapitres": []
   },
-
   "maman_alex": {
     "id": "maman_alex",
     "nom": "Nathalie",
@@ -247,10 +318,17 @@
       "vetements_defaut": "Vêtements simples, parfois froissés, veste usée",
       "accessoires": "Sac à main usé"
     },
-    "personnalite": ["aimante mais absente", "fragile", "culpabilisée", "désorganisée"],
+    "personnalite": [
+      "aimante mais absente",
+      "fragile",
+      "culpabilisée",
+      "désorganisée"
+    ],
     "backstory": "A eu Alex jeune. Problèmes de dépendance depuis des années.",
     "voix": "Douce mais parfois confuse, ton apologétique",
-    "references": [],
+    "references": [
+      "/images/character-sheets/maman_alex_sheet.png"
+    ],
     "emotions": {
       "triste": null,
       "coupable": null,
@@ -258,7 +336,6 @@
     },
     "chapitres": []
   },
-
   "dr_chen": {
     "id": "dr_chen",
     "nom": "Dr. Michelle Chen",
@@ -275,10 +352,18 @@
       "vetements_defaut": "Sarrau blanc sur vêtements professionnels, ou tenue casual-chic en consultation",
       "accessoires": "Stéthoscope, badge médical, tablette ou carnet"
     },
-    "personnalite": ["calme", "attentive", "professionnelle", "empathique", "patiente"],
+    "personnalite": [
+      "calme",
+      "attentive",
+      "professionnelle",
+      "empathique",
+      "patiente"
+    ],
     "backstory": "Spécialisée en psychiatrie de l'enfant et l'adolescent depuis 15 ans.",
     "voix": "Douce, posée, choisit ses mots avec soin",
-    "references": [],
+    "references": [
+      "/images/character-sheets/dr_chen_sheet.png"
+    ],
     "emotions": {
       "neutre": null,
       "attentive": null,
@@ -287,4 +372,3 @@
     "chapitres": []
   }
 }
-

@@ -1,6 +1,7 @@
 /**
- * API Route pour générer des scénarios de chapitres avec Claude Sonnet 4.5
+ * API Route pour générer des scénarios de chapitres avec Claude Opus 4.6
  * Génère des dialogues, choix et structures narratives pour le jeu
+ * Utilise le modèle le plus avancé d'Anthropic pour une qualité narrative maximale
  */
 
 import { NextResponse } from 'next/server'
@@ -47,8 +48,8 @@ export async function POST(request: Request) {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 8000,
+        model: 'claude-opus-4-20260318',
+        max_tokens: 16000,
         messages: [{ role: 'user', content: userPrompt }],
         system: systemPrompt,
         temperature: 0.8
@@ -313,7 +314,7 @@ export async function GET() {
   return NextResponse.json({
     status: 'ok',
     message: 'API Génération Scénario',
-    model: 'Claude Sonnet 4.5',
+    model: 'Claude Opus 4.6',
     apiConfigured: !!process.env.ANTHROPIC_API_KEY
   })
 }

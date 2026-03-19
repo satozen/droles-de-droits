@@ -7,10 +7,10 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-// Liste des chapitres dans l'ordre
 const CHAPTERS = [
-  { slug: 'la-fugue', title: 'La Fugue' },
   { slug: 'fouilles-cafouillage', title: 'Fouilles et Cafouillage' },
+  { slug: 'la-fugue', title: 'La Fugue' },
+  { slug: 'le-secret-dalex', title: 'Le Secret d\'Alex' },
 ]
 
 interface ChapterNavigationProps {

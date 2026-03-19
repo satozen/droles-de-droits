@@ -1,9 +1,10 @@
-// Layout principal de l'application - structure globale, police et navigation
+// Layout principal de l'application - structure globale, police, navigation, et progression globale
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import { Fredoka } from 'next/font/google'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
+import ProgressBar from '@/components/ProgressBar'
 
 const fredoka = Fredoka({ 
   subsets: ['latin'], 
@@ -75,6 +76,7 @@ export default function RootLayout({
     <html lang="fr">
       <body className={`antialiased ${fredoka.className} bg-white dark:bg-gray-900 transition-colors flex flex-col min-h-screen`}>
         <Navigation />
+        <ProgressBar />
         <main className="flex-1">
           {children}
         </main>

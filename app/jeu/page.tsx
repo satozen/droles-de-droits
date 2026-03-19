@@ -7,12 +7,14 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { droits } from '@/data/droits'
 import { useProgress } from '@/hooks/useProgress'
+import { useGlobalProgress } from '@/hooks/useGlobalProgress'
 import IntroUsager from '@/components/IntroUsager'
 import DevBadge from '@/components/DevBadge'
 
 export default function JeuPage() {
   const router = useRouter()
   const { progress } = useProgress()
+  const { markQuizDroitCompleted, addRightsDiscovered } = useGlobalProgress()
   const [selectedDroit, setSelectedDroit] = useState<number | null>(null)
   const [modeLibre, setModeLibre] = useState(false)
   const [showIntro, setShowIntro] = useState(false)
@@ -116,9 +118,15 @@ export default function JeuPage() {
             }
             window.dispatchEvent(new Event('progress-update'))
           }
+
+          // Progression globale: un droit vu/abordé
+          addRightsDiscovered([droitId])
         }}
         onNextDroit={(nextDroitId) => {
           setSelectedDroit(nextDroitId)
+        }}
+        onDroitCompleted={(droitId) => {
+          markQuizDroitCompleted(droitId)
         }}
       />
     )
@@ -365,12 +373,14 @@ function ScenarioComponent({
   droitId, 
   onBack, 
   onComplete,
-  onNextDroit
+  onNextDroit,
+  onDroitCompleted
 }: { 
   droitId: number
   onBack: () => void
   onComplete: (droitId: number, scenarioId: string) => void
   onNextDroit: (nextDroitId: number) => void
+  onDroitCompleted: (droitId: number) => void
 }) {
   const droit = droits.find(d => d.id === droitId)!
   const [currentScenarioIndex, setCurrentScenarioIndex] = useState(0)
@@ -395,6 +405,11 @@ function ScenarioComponent({
       setShowCompletion(true)
     }
   }, [isDroitCompleted, currentScenarioIndex, selectedAnswer, currentScenario])
+
+  // Progression globale: marquer le droit complété (quiz)
+  useEffect(() => {
+    if (showCompletion) onDroitCompleted(droitId)
+  }, [showCompletion, onDroitCompleted, droitId])
   
   // Si pas de scénario disponible (droit vide), retourner à la liste
   if (!currentScenario) {
